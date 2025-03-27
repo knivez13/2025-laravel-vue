@@ -4,7 +4,7 @@ services:
     app:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: .docker/dockerfile/php/Dockerfile
         container_name: laravel_app
         restart: unless-stopped
         working_dir: /var/www
@@ -27,7 +27,7 @@ services:
             MYSQL_PASSWORD: laravel
         command: --default-authentication-plugin=mysql_native_password --max-connections=1000
         volumes:
-            - db_data:/var/lib/mysql
+            - .docker/db/data:/var/lib/mysql
         networks:
             - app_network
 
@@ -41,10 +41,12 @@ services:
     websockets:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: .docker/dockerfile/other/Dockerfile
         container_name: laravel_websockets
         restart: unless-stopped
         working_dir: /var/www
+        volumes:
+            - .:/var/www
         command: php artisan websockets:serve
         depends_on:
             - app
@@ -56,9 +58,11 @@ services:
     queue:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: .docker/dockerfile/other/Dockerfile
         container_name: laravel_queue
         restart: unless-stopped
+        volumes:
+            - .:/var/www
         working_dir: /var/www
         command: php artisan queue:work --tries=3 --timeout=90
         depends_on:
@@ -69,10 +73,12 @@ services:
     schedule:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: .docker/dockerfile/other/Dockerfile
         container_name: laravel_schedule
         restart: unless-stopped
         working_dir: /var/www
+        volumes:
+            - .:/var/www
         command: /bin/sh -c "while :; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
         depends_on:
             - app
@@ -93,8 +99,6 @@ services:
         networks:
             - app_network
 
-volumes:
-    db_data:
-
 networks:
     app_network:
+        driver: bridge
