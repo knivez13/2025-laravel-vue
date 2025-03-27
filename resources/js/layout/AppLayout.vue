@@ -7,6 +7,7 @@ import AppTopbar from './AppTopbar.vue';
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 onMounted(async () => {
+    console.log(layoutConfig);
     await window.Echo.channel('testing').listen('.TestEvent', (e) => {
         console.log(e);
     });
