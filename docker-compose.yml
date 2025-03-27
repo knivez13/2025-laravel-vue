@@ -25,6 +25,7 @@ services:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_USER: laravel
             MYSQL_PASSWORD: laravel
+        command: --default-authentication-plugin=mysql_native_password --max-connections=1000
         volumes:
             - db_data:/var/lib/mysql
         networks:
@@ -51,6 +52,32 @@ services:
             - app_network
         ports:
             - '6001:6001'
+
+    queue:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel_queue
+        restart: unless-stopped
+        working_dir: /var/www
+        command: php artisan queue:work --tries=3 --timeout=90
+        depends_on:
+            - app
+        networks:
+            - app_network
+
+    schedule:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: laravel_schedule
+        restart: unless-stopped
+        working_dir: /var/www
+        command: /bin/sh -c "while :; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
+        depends_on:
+            - app
+        networks:
+            - app_network
 
     nginx:
         image: nginx:alpine
