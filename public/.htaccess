@@ -18,4 +18,22 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+
+    RewriteCond %{HTTP_ACCEPT} image/webp
+
+    # ...and WebP replacement image exists in the same directory...
+    RewriteCond %{REQUEST_FILENAME}.webp -f
+
+    # ...serve WebP image instead of jpeg/png/gif.
+    RewriteRule (.+)\.(jpe?g|png|gif)$ $1.webp [T=image/webp,E=REQUEST_image]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Vary: Accept for all the requests to jpeg, png and gif
+  Header append Vary Accept env=REQUEST_image
+</IfModule>
+
+<IfModule mod_mime.c>
+  # Add file type MIME support
+  AddType image/webp .webp
 </IfModule>
