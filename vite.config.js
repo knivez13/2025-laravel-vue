@@ -6,12 +6,12 @@ import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 import Components from 'unplugin-vue-components/vite';
 import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 import viteCompression from 'vite-plugin-compression';
+import viteImagemin from 'vite-plugin-imagemin';
 
 export default defineConfig({
     plugins: [
         viteCompression(),
         purgeCss(),
-
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true
@@ -34,6 +34,33 @@ export default defineConfig({
             },
             imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
             vueTemplate: true
+        }),
+        viteImagemin({
+            gifsicle: {
+                optimizationLevel: 7,
+                interlaced: false
+            },
+            optipng: {
+                optimizationLevel: 7
+            },
+            mozjpeg: {
+                quality: 20
+            },
+            pngquant: {
+                quality: [0.8, 0.9],
+                speed: 4
+            },
+            svgo: {
+                plugins: [
+                    {
+                        name: 'removeViewBox'
+                    },
+                    {
+                        name: 'removeEmptyAttrs',
+                        active: false
+                    }
+                ]
+            }
         })
     ],
     define: { 'process.env': {} },
