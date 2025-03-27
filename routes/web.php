@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SampleWebSocketTest;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('{any}', function () {
     return view('welcome');
 })->where('any', '.*');;
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/test', [SampleWebSocketTest::class, 'test']);

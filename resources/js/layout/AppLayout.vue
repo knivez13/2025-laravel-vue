@@ -6,6 +6,12 @@ import AppTopbar from './AppTopbar.vue';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
+onMounted(async () => {
+    await window.Echo.channel('testing').listen('.TestEvent', (e) => {
+        console.log(e);
+    });
+});
+
 const outsideClickListener = ref(null);
 watch(isSidebarActive, (newVal) => {
     if (newVal) {
