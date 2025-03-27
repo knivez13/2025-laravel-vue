@@ -11,7 +11,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $maintenanceBindings = [
+            \App\Repositories\BaseRepositoryInterface::class                                                => \App\Repositories\BaseRepository::class,
+            \App\Http\Controllers\Api\Auth\AuthInterface::class                                             => \App\Http\Controllers\Api\Auth\AuthRepository::class,
+        ];
+
+        foreach ($maintenanceBindings as $interface => $repository) {
+            $this->app->bind($interface, $repository);
+        }
     }
 
     /**

@@ -1,19 +1,42 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
+// Authentication Routes
+Route::controller(\App\Http\Controllers\Api\Auth\AuthController::class)->group(function () {
+    Route::post('login', 'login');
+});
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Protected Routes (Requires Authentication)
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Route::prefix('maintenance')->group(function () {
+    //     $resources = [
+    //         'amenities'             => 'Amenity',
+    //         'appliances'            => 'Appliances',
+    //         'file-type'             => 'FileType',
+    //         'mode-payment'          => 'ModePayment',
+    //         'price-type'            => 'PriceType',
+    //         'prop-category'         => 'PropCategory',
+    //         'prop-condition'        => 'PropCondition',
+    //         'prop-listType'         => 'PropListType',
+    //         'prop-status'           => 'PropStatus',
+    //         'prop-type'             => 'PropType',
+    //         'utility'               => 'Utility',
+    //         'near-location-filter'  => 'NearLocationFilter',
+    //     ];
+
+    //     foreach ($resources as $route => $controller) {
+    //         Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\Maintenance\\$controller\\{$controller}Controller")->except(['show']);
+    //     }
+    // });
+    // Route::prefix('subscription')->group(function () {
+    //     $subscriptions = [
+    //         'subscription-type' => 'SubscriptionType',
+    //         'user-subscription' => 'UserSubscription',
+    //     ];
+
+    //     foreach ($subscriptions as $route => $controller) {
+    //         Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\Subscription\\$controller\\{$controller}Controller")->except(['show']);
+    //     }
+    // });
 });
