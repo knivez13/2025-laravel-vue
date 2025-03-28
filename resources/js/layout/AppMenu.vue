@@ -11,11 +11,9 @@ const model = ref([
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
             { label: 'My Listing', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
             { label: 'Create Property', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
-            { label: 'My Profile', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
             { label: 'Message', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
             { label: 'Subcription', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
-            { label: 'Favorites', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' },
-            { label: 'Logout', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' }
+            { label: 'Favorites', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' }
         ]
     },
     {

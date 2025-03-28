@@ -139,22 +139,22 @@ const router = createRouter({
         },
 
         {
-            path: '/auth/login',
+            path: '/login',
             name: 'login',
             meta: { access: 'user' },
-            component: () => import('@/views/pages/auth/Login.vue')
+            component: () => import('@/views/Login.vue')
         },
         {
             path: '/auth/access',
             name: 'accessDenied',
             meta: { access: 'user' },
-            component: () => import('@/views/pages/auth/Access.vue')
+            component: () => import('@/views/Access.vue')
         },
         {
             path: '/auth/error',
             name: 'error',
             meta: { access: 'user' },
-            component: () => import('@/views/pages/auth/Error.vue')
+            component: () => import('@/views/Error.vue')
         }
     ]
 });

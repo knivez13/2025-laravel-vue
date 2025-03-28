@@ -18,14 +18,9 @@ const service = axios.create({
 
 service.interceptors.request.use(
     (config) => {
-        const api = new Resource('sample');
         const authStore = useAuthStore();
-        // console.log(authStore.get_res_data);
-        if (authStore.get_res_data) {
-            // console.log(api.decrypt(authStore.get_res_data));
-            let token = api.decrypt(authStore.get_res_data)['token'];
-            // console.log(api.decrypt(authStore.get_res_data)['user']);
-            // console.log(token);
+        if (authStore.get_token) {
+            let token = authStore.get_token;
             if (token) {
                 config.headers['Authorization'] = 'Bearer ' + token; // Set JWT token
             }
@@ -41,11 +36,8 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     (response) => {
         try {
-            // console.log(response);
-            // Attempt to parse the response data to ensure it's valid JSON
             JSON.parse(JSON.stringify(response.data));
         } catch (error) {
-            // If parsing fails, throw an error
             return Promise.reject(new Error('Invalid JSON response'));
         }
         return response;
@@ -55,23 +47,18 @@ service.interceptors.response.use(
 
         const api = new Resource('');
 
-        console.log('1');
-        console.log(err);
-        console.log(api.decrypt(err.response?.data?.data ?? err.response?.data?.message)); // for debug
         const error = {
             status: err.response?.status,
-            original: api.decrypt(err.response?.data?.data ?? err.response?.data?.message),
+            original: err.response?.data?.data ?? err.response?.data?.message,
             validation: {},
             message: null
         };
-        console.log('2');
 
         if (err.response?.data == undefined) {
             return Promise.reject(error);
         }
-        console.log('3');
 
-        const encrypt_error = api.decrypt(err.response?.data?.data ?? err.response?.data?.message);
+        const encrypt_error = err.response?.data?.data ?? err.response?.data?.message;
         // console.log(api.decrypt(err.response.data.data));
 
         switch (err.response?.status) {
@@ -86,7 +73,7 @@ service.interceptors.response.use(
                 break;
             case 401:
                 error.message = encrypt_error.data == 'Wrong Username or Password' ? 'Wrong Username or Password' : 'Please re-login.';
-                authStore.clearToken();
+                authStore.clear();
                 router.push('/');
                 break;
             case 500:

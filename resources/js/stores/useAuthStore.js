@@ -5,7 +5,7 @@ import router from '@/router';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        token: [],
+        token: null,
         user: [],
         roles: [],
         permission: [],
@@ -26,7 +26,7 @@ export const useAuthStore = defineStore('auth', {
         async clear() {
             await api.csrf().then(async ({ e }) => {
                 await api.logout().then(({ data }) => {
-                    this.token = [];
+                    this.token = null;
                     this.user = [];
                     this.roles = [];
                     this.permission = [];
