@@ -12,8 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('chat_messages', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('chat_room_id')->nullable();
+            $table->foreign('chat_room_id')->references('id')->on('chat_rooms');
+            $table->uuid('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('message')->nullable();
+            $table->uuid('created_by')->nullable();
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

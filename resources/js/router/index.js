@@ -10,153 +10,224 @@ const router = createRouter({
             component: AppLayout,
             children: [
                 {
-                    path: '/',
-                    name: 'dashboard',
+                    path: '',
                     meta: { access: 'user' },
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
-                    path: '/uikit/formlayout',
-                    name: 'formlayout',
+                    path: 'rent',
                     meta: { access: 'user' },
                     component: () => import('@/views/uikit/FormLayout.vue')
                 },
                 {
-                    path: '/uikit/input',
-                    name: 'input',
+                    path: 'sell',
                     meta: { access: 'user' },
-                    component: () => import('@/views/uikit/InputDoc.vue')
+                    component: () => import('@/views/uikit/FormLayout.vue')
                 },
                 {
-                    path: '/uikit/button',
-                    name: 'button',
+                    path: 'new-listing',
                     meta: { access: 'user' },
-                    component: () => import('@/views/uikit/ButtonDoc.vue')
+                    component: () => import('@/views/uikit/FormLayout.vue')
                 },
                 {
-                    path: '/uikit/table',
-                    name: 'table',
+                    path: 'pricing',
                     meta: { access: 'user' },
-                    component: () => import('@/views/uikit/TableDoc.vue')
+                    component: () => import('@/views/uikit/FormLayout.vue')
                 },
                 {
-                    path: '/uikit/list',
-                    name: 'list',
+                    path: 'about-us',
                     meta: { access: 'user' },
-                    component: () => import('@/views/uikit/ListDoc.vue')
-                },
-                {
-                    path: '/uikit/tree',
-                    name: 'tree',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/TreeDoc.vue')
-                },
-                {
-                    path: '/uikit/panel',
-                    name: 'panel',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/PanelsDoc.vue')
-                },
-
-                {
-                    path: '/uikit/overlay',
-                    name: 'overlay',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/OverlayDoc.vue')
-                },
-                {
-                    path: '/uikit/media',
-                    name: 'media',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/MediaDoc.vue')
-                },
-                {
-                    path: '/uikit/message',
-                    name: 'message',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/MessagesDoc.vue')
-                },
-                {
-                    path: '/uikit/file',
-                    name: 'file',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/FileDoc.vue')
-                },
-                {
-                    path: '/uikit/menu',
-                    name: 'menu',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/MenuDoc.vue')
-                },
-                {
-                    path: '/uikit/charts',
-                    name: 'charts',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/ChartDoc.vue')
-                },
-                {
-                    path: '/uikit/misc',
-                    name: 'misc',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/MiscDoc.vue')
-                },
-                {
-                    path: '/uikit/timeline',
-                    name: 'timeline',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/uikit/TimelineDoc.vue')
-                },
-                {
-                    path: '/pages/empty',
-                    name: 'empty',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/pages/Empty.vue')
-                },
-                {
-                    path: '/pages/crud',
-                    name: 'crud',
-                    component: () => import('@/views/pages/Crud.vue')
-                },
-                {
-                    path: '/documentation',
-                    name: 'documentation',
-                    meta: { access: 'user' },
-                    component: () => import('@/views/pages/Documentation.vue')
+                    component: () => import('@/views/uikit/FormLayout.vue')
                 }
             ]
         },
         {
-            path: '/landing',
-            name: 'landing',
-            meta: { access: 'user' },
-            component: () => import('@/views/pages/Landing.vue')
+            path: '/manage-rental',
+            component: AppLayout,
+            children: [
+                {
+                    path: 'dashboard',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/Dashboard.vue')
+                },
+                {
+                    path: 'my-listing',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: 'create-property',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: 'message',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: 'subscription',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: 'favorites',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: 'save',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                }
+            ]
         },
         {
-            path: '/pages/notfound',
-            name: 'notfound',
-            meta: { access: 'user' },
-            component: () => import('@/views/pages/NotFound.vue')
+            path: '/admin',
+            component: AppLayout,
+            children: [
+                {
+                    path: 'dashboard',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/Dashboard.vue')
+                },
+                {
+                    path: 'message',
+                    meta: { access: 'user' },
+                    component: () => import('@/views/uikit/FormLayout.vue')
+                },
+                {
+                    path: 'property-management',
+                    children: [
+                        {
+                            path: 'property-list',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'for-approval',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'active',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'reject',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        }
+                    ]
+                },
+                {
+                    path: 'maintenance',
+                    children: [
+                        {
+                            path: 'amenity',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'appliances',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'file-type',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'mode-of-payment',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'price-type',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'property-type',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'property-status',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        }
+                    ]
+                },
+                {
+                    path: 'user-management',
+                    children: [
+                        {
+                            path: 'user-list',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'role',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        }
+                    ]
+                },
+                {
+                    path: 'subscription-management',
+                    children: [
+                        {
+                            path: 'user-subscription',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'expired-month',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'for-approval',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        },
+                        {
+                            path: 'subscription-type',
+                            meta: { access: 'user' },
+                            component: () => import('@/views/Dashboard.vue')
+                        }
+                    ]
+                }
+            ]
         },
 
         {
+            path: '/pages/notfound',
+            meta: { access: 'user' },
+            component: () => import('@/views/pages/NotFound.vue')
+        },
+        {
             path: '/login',
-            name: 'login',
             meta: { access: 'user' },
             component: () => import('@/views/Login.vue')
         },
         {
             path: '/auth/access',
-            name: 'accessDenied',
             meta: { access: 'user' },
             component: () => import('@/views/Access.vue')
         },
         {
             path: '/auth/error',
-            name: 'error',
             meta: { access: 'user' },
             component: () => import('@/views/Error.vue')
         }
-    ]
+    ],
+    scrollBehavior() {
+        return { left: 0, top: 0 };
+    }
 });
 
 router.beforeEach((to, from) => {

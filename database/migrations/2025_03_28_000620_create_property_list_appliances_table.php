@@ -12,8 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('property_list_appliances', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->uuid('property_list_id')->nullable();
+            $table->foreign('property_list_id')->references('id')->on('property_lists');
+            $table->uuid('appliance_id')->nullable();
+            $table->foreign('appliance_id')->references('id')->on('appliances');
+            $table->uuid('created_by')->nullable();
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
