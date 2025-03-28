@@ -70,7 +70,7 @@ return [
     /*
      * This path will be used to register the necessary routes for the package.
      */
-    'path' => 'monitoring/websocket',
+    'path' => 'api/monitor/pusher/websocket',
 
     /*
      * Dashboard Routes Middleware
