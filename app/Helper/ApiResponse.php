@@ -17,7 +17,7 @@ class ApiResponse
             'response_date' => Carbon::now()->setTimezone('Asia/Manila')->format('l jS F Y g:i a'),
             'response_result' => '0001',
             'response_description' => 'SUCCESS',
-            'response_data' => $result, //ApiEncResponse::encrypt($result)
+            'response_data' => $result, //ApiEncResponse::encryptJson($result)
             'response_message' => $message
         ];
         return response()->json($response, 200);
@@ -30,7 +30,7 @@ class ApiResponse
             'response_date' => Carbon::now()->setTimezone('Asia/Manila')->format('l jS F Y g:i a'),
             'response_result' => '0002',
             'response_description' => 'FAILED',
-            'response_data' => $errorMessage ?? null, //ApiEncResponse::encrypt($errorMessage ?? null)
+            'response_data' => $errorMessage ?? null, //ApiEncResponse::encryptJson($errorMessage ?? null)
             'response_message' => $error
         ];
         return response()->json($response, $code);

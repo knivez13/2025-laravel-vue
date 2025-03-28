@@ -3,12 +3,15 @@ import { useLayout } from '@/layout/composables/layout';
 import AppFooter from './AppFooter.vue';
 import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
+import Resource from '@/api/resource.js';
+const api = new Resource('sample');
+import CryptoJS from 'crypto-js';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 onMounted(async () => {
     await window.Echo.channel('testing').listen('.TestEvent', (e) => {
-        console.log(e);
+        console.log(api.decrypt(e.data));
     });
 });
 

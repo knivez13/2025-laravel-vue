@@ -72,19 +72,23 @@ class Resource {
         });
     }
     encrypt(resource) {
-        const key = '12345678901234567890123456789012';
-        return CryptoJS.AES.encrypt(JSON.stringify(resource), CryptoJS.enc.Utf8.parse(key), {
-            iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)),
-            mode: CryptoJS.mode.CBC,
-            padding: CryptoJS.pad.Pkcs7
-        }).toString();
+        // const key = '12345678901234567890123456789012';
+        const key = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+        return (
+            CryptoJS.AES.encrypt(JSON.stringify(resource), CryptoJS.enc.Utf8.parse(key), {
+                iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)),
+                mode: CryptoJS.mode.CBC,
+                padding: CryptoJS.pad.Pkcs7
+            }).toString() + key
+        );
     }
-    decrypt(resource) {
-        const key = '12345678901234567890123456789012';
 
+    decrypt(resource) {
+        const data = resource;
+        const key = data.slice(-32);
         return JSON.parse(
             CryptoJS.enc.Utf8.stringify(
-                CryptoJS.AES.decrypt(resource, CryptoJS.enc.Utf8.parse(key), {
+                CryptoJS.AES.decrypt(data.slice(0, data.length - 32), CryptoJS.enc.Utf8.parse(key), {
                     iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)),
                     mode: CryptoJS.mode.CBC,
                     padding: CryptoJS.pad.Pkcs7
