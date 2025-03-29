@@ -5,97 +5,108 @@ class Resource {
     constructor(uri) {
         this.uri = uri;
     }
+
+    // Fetch CSRF token
     csrf() {
         return request({
             url: 'sanctum/csrf-cookie',
             method: 'get'
         });
     }
-    login(data) {
+
+    // User login
+    login(resource) {
         return request({
             url: 'api/login',
             method: 'post',
-            data: data
+            data: resource
         });
     }
-    register(data) {
+
+    // User registration
+    register(resource) {
         return request({
             url: 'api/registration',
             method: 'post',
-            data: data
+            data: resource
         });
     }
+
+    // User logout
     logout() {
         return request({
             url: 'api/logout',
             method: 'get'
         });
     }
+
+    // Fetch a list of resources with query parameters
     list(query) {
         return request({
-            url: 'api/' + this.uri,
+            url: `api/${this.uri}`,
             method: 'get',
             params: query
         });
     }
+
+    // Fetch a single resource by ID
     get(id) {
         return request({
-            url: 'api/' + this.uri + '/' + id,
+            url: `api/${this.uri}/${id}`,
             method: 'get'
         });
     }
+
+    // Create a new resource
     store(resource) {
         return request({
-            url: 'api/' + this.uri,
+            url: `api/${this.uri}`,
             method: 'post',
             data: resource
         });
     }
+
+    // Update an existing resource by ID
     update(id, resource) {
         return request({
-            url: 'api/' + this.uri + '/' + id,
+            url: `api/${this.uri}/${id}`,
             method: 'put',
             data: resource
         });
     }
+
+    // Delete a resource by ID
     destroy(id) {
         return request({
-            url: 'api/' + this.uri + '/' + id,
+            url: `api/${this.uri}/${id}`,
             method: 'delete'
         });
     }
-    destroy2(resource) {
-        return request({
-            url: 'api/' + this.uri + '/' + resource.id,
-            method: 'delete',
-            data: resource
-        });
-    }
+
+    // Encrypt a resource
     encrypt(resource) {
-        // const key = '12345678901234567890123456789012';
         const key = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
-        return (
-            CryptoJS.AES.encrypt(JSON.stringify(resource), CryptoJS.enc.Utf8.parse(key), {
-                iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)),
-                mode: CryptoJS.mode.CBC,
-                padding: CryptoJS.pad.Pkcs7
-            }).toString() + key
-        );
+        const iv = CryptoJS.enc.Utf8.parse(key.substring(0, 16));
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(resource), CryptoJS.enc.Utf8.parse(key), {
+            iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        }).toString();
+        return encrypted + key;
     }
 
+    // Decrypt a resource
     decrypt(resource) {
-        const data = resource;
-        const key = data.slice(-32);
-        return JSON.parse(
-            CryptoJS.enc.Utf8.stringify(
-                CryptoJS.AES.decrypt(data.slice(0, data.length - 32), CryptoJS.enc.Utf8.parse(key), {
-                    iv: CryptoJS.enc.Utf8.parse(key.substring(0, 16)),
-                    mode: CryptoJS.mode.CBC,
-                    padding: CryptoJS.pad.Pkcs7
-                })
-            )
-        );
+        const key = resource.slice(-32);
+        const encryptedData = resource.slice(0, resource.length - 32);
+        const iv = CryptoJS.enc.Utf8.parse(key.substring(0, 16));
+        const decrypted = CryptoJS.AES.decrypt(encryptedData, CryptoJS.enc.Utf8.parse(key), {
+            iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+        return JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted));
     }
 }
 
-export { Resource as default };
+export default Resource;

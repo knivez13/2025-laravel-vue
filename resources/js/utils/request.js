@@ -2,8 +2,6 @@ import axios from 'axios';
 import router from '@/router';
 import { useAuthStore } from '@/stores/useAuthStore.js';
 
-import Resource from '@/api/resource.js';
-
 const service = axios.create({
     baseURL: '/',
     timeout: 60000, // Request timeout
@@ -11,30 +9,33 @@ const service = axios.create({
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN',
     headers: {
-        'Content-type': 'application/json',
+        'Content-Type': 'application/json',
         Accept: 'application/json'
     }
 });
 
+// Request Interceptor
 service.interceptors.request.use(
     (config) => {
         const authStore = useAuthStore();
-        if (authStore.get_token) {
-            let token = authStore.get_token;
-            if (token) {
-                config.headers['Authorization'] = 'Bearer ' + token; // Set JWT token
-            }
+        const token = authStore.get_token;
+
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`; // Set JWT token
         }
+
         return config;
     },
     (error) => {
-        console.log(error); // for debug
+        console.error('Request Error:', error); // Debugging
         return Promise.reject(error);
     }
 );
 
+// Response Interceptor
 service.interceptors.response.use(
     (response) => {
+        // Ensure the response data is valid JSON
         try {
             JSON.parse(JSON.stringify(response.data));
         } catch (error) {
@@ -44,42 +45,43 @@ service.interceptors.response.use(
     },
     (err) => {
         const authStore = useAuthStore();
-
-        const api = new Resource('');
-
+        const errorResponse = err.response;
         const error = {
-            status: err.response?.status,
-            original: err.response?.data?.data ?? err.response?.data?.message,
+            status: errorResponse?.status,
+            original: errorResponse?.data?.data || errorResponse?.data?.message,
             validation: {},
             message: null
         };
 
-        if (err.response?.data == undefined) {
+        if (!errorResponse?.data) {
             return Promise.reject(error);
         }
 
-        const encrypt_error = err.response?.data?.data ?? err.response?.data?.message;
-        // console.log(api.decrypt(err.response.data.data));
+        const encryptedError = errorResponse?.data?.data || errorResponse?.data?.message;
 
-        switch (err.response?.status) {
-            case 422:
-                for (let field in encrypt_error) {
-                    error.validation[field] = encrypt_error[field][0];
-                }
+        // Handle specific HTTP status codes
+        switch (errorResponse.status) {
+            case 422: // Validation error
+                Object.keys(encryptedError).forEach((field) => {
+                    error.validation[field] = encryptedError[field][0];
+                });
                 break;
 
-            case 403:
+            case 403: // Forbidden
                 error.message = "You're not allowed to do that.";
                 break;
-            case 401:
-                error.message = encrypt_error.data == 'Wrong Username or Password' ? 'Wrong Username or Password' : 'Please re-login.';
+
+            case 401: // Unauthorized
+                error.message = encryptedError === 'Wrong Username or Password' ? 'Wrong Username or Password' : 'Please re-login.';
                 authStore.clear();
                 router.push('/');
                 break;
-            case 500:
+
+            case 500: // Internal Server Error
                 error.message = 'Something went really bad. Sorry.';
                 break;
-            default:
+
+            default: // Other errors
                 error.message = 'Something went wrong. Please try again later.';
         }
 
