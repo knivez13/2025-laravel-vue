@@ -204,11 +204,11 @@ const router = createRouter({
             ]
         },
 
-        {
-            path: '/pages/notfound',
-            meta: { access: 'user' },
-            component: () => import('@/views/pages/NotFound.vue')
-        },
+        // {
+        //     path: '/pages/notfound',
+        //     meta: { access: 'user' },
+        //     component: () => import('@/views/pages/NotFound.vue')
+        // },
         {
             path: '/login',
             meta: { access: 'user' },
