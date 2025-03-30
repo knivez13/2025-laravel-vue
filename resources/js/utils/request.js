@@ -35,6 +35,7 @@ service.interceptors.request.use(
 // Response Interceptor
 service.interceptors.response.use(
     (response) => {
+        console.log('Success Response:', response);
         // Ensure the response data is valid JSON
         try {
             JSON.parse(JSON.stringify(response.data));

@@ -19,7 +19,7 @@ class Resource {
         return request({
             url: 'api/login',
             method: 'post',
-            data: resource
+            data: { encrypt: encrypt(resource) }
         });
     }
 
@@ -28,7 +28,7 @@ class Resource {
         return request({
             url: 'api/registration',
             method: 'post',
-            data: resource
+            data: { encrypt: encrypt(resource) }
         });
     }
 
@@ -41,11 +41,11 @@ class Resource {
     }
 
     // Fetch a list of resources with query parameters
-    list(query) {
+    list(resource) {
         return request({
             url: `api/${this.uri}`,
             method: 'get',
-            params: query
+            params: { encrypt: encrypt(resource) }
         });
     }
 
@@ -62,7 +62,7 @@ class Resource {
         return request({
             url: `api/${this.uri}`,
             method: 'post',
-            data: resource
+            data: { encrypt: encrypt(resource) }
         });
     }
 
@@ -71,7 +71,7 @@ class Resource {
         return request({
             url: `api/${this.uri}/${id}`,
             method: 'put',
-            data: resource
+            data: { encrypt: encrypt(resource) }
         });
     }
 
