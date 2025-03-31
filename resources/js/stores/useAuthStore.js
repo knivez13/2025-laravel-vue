@@ -17,9 +17,7 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         // Check if the user has a specific permission
         check(permission) {
-            const permissions = api.decrypt(this.token)['permission'];
-            // console.log('Checking permission:', permissions);
-            return permission === 'user' || permissions.includes(permission);
+            return permission === 'user' || api.decrypt(this.token)['permission'].includes(permission);
         },
 
         // Clear user data and redirect to login
