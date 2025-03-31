@@ -7,9 +7,7 @@ const api = new Resource('currency');
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: null,
-        user: [],
-        roles: [],
-        permission: [],
+        validation: [],
         processing: false,
         error: null
     }),
@@ -19,7 +17,9 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         // Check if the user has a specific permission
         check(permission) {
-            return permission === 'user' || this.permission.includes(permission);
+            const permissions = api.decrypt(this.token)['permission'];
+            // console.log('Checking permission:', permissions);
+            return permission === 'user' || permissions.includes(permission);
         },
 
         // Clear user data and redirect to login
@@ -41,23 +41,19 @@ export const useAuthStore = defineStore('auth', {
         async loginUser(credentials) {
             if (this.processing) return;
             this.processing = true;
+            this.token = null;
             this.error = null;
-
             try {
                 await api.csrf();
                 const { data } = await api.login(credentials);
-
-                if (data.data === 'Wrong Username or Password') {
+                // console.log(api.decrypt(data?.response_data));
+                if (api.decrypt(data?.response_data) === 'Wrong Username or Password') {
                     this.error = 'Wrong Username or Password';
-                } else if (data?.data.token && data?.data.user) {
-                    this.$state.token = data.data.token;
-                    this.$state.user = data.data.user;
-                    this.$state.roles = data.data.roles;
-                    this.$state.permission = data.data.permission;
-                    setTimeout(() => router.push('/'), 100);
+                } else if (data) {
+                    this.token = data?.response_data;
+                    router.push('/manage-rental/dashboard');
                 }
             } catch (error) {
-                this.error = error?.response?.data?.message || 'An error occurred during login.';
                 console.error('Login Error:', error);
             } finally {
                 this.processing = false;

@@ -13,7 +13,7 @@ class ApiEncResponse
         return  openssl_encrypt(json_encode($data), 'AES-256-CBC', $key, 0, substr($key, 0, 16)) . $key;
     }
 
-    public static function decrypt($encryptedData)
+    public static function decryptJson($encryptedData)
     {
         $key = substr($encryptedData, -32);
         return json_decode(openssl_decrypt(substr($encryptedData, 0, -32), 'AES-256-CBC', $key, 0, substr($key, 0, 16)), true);

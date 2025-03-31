@@ -19,7 +19,7 @@ class Resource {
         return request({
             url: 'api/login',
             method: 'post',
-            data: { encrypt: encrypt(resource) }
+            data: { encrypt: this.encrypt(resource) }
         });
     }
 

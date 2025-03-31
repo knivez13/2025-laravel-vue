@@ -1,6 +1,7 @@
 import axios from 'axios';
 import router from '@/router';
 import { useAuthStore } from '@/stores/useAuthStore.js';
+import Resource from '@/api/resource.js';
 
 const service = axios.create({
     baseURL: '/',
@@ -17,13 +18,13 @@ const service = axios.create({
 // Request Interceptor
 service.interceptors.request.use(
     (config) => {
+        const api = new Resource('sample');
+
         const authStore = useAuthStore();
         const token = authStore.get_token;
-
         if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`; // Set JWT token
+            config.headers['Authorization'] = `Bearer ${api.decrypt(token)['token']}`; // Set JWT token
         }
-
         return config;
     },
     (error) => {
@@ -35,10 +36,12 @@ service.interceptors.request.use(
 // Response Interceptor
 service.interceptors.response.use(
     (response) => {
-        console.log('Success Response:', response);
         // Ensure the response data is valid JSON
         try {
             JSON.parse(JSON.stringify(response.data));
+            if (response.data) {
+                console.log('Success Response:', response.data);
+            }
         } catch (error) {
             return Promise.reject(new Error('Invalid JSON response'));
         }
@@ -46,19 +49,20 @@ service.interceptors.response.use(
     },
     (err) => {
         const authStore = useAuthStore();
+
         const errorResponse = err.response;
         const error = {
             status: errorResponse?.status,
-            original: errorResponse?.data?.data || errorResponse?.data?.message,
+            original: err.response,
             validation: {},
-            message: null
+            message: errorResponse?.data?.response_message
         };
 
         if (!errorResponse?.data) {
             return Promise.reject(error);
         }
 
-        const encryptedError = errorResponse?.data?.data || errorResponse?.data?.message;
+        const encryptedError = errorResponse?.status == 422 ? errorResponse?.data?.response_data : errorResponse?.data?.response_message;
 
         // Handle specific HTTP status codes
         switch (errorResponse.status) {
