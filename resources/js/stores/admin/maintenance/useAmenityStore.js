@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('currency');
+const api = new Resource('maintenance/amenities');
+import { useToast } from 'primevue/usetoast';
 
 export const useAmenityStore = defineStore('admin-maintenance-amenity', {
     state: () => ({
         token: null,
+        toast: useToast(),
         processing: false,
         error: [],
         option: {
@@ -44,7 +46,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
                 await api.csrf();
             } catch (e) {
                 this.error = e;
-                $toast.error('CSRF token error', { position: 'top-right' });
+                this.toast.error('CSRF token error', { position: 'top-right' });
                 throw e;
             }
         },
@@ -52,7 +54,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
         // Centralized error handler
         handleError(e) {
             this.error = e;
-            $toast.error(e?.message || 'An error occurred', { position: 'top-right' });
+            this.toast.add({ severity: 'error', summary: 'Notification', detail: e?.message, life: 3000 });
         },
 
         async fnFetch() {
@@ -63,7 +65,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
             try {
                 await this.ensureCsrf();
                 const filters = this.getFilters();
-                const { data } = await api.list(filters);
+                const { data } = await api.list();
                 console.log(data); // Replace with actual data handling logic
             } catch (e) {
                 this.handleError(e);
@@ -82,7 +84,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
                 const filters = this.getFilters();
                 const { data } = await api.store({ head: filters, data: res });
                 console.log(data); // Replace with actual success handling logic
-                $toast.success(data.message, { position: 'top-right' });
+                this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Insert Success', life: 3000 });
             } catch (e) {
                 this.handleError(e);
             } finally {
@@ -100,7 +102,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
                 const filters = this.getFilters();
                 const { data } = await api.update(id, { head: filters, data: res });
                 console.log(data); // Replace with actual success handling logic
-                $toast.success(data.message, { position: 'top-right' });
+                this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Updated Success', life: 3000 });
             } catch (e) {
                 this.handleError(e);
             } finally {
@@ -118,7 +120,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
                 const filters = this.getFilters();
                 const { data } = await api.destroy2({ head: filters, id });
                 console.log(data); // Replace with actual success handling logic
-                $toast.success(data.message, { position: 'top-right' });
+                this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Deleted Success', life: 3000 });
             } catch (e) {
                 this.handleError(e);
             } finally {
