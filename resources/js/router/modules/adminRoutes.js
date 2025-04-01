@@ -18,8 +18,12 @@ const adminRoutes = [
             { path: 'file-type', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/FileType.vue') },
             { path: 'mode-of-payment', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/ModeOfPayment.vue') },
             { path: 'price-type', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PriceType.vue') },
+            { path: 'property-category', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PropertyCategory.vue') },
+            { path: 'property-condition', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PropertyCondition.vue') },
+            { path: 'property-listing-type', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PropertyListType.vue') },
             { path: 'property-type', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PropertyType.vue') },
-            { path: 'property-status', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PropertyStatus.vue') }
+            { path: 'property-status', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/PropertyStatus.vue') },
+            { path: 'utility-included', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/UtilityIncluded.vue') }
         ]
     },
     {

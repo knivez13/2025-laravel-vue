@@ -1,15 +1,15 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { usePriceTypeStore } from '@/stores/admin/maintenance/usePriceTypeStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = usePriceTypeStore();
-const { error, processing, token, option } = storeToRefs(usePriceTypeStore());
+import { usePropertyListTypeStore } from '@/stores/admin/maintenance/usePropertyListTypeStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = usePropertyListTypeStore();
+const { error, processing, token, option } = storeToRefs(usePropertyListTypeStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Price Type');
+const title = ref('Property Condition');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({
@@ -112,11 +112,10 @@ const show_edit = async (data) => {
                     tableStyle="min-width: 20rem"
                     scrollDirection="both"
                 >
-                    <Column field="code" sortable header="Code" class="grid-table-line"></Column>
+                    <Column field="code" sortable header="Code"></Column>
                     <Column field="description" sortable header="Description"></Column>
-                    <Column field="payment_frequency" sortable header="Payment Frequency" class="grid-table-line"></Column>
-                    <Column field="created_at" sortable header="Created Date" class="grid-table-line"></Column>
-                    <Column field="updated_at" sortable header="Updated Date" class="grid-table-line"></Column>
+                    <Column field="created_at" sortable header="Created Date"></Column>
+                    <Column field="updated_at" sortable header="Updated Date"></Column>
                     <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 100px" headerStyle="width: 5rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="data">
                             <div class="text-end">

@@ -96,6 +96,24 @@ const model = ref([
                         meta: 'user'
                     },
                     {
+                        label: 'Property Category',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-category',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Condition',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-condition',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Listing Type',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-listing-type',
+                        meta: 'user'
+                    },
+                    {
                         label: 'Property Type',
                         icon: 'pi pi-fw pi-lock',
                         to: '/admin/maintenance/property-type',
@@ -105,6 +123,12 @@ const model = ref([
                         label: 'Property Status',
                         icon: 'pi pi-fw pi-lock',
                         to: '/admin/maintenance/property-status',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Utility Included',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/utility-included',
                         meta: 'user'
                     }
                 ]

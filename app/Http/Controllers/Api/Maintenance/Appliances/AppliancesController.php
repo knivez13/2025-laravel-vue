@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Maintenance\Appliances;
 use App\Helper\ApiResponse;
 use App\Helper\AccessHelper;
 use Illuminate\Http\Request;
+use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Maintenance\Appliances\AppliancesInterface;

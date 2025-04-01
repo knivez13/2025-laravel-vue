@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/prop-type');
+const api = new Resource('maintenance/prop-category');
 import { useToast } from 'primevue/usetoast';
 
-export const usePropertyTypeStore = defineStore('admin-maintenance-property-type', {
+export const usePropertyCategoryStore = defineStore('admin-maintenance-property-category', {
     state: () => ({
         token: null,
         toast: useToast(),
