@@ -23,6 +23,6 @@ class ExceptionHelper
             return ApiResponse::failed('Http Error', $e->getMessage(), 420);
         }
 
-        return ApiResponse::failed('errors', 'Something went wrong.', 500);
+        return ApiResponse::failed('errors', $e->getMessage(), 500);
     }
 }

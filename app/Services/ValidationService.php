@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helper\ApiEncResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 

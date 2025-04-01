@@ -21,7 +21,7 @@ service.interceptors.request.use(
         const api = new Resource('sample');
         const authStore = useAuthStore();
         const token = authStore.get_token;
-        console.log('Request Token:', token); // Debugging
+        // console.log('Request Token:', token); // Debugging
         if (token) {
             config.headers['Authorization'] = `Bearer ${api.decrypt(token)['token']}`; // Set JWT token
         }
@@ -57,12 +57,12 @@ service.interceptors.response.use(
             validation: {},
             message: errorResponse?.data?.response_message
         };
-
         if (!errorResponse?.data) {
             return Promise.reject(error);
         }
 
         const encryptedError = errorResponse?.status == 422 ? errorResponse?.data?.response_data : errorResponse?.data?.response_message;
+        console.error('Response Error:', error); // Debugging
 
         // Handle specific HTTP status codes
         switch (errorResponse.status) {

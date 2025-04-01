@@ -15,7 +15,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
             sortOrder: 'desc',
             rows: 10,
             page: 1,
-            total: 0,
+            show_modal: false,
             perm: {
                 can_add: false,
                 can_delete: false,
@@ -26,9 +26,30 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
         }
     }),
     getters: {
-        get_token: (state) => state.token
+        get_token: (state) => state.token,
+        decode_token: (state) => api.decrypt(state.token)
     },
     actions: {
+        set_processing(data) {
+            this.processing = data;
+        },
+        set_keywords(data) {
+            this.option.keywords = data;
+        },
+        set_rows(data) {
+            this.option.rows = data;
+        },
+        set_page(data) {
+            this.option.page = data;
+        },
+        tigger_modal(data) {
+            this.option.show_modal = data;
+        },
+        set_sort(data) {
+            this.option.sortBy = data.sortBy;
+            this.option.sortOrder = data.sortOrder;
+            this.option.page = 0;
+        },
         // Helper to generate filters
         getFilters() {
             return {
@@ -65,8 +86,8 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
             try {
                 await this.ensureCsrf();
                 const filters = this.getFilters();
-                const { data } = await api.list();
-                console.log(data); // Replace with actual data handling logic
+                const { data } = await api.list(filters);
+                this.token = data?.response_data;
             } catch (e) {
                 this.handleError(e);
             } finally {
@@ -78,17 +99,17 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
             if (this.processing) return;
             this.processing = true;
             this.error = null;
-
             try {
                 await this.ensureCsrf();
                 const filters = this.getFilters();
                 const { data } = await api.store({ head: filters, data: res });
-                console.log(data); // Replace with actual success handling logic
+                this.token = data?.response_data;
                 this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Insert Success', life: 3000 });
             } catch (e) {
                 this.handleError(e);
             } finally {
                 this.processing = false;
+                this.option.show_modal = false;
             }
         },
 
@@ -101,12 +122,13 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
                 await this.ensureCsrf();
                 const filters = this.getFilters();
                 const { data } = await api.update(id, { head: filters, data: res });
-                console.log(data); // Replace with actual success handling logic
+                this.token = data?.response_data;
                 this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Updated Success', life: 3000 });
             } catch (e) {
                 this.handleError(e);
             } finally {
                 this.processing = false;
+                this.option.show_modal = false;
             }
         },
 
@@ -119,7 +141,7 @@ export const useAmenityStore = defineStore('admin-maintenance-amenity', {
                 await this.ensureCsrf();
                 const filters = this.getFilters();
                 const { data } = await api.destroy2({ head: filters, id });
-                console.log(data); // Replace with actual success handling logic
+                this.token = data?.response_data;
                 this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Deleted Success', life: 3000 });
             } catch (e) {
                 this.handleError(e);

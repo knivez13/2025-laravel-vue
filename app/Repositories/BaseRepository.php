@@ -44,12 +44,13 @@ class BaseRepository implements BaseRepositoryInterface
     /**
      * Create a new record.
      */
-    public function create(array $data): Model
+    public function create(array $data): bool
     {
         return DB::transaction(function () use ($data) {
             $this->validateData($data);
             $input = $this->prepareDataForInsert($data);
-            return $this->model->create($input);
+            $this->model->create($input);
+            return true;
         });
     }
 
@@ -113,13 +114,13 @@ class BaseRepository implements BaseRepositoryInterface
     /**
      * Paginate records with filters, sorting, and relationships.
      */
-    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc'): LengthAwarePaginator
+    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1): LengthAwarePaginator
     {
         $query = $this->model->query();
 
         // Apply search filters
-        if (!empty($filters['search']) && !empty($this->filterableFields)) {
-            $this->applySearchFilter($query, $filters['search']);
+        if (!empty($filters['keyword']) && !empty($this->filterableFields)) {
+            $this->applySearchFilter($query, $filters['keyword']);
         }
 
         // Apply date range filters
@@ -139,7 +140,7 @@ class BaseRepository implements BaseRepositoryInterface
 
         // Apply sorting
         if (!empty($sortBy) && !empty($sortOrder)) {
-            $query->orderBy($sortBy, $sortOrder);
+            $query->orderBy($sortBy, $sortOrder == 1 ? 'ASC' : 'DESC');
         }
 
         // Load relationships
@@ -147,7 +148,7 @@ class BaseRepository implements BaseRepositoryInterface
             $query->with($this->relationshipTable);
         }
 
-        return $query->paginate($filters['per_page'] ?? $perPage);
+        return $query->paginate($filters['per_page'] ?? $perPage, ['*'], 'page', $page);
     }
 
     /**

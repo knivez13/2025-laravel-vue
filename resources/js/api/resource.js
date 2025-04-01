@@ -42,6 +42,7 @@ class Resource {
 
     // Fetch a list of resources with query parameters
     list(resource) {
+        console.log(resource);
         return request({
             url: `api/${this.uri}`,
             method: 'get',
