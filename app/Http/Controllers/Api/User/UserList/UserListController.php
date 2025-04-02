@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\User\UserList;
 use App\Helper\ApiResponse;
 use App\Helper\AccessHelper;
 use Illuminate\Http\Request;
+use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\User\UserList\UserListInterface;
@@ -22,11 +23,19 @@ class UserListController extends Controller
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-            $filters = $request->only(['search']); // Include date filters
-            $perPage = $request->input('per_page', 10);
-            $sortBy = $request->input('sort_by', 'id');
-            $sortOrder = $request->input('sort_order', 'asc');
-            $res = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder);
+
+            $data = $request->has('encrypt') || strpos(json_encode($request->all()), 'encrypt') !== false
+                ? new Request(ApiEncResponse::decryptJson($request['encrypt']))
+                : $request;
+
+            $filters = $data->only(['keyword']);
+            $perPage = (int) $data->input('rows', 10);
+            $sortBy = $data->input('sortBy', 'id');
+            $sortOrder = $data->input('sortOrder', 'asc');
+            $page =  $data->input('page', 1);
+
+            $res = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
+
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);
@@ -48,8 +57,12 @@ class UserListController extends Controller
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-            $res = $this->interface->create($request->all());
-            return ApiResponse::success($res, 'insert success');
+            $data = ApiEncResponse::decryptJson($request['encrypt']);
+            $res = $this->interface->create($data['data']);
+            if ($res) {
+                $newRequest = new Request($data['head']);
+                return $this->index($newRequest);
+            }
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);
         }
@@ -59,8 +72,12 @@ class UserListController extends Controller
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-            $res = $this->interface->update($id, $request->all());
-            return ApiResponse::success($res, 'update success');
+            $data = ApiEncResponse::decryptJson($request['encrypt']);
+            $res = $this->interface->update($id, $data['data']);
+            if ($res) {
+                $newRequest = new Request($data['head']);
+                return $this->index($newRequest);
+            }
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);
         }

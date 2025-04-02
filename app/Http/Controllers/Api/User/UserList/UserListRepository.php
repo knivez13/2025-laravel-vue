@@ -14,9 +14,9 @@ class UserListRepository extends BaseRepository implements UserListInterface
         'description' => ['required', 'string'],
     ];
 
-    protected array $filterableFields = ['code', 'description']; // Fields to search in
-    protected array $relationshipTable = ['createdBy', 'updatedBy'];
-    protected array $filteredInsertData = ['code', 'description'];
+    protected array $filterableFields = ['name', 'email']; // Fields to search in
+    protected array $relationshipTable = ['createdBy', 'updatedBy', 'roles'];
+    protected array $filteredInsertData = ['name', 'email'];
 
     public function __construct(User $model)
     {

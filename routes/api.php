@@ -39,4 +39,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\Subscription\\$controller\\{$controller}Controller")->except(['show']);
         }
     });
+    Route::prefix('users')->group(function () {
+        $subscriptions = [
+            'user-list' => 'UserList',
+            'role' => 'Role',
+        ];
+
+        foreach ($subscriptions as $route => $controller) {
+            Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\User\\$controller\\{$controller}Controller")->except(['destroy', 'store']);
+        }
+    });
 });
