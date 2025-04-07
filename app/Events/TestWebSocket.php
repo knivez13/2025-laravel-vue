@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Helper\ApiEncResponse;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -18,7 +19,7 @@ class TestWebSocket implements ShouldBroadcastNow
     public $data;
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->data = ApiEncResponse::encryptJson(["date" => $data]);
     }
 
     /**

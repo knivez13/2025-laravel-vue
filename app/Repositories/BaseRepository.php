@@ -5,16 +5,12 @@ namespace App\Repositories;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use App\Services\ValidationService;
-use App\Services\ImageUploadService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Services\ValidationService;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -24,108 +20,110 @@ class BaseRepository implements BaseRepositoryInterface
     protected array $relationshipTable = [];
     protected array $filteredInsertData = [];
 
-
     public function __construct(Model $model)
     {
         $this->model = $model;
     }
 
+    /**
+     * Retrieve all records.
+     */
     public function all(): Collection
     {
-        return  DB::transaction(function () {
-            return $this->model->all();
-        });
+        return DB::transaction(fn() => $this->model->all());
     }
 
+    /**
+     * Find a record by ID.
+     */
     public function find(string $id): ?Model
     {
-        return  DB::transaction(function () use ($id) {
-            return $this->model->find($id);
-        });
+        return DB::transaction(fn() => $this->model->find($id));
     }
 
-    public function create(array $data): Model
+    /**
+     * Create a new record.
+     */
+    public function create(array $data): bool
     {
-        return  DB::transaction(function () use ($data) {
-            if (!isset($this->rules)) {
-                throw new \Exception("Validation rules not defined in " . get_called_class());
-            }
-            ValidationService::validate($data, $this->rules);
-            $input = Arr::only($data, $this->filteredInsertData);
-            if (isset($data['file_path'])) {
-                $input['file_path'] = ImageUploadService::upload($data['file_path'], 'upload');
-            }
-            $input['created_by'] = Auth::user()->id;
-            return $this->model->create($input);
+        return DB::transaction(function () use ($data) {
+            $this->validateData($data);
+            $input = $this->prepareDataForInsert($data);
+            $this->model->create($input);
+            return true;
         });
     }
 
+    /**
+     * Update an existing record by ID.
+     */
     public function update(string $id, array $data): bool
     {
-        return  DB::transaction(function () use ($id, $data) {
-            if (!isset($this->rules)) {
-                throw new \Exception("Validation rules not defined in " . get_called_class());
-            }
-            ValidationService::validate($data, $this->rules, $id);
+        return DB::transaction(function () use ($id, $data) {
+            $this->validateData($data, $id);
             $record = $this->model->find($id);
-            $input = Arr::only($data, $this->filteredInsertData);
-            if (isset($data['file_path'])) {
-                $input['file_path'] = ImageUploadService::upload($data['file_path'], 'upload');
+            if (!$record) {
+                return false;
             }
-            $input['updated_by'] = Auth::user()->id;
-            return $record ? $record->update($input) : false;
+            $input = $this->prepareDataForInsert($data, false);
+            return $record->update($input);
         });
     }
 
+    /**
+     * Delete a record by ID.
+     */
     public function delete(string $id): bool
     {
-        return  DB::transaction(function () use ($id) {
+        return DB::transaction(function () use ($id) {
             $record = $this->model->find($id);
             return $record ? $record->delete() : false;
         });
     }
 
-    public function restore(string $id)
+    /**
+     * Restore a soft-deleted record by ID.
+     */
+    public function restore(string $id): bool
     {
-        return  DB::transaction(function () use ($id) {
-            $model = $this->model->onlyTrashed()->findOrFail($id);
-            return $model->restore(); // 🟢 Restore soft-deleted record
+        return DB::transaction(function () use ($id) {
+            $record = $this->model->onlyTrashed()->findOrFail($id);
+            return $record->restore();
         });
     }
 
-    public function forceDelete(string $id)
+    /**
+     * Permanently delete a soft-deleted record by ID.
+     */
+    public function forceDelete(string $id): bool
     {
-
-        return  DB::transaction(function () use ($id) {
-            $model = $this->model->onlyTrashed()->findOrFail($id);
-            return $model->forceDelete(); // 🛑 Permanently delete the record
+        return DB::transaction(function () use ($id) {
+            $record = $this->model->onlyTrashed()->findOrFail($id);
+            return $record->forceDelete();
         });
     }
 
-    public function getDeleted(int $perPage = 10)
+    /**
+     * Retrieve soft-deleted records with pagination.
+     */
+    public function getDeleted(int $perPage = 10): LengthAwarePaginator
     {
-        return $this->model->onlyTrashed()->paginate($perPage); // 🟢 Retrieve soft-deleted records
+        return $this->model->onlyTrashed()->paginate($perPage);
     }
 
-    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc'): LengthAwarePaginator
+    /**
+     * Paginate records with filters, sorting, and relationships.
+     */
+    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1): LengthAwarePaginator
     {
         $query = $this->model->query();
 
-        // 🔎 Word-based searching across multiple fields
-        if (!empty($filters['search']) && !empty($this->filterableFields)) {
-            $searchTerms = explode(' ', $filters['search']);
-            $query->where(function (Builder $q) use ($searchTerms) {
-                foreach ($searchTerms as $word) {
-                    $q->orWhere(function (Builder $subQuery) use ($word) {
-                        foreach ($this->filterableFields as $field) {
-                            $subQuery->orWhere($field, 'LIKE', "%$word%");
-                        }
-                    });
-                }
-            });
+        // Apply search filters
+        if (!empty($filters['keyword']) && !empty($this->filterableFields)) {
+            $this->applySearchFilter($query, $filters['keyword']);
         }
 
-        // 📅 Date range filtering
+        // Apply date range filters
         if (!empty($filters['start_date'])) {
             $query->whereDate('created_at', '>=', $filters['start_date']);
         }
@@ -133,30 +131,61 @@ class BaseRepository implements BaseRepositoryInterface
             $query->whereDate('created_at', '<=', $filters['end_date']);
         }
 
-        // 🏷️ Category filtering
-        if (!empty($filters['category_id'])) {
-            $query->where('category_id', $filters['category_id']);
+        // Apply additional filters
+        foreach (['category_id', 'user_id'] as $field) {
+            if (!empty($filters[$field])) {
+                $query->where($field, $filters[$field]);
+            }
         }
 
-        // 👤 Filter by user (if applicable)
-
-
-        if (!empty($filters['user_id'])) {
-            $query->where('user_id', $filters['user_id']);
-        }
-
-        if (!empty($filters['per_page'])) {
-            $perPage = $filters['per_page'];
-        }
-        // 🔀 Sorting
+        // Apply sorting
         if (!empty($sortBy) && !empty($sortOrder)) {
-            $query->orderBy($sortBy, $sortOrder);
+            $query->orderBy($sortBy, $sortOrder == 1 ? 'ASC' : 'DESC');
         }
 
+        // Load relationships
         if (!empty($this->relationshipTable)) {
             $query->with($this->relationshipTable);
         }
 
-        return $query->paginate($perPage);
+        return $query->paginate($filters['per_page'] ?? $perPage, ['*'], 'page', $page);
+    }
+
+    /**
+     * Validate data using the defined rules.
+     */
+    protected function validateData(array $data, ?string $id = null): void
+    {
+        if (empty($this->rules)) {
+            throw new \Exception("Validation rules not defined in " . get_called_class());
+        }
+        ValidationService::validate($data, $this->rules, $id);
+    }
+
+    /**
+     * Prepare data for insertion or update.
+     */
+    protected function prepareDataForInsert(array $data, bool $isNew = true): array
+    {
+        $input = Arr::only($data, $this->filteredInsertData);
+        $input[$isNew ? 'created_by' : 'updated_by'] = Auth::id();
+        return $input;
+    }
+
+    /**
+     * Apply search filters to the query.
+     */
+    protected function applySearchFilter(Builder $query, string $search): void
+    {
+        $searchTerms = explode(' ', $search);
+        $query->where(function (Builder $q) use ($searchTerms) {
+            foreach ($searchTerms as $term) {
+                $q->orWhere(function (Builder $subQuery) use ($term) {
+                    foreach ($this->filterableFields as $field) {
+                        $subQuery->orWhere($field, 'LIKE', "%$term%");
+                    }
+                });
+            }
+        });
     }
 }

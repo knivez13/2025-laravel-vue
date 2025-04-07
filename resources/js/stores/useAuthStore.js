@@ -1,67 +1,61 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('currency');
 import router from '@/router';
+
+const api = new Resource('currency');
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        token: [],
-        user: [],
-        roles: [],
-        permission: [],
+        token: null,
+        validation: [],
         processing: false,
-        error: []
+        error: null
     }),
     getters: {
         get_token: (state) => state.token
     },
     actions: {
-        check(res) {
-            if (res == 'user') {
-                return true;
-            } else {
-                return this.permission.includes(res);
+        // Check if the user has a specific permission
+        check(permission) {
+            return permission === 'user' || api.decrypt(this.token)['permission'].includes(permission);
+        },
+
+        // Clear user data and redirect to login
+        async clear() {
+            try {
+                await api.csrf();
+                await api.logout();
+                this.token = null;
+                this.user = [];
+                this.roles = [];
+                this.permission = [];
+                setTimeout(() => router.push('/login'), 100);
+            } catch (error) {
+                console.error('Error during logout:', error);
             }
         },
-        async clear() {
-            await api.csrf().then(async ({ e }) => {
-                await api.logout().then(({ data }) => {
-                    this.token = [];
-                    this.user = [];
-                    this.roles = [];
-                    this.permission = [];
-                    setTimeout(() => router.push('/login'), 500);
-                });
-            });
-        },
-        async loginUser(res) {
+
+        // Login user and handle authentication
+        async loginUser(credentials) {
             if (this.processing) return;
             this.processing = true;
+            this.token = null;
             this.error = null;
-            await api.csrf().then(async ({ e }) => {
-                await api
-                    .login(res)
-                    .then(({ data }) => {
-                        if (data.data == 'Wrong Username or Password') {
-                            this.error = data.data;
-                        }
-                        if (data?.data.token && data?.data.user) {
-                            this.$state.token = data.data.token;
-                            this.$state.user = data.data.user;
-                            this.$state.roles = data.data.roles;
-                            this.$state.permission = data.data.permission;
-                            setTimeout(() => router.push('/'), 500);
-                            this.error = null;
-                        }
-                    })
-                    .catch((e) => {
-                        // console.log(e);
-                        this.error = e;
-                    })
-                    .finally(() => {
-                        this.processing = false;
-                    });
-            });
+            try {
+                await api.csrf();
+                const { data } = await api.login(credentials);
+                // console.log(api.decrypt(data?.response_data));
+                if (api.decrypt(data?.response_data) === 'Wrong Username or Password') {
+                    this.error = 'Wrong Username or Password';
+                } else if (data) {
+                    this.token = data?.response_data;
+                    router.push('/manage-rental/dashboard');
+                }
+            } catch (error) {
+                console.error('Login Error:', error);
+            } finally {
+                this.processing = false;
+            }
         }
     },
     persist: true

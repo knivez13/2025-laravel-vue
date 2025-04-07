@@ -8,6 +8,10 @@ import { ref } from 'vue';
 
 const { layoutConfig, isDarkTheme } = useLayout();
 
+onMounted(async () => {
+    updateColors('primary', 'yellow');
+});
+
 const presets = {
     Aura,
     Lara,
@@ -84,17 +88,17 @@ function getPresetExt() {
         return {
             semantic: {
                 primary: {
-                    50: '{surface.50}',
-                    100: '{surface.100}',
-                    200: '{surface.200}',
-                    300: '{surface.300}',
-                    400: '{surface.400}',
-                    500: '{surface.500}',
-                    600: '{surface.600}',
-                    700: '{surface.700}',
-                    800: '{surface.800}',
-                    900: '{surface.900}',
-                    950: '{surface.950}'
+                    50: '#fffbeb',
+                    100: '#fef3c7',
+                    200: '#fde68a',
+                    300: '#fcd34d',
+                    400: '#fbbf24',
+                    500: '#f59e0b',
+                    600: '#d97706',
+                    700: '#b45309',
+                    800: '#92400e',
+                    900: '#78350f',
+                    950: '#451a03'
                 },
                 colorScheme: {
                     light: {
@@ -168,11 +172,13 @@ function getPresetExt() {
 }
 
 function updateColors(type, color) {
-    if (type === 'primary') {
-        layoutConfig.primary = color.name;
-    } else if (type === 'surface') {
-        layoutConfig.surface = color.name;
-    }
+    // if (type === 'primary') {
+    //     layoutConfig.primary = color.name;
+    // } else if (type === 'surface') {
+    //     layoutConfig.surface = color.name;
+    // }
+    layoutConfig.primary = 'yellow';
+    layoutConfig.surface = 'yellow';
 
     applyTheme(type, color);
 }

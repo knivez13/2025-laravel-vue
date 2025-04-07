@@ -5,27 +5,184 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
-        label: 'Home',
-        items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/', meta: 'user' }]
+        label: 'Manage Rental',
+        meta: 'user',
+        items: [
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'My Listing', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
+            { label: 'Create Property', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' },
+            { label: 'Message', icon: 'pi pi-fw pi-home', to: '/manage-rental/message', meta: 'user' },
+            { label: 'Subcription', icon: 'pi pi-fw pi-home', to: '/manage-rental/subscription', meta: 'user' },
+            { label: 'Favorites', icon: 'pi pi-fw pi-home', to: '/manage-rental/favorites', meta: 'user' },
+            { label: 'Save', icon: 'pi pi-fw pi-home', to: '/manage-rental/save', meta: 'user' }
+        ]
     },
     {
-        label: 'UI Components',
+        label: 'Admin',
+        meta: 'user',
         items: [
-            { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout', meta: 'user' },
-            { label: 'Input', icon: 'pi pi-fw pi-check-square', to: '/uikit/input', meta: 'user' },
-            { label: 'Button', icon: 'pi pi-fw pi-mobile', to: '/uikit/button', class: 'rotated-icon', meta: 'user' },
-            { label: 'Table', icon: 'pi pi-fw pi-table', to: '/uikit/table', meta: 'user' },
-            { label: 'List', icon: 'pi pi-fw pi-list', to: '/uikit/list', meta: 'user' },
-            { label: 'Tree', icon: 'pi pi-fw pi-share-alt', to: '/uikit/tree', meta: 'user' },
-            { label: 'Panel', icon: 'pi pi-fw pi-tablet', to: '/uikit/panel', meta: 'user' },
-            { label: 'Overlay', icon: 'pi pi-fw pi-clone', to: '/uikit/overlay', meta: 'user' },
-            { label: 'Media', icon: 'pi pi-fw pi-image', to: '/uikit/media', meta: 'user' },
-            { label: 'Menu', icon: 'pi pi-fw pi-bars', to: '/uikit/menu', meta: 'user' },
-            { label: 'Message', icon: 'pi pi-fw pi-comment', to: '/uikit/message', meta: 'user' },
-            { label: 'File', icon: 'pi pi-fw pi-file', to: '/uikit/file', meta: 'user' },
-            { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', to: '/uikit/charts', meta: 'user' },
-            { label: 'Timeline', icon: 'pi pi-fw pi-calendar', to: '/uikit/timeline', meta: 'user' },
-            { label: 'Misc', icon: 'pi pi-fw pi-circle', to: '/uikit/misc', meta: 'user' }
+            {
+                label: 'Dashboard',
+                icon: 'pi pi-fw pi-globe',
+                to: '/admin/dashboard',
+                meta: 'user'
+            },
+            { label: 'Message', icon: 'pi pi-fw pi-home', to: '/admin/message', meta: 'user' },
+
+            {
+                label: 'Property Management',
+                icon: 'pi pi-fw pi-user',
+                meta: 'user',
+                items: [
+                    {
+                        label: 'Property List',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/admin/property-management/property-list',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'For Approval',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/admin/property-management/for-approval',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Active',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/property-management/active',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Reject',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/property-management/reject',
+                        meta: 'user'
+                    }
+                ]
+            },
+            {
+                label: 'Maintenance',
+                icon: 'pi pi-fw pi-user',
+                meta: 'user',
+                items: [
+                    {
+                        label: 'Amenity',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/admin/maintenance/amenity',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Appliances',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/admin/maintenance/appliances',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'File Type',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/file-type',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Mode of Payment',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/mode-of-payment',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Price Type',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/price-type',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Category',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-category',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Condition',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-condition',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Listing Type',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-listing-type',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Type',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-type',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Property Status',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/property-status',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Utility Included',
+                        icon: 'pi pi-fw pi-lock',
+                        to: '/admin/maintenance/utility-included',
+                        meta: 'user'
+                    }
+                ]
+            },
+            {
+                label: 'User Management',
+                icon: 'pi pi-fw pi-user',
+                meta: 'user',
+                items: [
+                    {
+                        label: 'User List',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/admin/user-management/user-list',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Role',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/admin/user-management/role',
+                        meta: 'user'
+                    }
+                ]
+            },
+            {
+                label: 'Subscription Management',
+                icon: 'pi pi-fw pi-user',
+                meta: 'user',
+                items: [
+                    {
+                        label: 'User Subscription',
+                        icon: 'pi pi-fw pi-sign-in',
+                        to: '/admin/subscription-management/user-subscription',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Expired this Month',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/admin/subscription-management/expired-month',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'For Approval',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/admin/subscription-management/for-approval',
+                        meta: 'user'
+                    },
+                    {
+                        label: 'Subscription Type',
+                        icon: 'pi pi-fw pi-times-circle',
+                        to: '/admin/subscription-management/subscription-type',
+                        meta: 'user'
+                    }
+                ]
+            }
         ]
     }
 ]);

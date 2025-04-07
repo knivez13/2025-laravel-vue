@@ -26,4 +26,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by')->select('id', 'name');
+    }
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by')->select('id', 'name');
+    }
 }
