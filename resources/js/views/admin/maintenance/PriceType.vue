@@ -132,7 +132,7 @@ const show_edit = async (data) => {
             v-model:visible="option.show_modal"
             modal
             :closable="false"
-            position="top"
+            position="center"
             :draggable="false"
             :style="{ width: '30rem' }"
             :pt="{
