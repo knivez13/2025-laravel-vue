@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Maintenance;
+namespace App\Models\User;
 
 use App\Models\User;
 use App\Traits\Uuids;
@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ModePayment extends Model
+class BankAccount extends Model
 {
     use HasFactory, Uuids, SoftDeletes, LocalTimestamps;
     protected $guarded = [];
@@ -21,5 +21,9 @@ class ModePayment extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by')->select('id', 'name');
+    }
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
     }
 }

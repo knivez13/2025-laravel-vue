@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('property_saves', function (Blueprint $table) {
+        Schema::create('agent_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('property_list_id')->nullable();
-            $table->foreign('property_list_id')->references('id')->on('property_lists');
-            $table->uuid('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable();
-            $table->foreign('created_by')->references('id')->on('users');
-            $table->foreign('updated_by')->references('id')->on('users');
+            $table->string('code')->unique();
+            $table->longText('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->uuid('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->uuid('updated_by')->nullable();
+            $table->foreign('updated_by')->references('id')->on('users');
+            $table->uuid('deleted_by')->nullable();
+            $table->foreign('deleted_by')->references('id')->on('users');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_saves');
+        Schema::dropIfExists('agent_types');
     }
 };

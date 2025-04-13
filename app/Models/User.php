@@ -35,4 +35,8 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'updated_by')->select('id', 'name');
     }
+    public function deletedBy()
+    {
+        return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
+    }
 }
