@@ -45,7 +45,7 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action" v-tooltip.bottom="'My Profile'">
+                    <button type="button" class="layout-topbar-action" v-tooltip.bottom="'My Profile'" @click="$router.push('/manage-rental/profile')">
                         <i class="pi pi-user"></i>
                         <span>My Profile</span>
                     </button>
