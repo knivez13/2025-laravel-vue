@@ -1,15 +1,15 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { usePropertyStatusStore } from '@/stores/admin/maintenance/usePropertyStatusStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = usePropertyStatusStore();
-const { error, processing, token, option } = storeToRefs(usePropertyStatusStore());
+import { useAmenityStore } from '@/stores/useAmenityStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useAmenityStore();
+const { error, processing, token, option } = storeToRefs(useAmenityStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Property List Type');
+const title = ref('Amenity');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({

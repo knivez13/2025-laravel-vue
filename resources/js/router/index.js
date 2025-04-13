@@ -11,16 +11,6 @@ const routes = [
         path: '/',
         children: landingRoutes
     },
-    {
-        path: '/manage-rental',
-        component: AppLayout,
-        children: manageRentalRoutes
-    },
-    {
-        path: '/admin',
-        component: AppLayout,
-        children: adminRoutes
-    },
     { path: '/login', meta: { access: 'user' }, component: () => import('@/views/Login.vue') },
     { path: '/auth/access', meta: { access: 'user' }, component: () => import('@/views/Access.vue') },
     { path: '/auth/error', meta: { access: 'user' }, component: () => import('@/views/Error.vue') }
