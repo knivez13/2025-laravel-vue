@@ -12,9 +12,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <title>Comp-Up | Dashboard</title>
+    <title>Casino | Dashboard</title>
+
+    <meta name="description" content="Online Casino Dashboard">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="knivez13">
     <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
 
     @vite(['resources/js/app.js'])
     <style type="text/css">

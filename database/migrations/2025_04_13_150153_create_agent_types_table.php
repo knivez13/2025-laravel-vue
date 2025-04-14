@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('agent_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->integer('order_list')->default(0);
             $table->string('code')->unique();
             $table->longText('description')->nullable();
             $table->timestamps();

@@ -5,182 +5,40 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
-        label: 'Manage Rental',
+        label: 'Menu',
         meta: 'user',
         items: [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'My Listing', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
-            { label: 'Create Property', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' },
-            { label: 'Message', icon: 'pi pi-fw pi-home', to: '/manage-rental/message', meta: 'user' },
-            { label: 'Subcription', icon: 'pi pi-fw pi-home', to: '/manage-rental/subscription', meta: 'user' },
-            { label: 'Favorites', icon: 'pi pi-fw pi-home', to: '/manage-rental/favorites', meta: 'user' },
-            { label: 'Save', icon: 'pi pi-fw pi-home', to: '/manage-rental/save', meta: 'user' }
+            { label: 'Home', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Live Casino', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Scatter Game', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Lotto', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Sabong', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Sports Betting', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Betting History', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Transaction', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' }
         ]
     },
     {
-        label: 'Admin',
+        label: 'Management',
         meta: 'user',
         items: [
-            {
-                label: 'Dashboard',
-                icon: 'pi pi-fw pi-globe',
-                to: '/admin/dashboard',
-                meta: 'user'
-            },
-            { label: 'Message', icon: 'pi pi-fw pi-home', to: '/admin/message', meta: 'user' },
-
-            {
-                label: 'Property Management',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'Property List',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/property-management/property-list',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'For Approval',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/property-management/for-approval',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Active',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/property-management/active',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Reject',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/property-management/reject',
-                        meta: 'user'
-                    }
-                ]
-            },
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard', meta: 'user' },
+            { label: 'Earnings', icon: 'pi pi-fw pi-home', to: '/admin/message1', meta: 'user' },
+            { label: 'Live Games', icon: 'pi pi-fw pi-home', to: '/admin/message2', meta: 'user' },
+            { label: 'Agent & Player', icon: 'pi pi-fw pi-home', to: '/admin/messag3e', meta: 'user' },
             {
                 label: 'Maintenance',
                 icon: 'pi pi-fw pi-user',
                 meta: 'user',
                 items: [
-                    {
-                        label: 'Amenity',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/maintenance/amenity',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Appliances',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/maintenance/appliances',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'File Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/file-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Mode of Payment',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/mode-of-payment',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Price Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/price-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Category',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-category',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Condition',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-condition',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Listing Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-listing-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Status',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-status',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Utility Included',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/utility-included',
-                        meta: 'user'
-                    }
-                ]
-            },
-            {
-                label: 'User Management',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'User List',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/user-management/user-list',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Role',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/user-management/role',
-                        meta: 'user'
-                    }
-                ]
-            },
-            {
-                label: 'Subscription Management',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'User Subscription',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/subscription-management/user-subscription',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Expired this Month',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/subscription-management/expired-month',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'For Approval',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/subscription-management/for-approval',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Subscription Type',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/subscription-management/subscription-type',
-                        meta: 'user'
-                    }
+                    { label: 'Game Present', icon: 'pi pi-fw pi-home', to: '/admin/message1', meta: 'user' },
+                    { label: 'Game Announcement', icon: 'pi pi-fw pi-home', to: '/admin/message2', meta: 'user' },
+                    { label: 'Game Videos', icon: 'pi pi-fw pi-home', to: '/admin/message3', meta: 'user' },
+                    { label: 'Game Type', icon: 'pi pi-fw pi-home', to: '/admin/message4', meta: 'user' },
+                    { label: 'Agent Type', icon: 'pi pi-fw pi-home', to: '/admin/message5', meta: 'user' },
+                    { label: 'Video Type', icon: 'pi pi-fw pi-home', to: '/admin/message6', meta: 'user' },
+                    { label: 'Bank Type', icon: 'pi pi-fw pi-home', to: '/admin/message7', meta: 'user' },
+                    { label: 'Game Provider', icon: 'pi pi-fw pi-home', to: '/admin/message8', meta: 'user' }
                 ]
             }
         ]
