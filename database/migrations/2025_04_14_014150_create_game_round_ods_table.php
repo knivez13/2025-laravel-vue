@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('game_round_id')->references('id')->on('game_list_rounds');
             $table->uuid('win_option_id')->nullable();
             $table->foreign('win_option_id')->references('id')->on('game_present_options');
-            $table->decimal('ods', 18, 6)->default(0);
+            $table->decimal('ods', 18, 10)->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();

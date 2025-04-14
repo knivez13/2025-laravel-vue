@@ -11,18 +11,31 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_round_bets', function (Blueprint $table) {
+        Schema::create('game_commissions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            
+            $table->uuid('game_present_id')->nullable();
+            $table->foreign('game_present_id')->references('id')->on('game_presents');
+
+            $table->uuid('game_list_id')->nullable();
+            $table->foreign('game_list_id')->references('id')->on('game_lists');
+
             $table->uuid('game_round_id')->nullable();
             $table->foreign('game_round_id')->references('id')->on('game_list_rounds');
-            $table->uuid('bet_option_id')->nullable();
-            $table->foreign('bet_option_id')->references('id')->on('game_present_options');
+
+            $table->uuid('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
+
             $table->decimal('bet_amount', 18, 10)->default(0);
             $table->decimal('before_amount', 18, 10)->default(0);
             $table->decimal('after_amount', 18, 10)->default(0);
-            $table->tinyInteger('is_win')->default(0);
+            $table->decimal('profit', 18, 10)->default(0);
+
+            $table->uuid('agent_id')->nullable();
+            $table->foreign('agent_id')->references('id')->on('users');
+            $table->tinyInteger('is_sync');
+            $table->tinyInteger('is_payment');
+
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();
@@ -39,6 +52,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_round_bets');
+        Schema::dropIfExists('game_commissions');
     }
 };

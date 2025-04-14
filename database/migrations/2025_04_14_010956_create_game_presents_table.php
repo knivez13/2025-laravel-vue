@@ -15,10 +15,16 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('code')->unique();
             $table->longText('description')->nullable();
-            $table->decimal('min_bet', 18, 6)->default(0);
-            $table->decimal('max_bet', 18, 6)->default(0);
-            $table->decimal('max_total_bet', 18, 6)->default(0);
+            $table->decimal('min_bet', 18, 10)->default(0);
+            $table->decimal('max_bet', 18, 10)->default(0);
+            $table->decimal('max_total_bet', 18, 10)->default(0);
             $table->integer('bet_opt_winner')->default(0);
+
+            $table->uuid('game_type_id')->nullable();
+            $table->foreign('game_type_id')->references('id')->on('game_types');
+
+            $table->uuid('game_provider_id')->nullable();
+            $table->foreign('game_provider_id')->references('id')->on('game_providers');
 
             $table->uuid('live_one_id')->nullable();
             $table->foreign('live_one_id')->references('id')->on('live_videos');

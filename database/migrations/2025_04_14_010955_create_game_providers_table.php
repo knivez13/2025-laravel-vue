@@ -11,18 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('game_list_rounds', function (Blueprint $table) {
+        Schema::create('game_providers', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->integer('round_no')->default(0);
-
-            $table->uuid('game_list_id')->nullable();
-            $table->foreign('game_list_id')->references('id')->on('game_lists');
-
-            $table->uuid('win_option_id')->nullable();
-            $table->foreign('win_option_id')->references('id')->on('game_present_options');
-
-            $table->tinyInteger('status')->default(0);
-
+            $table->string('code')->unique();
+            $table->longText('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();
@@ -39,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_list_rounds');
+        Schema::dropIfExists('game_providers');
     }
 };
