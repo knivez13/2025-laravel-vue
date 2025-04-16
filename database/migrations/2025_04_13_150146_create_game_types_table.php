@@ -10,7 +10,7 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+    {   /// Slot Games,Live Games,Sports Games,Live Casino,Virtual Games,Table Games
         Schema::create('game_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('code')->unique();
