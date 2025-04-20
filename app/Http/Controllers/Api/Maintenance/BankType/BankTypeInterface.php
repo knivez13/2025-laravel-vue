@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\Maintenance\BankType;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\BaseRepositoryInterface;
 
-class BankTypeInterface extends Controller
+interface BankTypeInterface extends BaseRepositoryInterface
 {
     //
 }

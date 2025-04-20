@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\User\UserCommission;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\BaseRepositoryInterface;
 
-class UserCommissionInterface extends Controller
+interface UserCommissionInterface extends BaseRepositoryInterface
+
 {
     //
 }

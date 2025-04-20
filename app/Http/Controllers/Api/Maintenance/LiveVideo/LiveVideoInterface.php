@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\Maintenance\LiveVideo;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\BaseRepositoryInterface;
 
-class LiveVideoInterface extends Controller
+interface LiveVideoInterface extends BaseRepositoryInterface
 {
     //
 }

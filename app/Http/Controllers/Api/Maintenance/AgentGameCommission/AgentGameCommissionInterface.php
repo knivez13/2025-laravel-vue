@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\Maintenance\AgentGameCommission;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\BaseRepositoryInterface;
 
-class AgentGameCommissionInterface extends Controller
+interface AgentGameCommissionInterface extends BaseRepositoryInterface
 {
     //
 }

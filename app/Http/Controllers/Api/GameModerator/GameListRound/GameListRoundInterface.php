@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\GameModerator\GameListRound;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\BaseRepositoryInterface;
 
-class GameListRoundInterface extends Controller
+interface GameListRoundInterface extends BaseRepositoryInterface
 {
     //
 }

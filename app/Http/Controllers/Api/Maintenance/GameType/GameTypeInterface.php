@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api\Maintenance\GameType;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\BaseRepositoryInterface;
 
-class GameTypeInterface extends Controller
+interface GameTypeInterface extends BaseRepositoryInterface
 {
     //
 }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api\Maintenance\AgentType;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\BaseRepositoryInterface;
 
-class AgentTypeInterface extends Controller
+interface AgentTypeInterface extends BaseRepositoryInterface
 {
     //
 }

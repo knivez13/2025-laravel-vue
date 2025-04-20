@@ -2,10 +2,22 @@
 
 namespace App\Http\Controllers\Api\GameModerator\GameRoundOds;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Repositories\BaseRepository;
+use App\Models\GameModerator\GameRoundOds;
 
-class GameRoundOdsRepository extends Controller
+class GameRoundOdsRepository extends BaseRepository implements GameRoundOdsInterface
 {
-    //
+    protected array $rules = [
+        'code' => ['required', 'string', 'unique:amenities,code'],
+        'description' => ['required', 'string'],
+    ];
+
+    protected array $filterableFields = ['code', 'description']; // Fields to search in
+    protected array $relationshipTable = ['createdBy', 'updatedBy'];
+    protected array $filteredInsertData = ['code', 'description'];
+
+    public function __construct(GameRoundOds $model)
+    {
+        parent::__construct($model);
+    }
 }

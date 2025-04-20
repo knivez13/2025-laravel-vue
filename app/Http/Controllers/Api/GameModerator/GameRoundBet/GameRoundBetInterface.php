@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\GameModerator\GameRoundBet;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\BaseRepositoryInterface;
 
-class GameRoundBetInterface extends Controller
+
+interface GameRoundBetInterface extends BaseRepositoryInterface
 {
     //
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api\Maintenance\GameType;
+namespace App\Http\Controllers\Api\Maintenance\GamePresentAnnouncement;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Maintenance\GameType;
 use App\Repositories\BaseRepository;
+use App\Models\Maintenance\GamePresentAnnouncement;
 
-class GameTypeRepository extends BaseRepository implements GameTypeInterface
+class GamePresentAnnouncementRepository extends BaseRepository implements GamePresentAnnouncementInterface
 {
     protected array $rules = [
         'code' => ['required', 'string', 'unique:amenities,code'],
@@ -18,7 +18,7 @@ class GameTypeRepository extends BaseRepository implements GameTypeInterface
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
 
-    public function __construct(GameType $model)
+    public function __construct(GamePresentAnnouncement $model)
     {
         parent::__construct($model);
     }
