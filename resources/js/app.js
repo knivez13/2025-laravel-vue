@@ -16,6 +16,7 @@ import GoogleTranslateSelect from '@google-translate-select/vue3';
 
 import { createPinia } from 'pinia';
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate';
+import i18n from './i18n';
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedState);
@@ -24,6 +25,7 @@ const app = createApp(App);
 
 app.use(router);
 app.use(pinia);
+app.use(i18n);
 
 app.use(GoogleTranslateSelect);
 
@@ -31,7 +33,7 @@ app.use(PrimeVue, {
     theme: {
         preset: Aura,
         options: {
-            darkModeSelector: '.app-dark',
+            darkModeSelector: '.app-dark'
         }
     }
 });
