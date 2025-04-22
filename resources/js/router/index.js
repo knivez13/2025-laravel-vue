@@ -11,11 +11,11 @@ const routes = [
         path: '/',
         children: landingRoutes
     },
-    {
-        path: '/manage-rental',
-        component: AppLayout,
-        children: manageRentalRoutes
-    },
+    // {
+    //     path: '/manage-rental',
+    //     component: AppLayout,
+    //     children: manageRentalRoutes
+    // },
     {
         path: '/admin',
         component: AppLayout,

@@ -5,184 +5,42 @@ import AppMenuItem from './AppMenuItem.vue';
 
 const model = ref([
     {
-        label: 'Manage Rental',
+        label: 'Portfolio',
         meta: 'user',
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'My Listing', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
-            { label: 'Create Property', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' },
-            { label: 'Message', icon: 'pi pi-fw pi-home', to: '/manage-rental/message', meta: 'user' },
-            { label: 'Subcription', icon: 'pi pi-fw pi-home', to: '/manage-rental/subscription', meta: 'user' },
-            { label: 'Favorites', icon: 'pi pi-fw pi-home', to: '/manage-rental/favorites', meta: 'user' },
-            { label: 'Save', icon: 'pi pi-fw pi-home', to: '/manage-rental/save', meta: 'user' }
+            { label: 'Assets', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
+            { label: 'Analytics', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' },
+            { label: 'Transactions', icon: 'pi pi-fw pi-home', to: '/manage-rental/message', meta: 'user' }
         ]
     },
     {
-        label: 'Admin',
+        label: 'Profile',
         meta: 'user',
         items: [
-            {
-                label: 'Dashboard',
-                icon: 'pi pi-fw pi-globe',
-                to: '/admin/dashboard',
-                meta: 'user'
-            },
-            { label: 'Message', icon: 'pi pi-fw pi-home', to: '/admin/message', meta: 'user' },
-
-            {
-                label: 'Property Management',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'Property List',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/property-management/property-list',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'For Approval',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/property-management/for-approval',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Active',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/property-management/active',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Reject',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/property-management/reject',
-                        meta: 'user'
-                    }
-                ]
-            },
-            {
-                label: 'Maintenance',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'Amenity',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/maintenance/amenity',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Appliances',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/maintenance/appliances',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'File Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/file-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Mode of Payment',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/mode-of-payment',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Price Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/price-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Category',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-category',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Condition',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-condition',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Listing Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-listing-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Type',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-type',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Property Status',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/property-status',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Utility Included',
-                        icon: 'pi pi-fw pi-lock',
-                        to: '/admin/maintenance/utility-included',
-                        meta: 'user'
-                    }
-                ]
-            },
-            {
-                label: 'User Management',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'User List',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/user-management/user-list',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Role',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/user-management/role',
-                        meta: 'user'
-                    }
-                ]
-            },
-            {
-                label: 'Subscription Management',
-                icon: 'pi pi-fw pi-user',
-                meta: 'user',
-                items: [
-                    {
-                        label: 'User Subscription',
-                        icon: 'pi pi-fw pi-sign-in',
-                        to: '/admin/subscription-management/user-subscription',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Expired this Month',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/subscription-management/expired-month',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'For Approval',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/subscription-management/for-approval',
-                        meta: 'user'
-                    },
-                    {
-                        label: 'Subscription Type',
-                        icon: 'pi pi-fw pi-times-circle',
-                        to: '/admin/subscription-management/subscription-type',
-                        meta: 'user'
-                    }
-                ]
-            }
+            { label: 'About Me', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Security', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
+            { label: 'Verification (KYC)', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' }
+        ]
+    },
+    {
+        label: 'Finance',
+        meta: 'user',
+        items: [
+            { label: 'Deposit', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Withdraw', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
+            { label: 'History Transfer', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' }
+        ]
+    },
+    {
+        label: 'Affiliate',
+        meta: 'user',
+        items: [
+            { label: 'Registrations', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            { label: 'Commission (USD)', icon: 'pi pi-fw pi-home', to: '/manage-rental/my-listing', meta: 'user' },
+            { label: 'Rate (10%)', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' },
+            { label: 'Available For Withdrawal', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' },
+            { label: 'Transfer to Trading Account', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' }
         ]
     }
 ]);
