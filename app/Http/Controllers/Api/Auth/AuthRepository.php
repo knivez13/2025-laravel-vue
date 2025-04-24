@@ -24,7 +24,7 @@ class AuthRepository implements AuthInterface
     {
         try {
             return  DB::transaction(function () use ($data) {
-                if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
+                if (Auth::attempt(['email' => $data['email'], 'password' => $data['password'], 'isban' => 0])) {
                     Auth::user()->tokens()->delete();
                     $user = Auth::user();
                     return [
