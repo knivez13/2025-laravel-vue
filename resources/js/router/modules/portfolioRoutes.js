@@ -1,5 +1,8 @@
-const adminRoutes = [
-    { path: 'dashboard', meta: { access: 'user' }, component: () => import('@/views/admin/dashboard/Dashboard.vue') }
+const portfolioRoutes = [
+    { path: 'dashboard', meta: { access: 'user' }, component: () => import('@/views/portfolio/dashboard/index.vue') },
+    { path: 'asset', meta: { access: 'user' }, component: () => import('@/views/portfolio/asset/index.vue') },
+    { path: 'analytics', meta: { access: 'user' }, component: () => import('@/views/portfolio/analytics/index.vue') },
+    { path: 'transaction', meta: { access: 'user' }, component: () => import('@/views/portfolio/transaction/index.vue') }
 
     // {
     //     path: 'subscription-management',
@@ -11,4 +14,4 @@ const adminRoutes = [
     //     ]
     // }
 ];
-export default adminRoutes;
+export default portfolioRoutes;

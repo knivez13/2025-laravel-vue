@@ -36,14 +36,11 @@ return new class extends Migration
         }
 
         $user = User::create([
-            // 'emp_id' => 'SA-001',
             'name' => 'Bonjour',
-            // 'middle_name' => 'Lopez',
-            // 'last_name' => 'De Guzman',
             'email' => 'bonjourdeguzman@gmail.com',
-            // 'contact_no' => '09666594533',
-            // 'status' => 1,
             'password' => Hash::make('password'),
+            'apiKey' => 'eJCdkr5O7T89RhquM6hxlQ35jtj685tBOBQTg6A28AnqRlZO6HixN1HN2yTKEeXz',
+            'secretKey' => 'MyO7WfOYcHMywm8qtl7oGkNNLjHsC7Zc646bD7Udwzo2A7JvfSEryMfDCnoo7GcW',
         ]);
         $role = Role::create(['name' => 'SystemAdmin']);
         $permissions = Permission::pluck('id', 'id')->all();

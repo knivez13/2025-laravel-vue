@@ -2,8 +2,10 @@ import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/useAuthStore.js';
 import landingRoutes from '@/router/modules/landingRoutes.js';
-import manageRentalRoutes from '@/router/modules/manageRentalRoutes.js';
-import adminRoutes from '@/router/modules/adminRoutes.js';
+import portfolioRoutes from '@/router/modules/portfolioRoutes.js';
+import profileRoutes from '@/router/modules/profileRoutes.js';
+import financeRoutes from '@/router/modules/financeRoutes.js';
+import affiliateRoutes from '@/router/modules/affiliateRoutes.js';
 
 // Define Routes
 const routes = [
@@ -11,15 +13,25 @@ const routes = [
         path: '/',
         children: landingRoutes
     },
-    // {
-    //     path: '/manage-rental',
-    //     component: AppLayout,
-    //     children: manageRentalRoutes
-    // },
     {
-        path: '/admin',
+        path: '/portfolio',
         component: AppLayout,
-        children: adminRoutes
+        children: portfolioRoutes
+    },
+    {
+        path: '/profile',
+        component: AppLayout,
+        children: profileRoutes
+    },
+    {
+        path: '/finance',
+        component: AppLayout,
+        children: financeRoutes
+    },
+    {
+        path: '/affiliate',
+        component: AppLayout,
+        children: affiliateRoutes
     },
     { path: '/login', meta: { access: 'user' }, component: () => import('@/views/Login.vue') },
     { path: '/auth/access', meta: { access: 'user' }, component: () => import('@/views/Access.vue') },

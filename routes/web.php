@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BinanceApi;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SampleWebSocketTest;
 
@@ -22,4 +23,5 @@ Route::get('{any}', function () {
 //     return view('welcome');
 // });
 
-Route::get('/test', [SampleWebSocketTest::class, 'test']);
+// Route::get('/test', [SampleWebSocketTest::class, 'test']);
+// Route::get('/sample', [BinanceApi::class, 'getProfile']);

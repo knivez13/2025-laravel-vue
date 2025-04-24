@@ -9,7 +9,7 @@ import { ref } from 'vue';
 const { layoutConfig, isDarkTheme } = useLayout();
 
 onMounted(async () => {
-    updateColors('primary', 'yellow');
+    updateColors('primary', 'blue');
 });
 
 const presets = {
@@ -177,8 +177,8 @@ function updateColors(type, color) {
     // } else if (type === 'surface') {
     //     layoutConfig.surface = color.name;
     // }
-    layoutConfig.primary = 'yellow';
-    layoutConfig.surface = 'yellow';
+    layoutConfig.primary = 'blue';
+    layoutConfig.surface = 'blue';
 
     applyTheme(type, color);
 }

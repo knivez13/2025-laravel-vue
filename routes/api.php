@@ -8,4 +8,6 @@ Route::controller(\App\Http\Controllers\Api\Auth\AuthController::class)->group(f
 });
 
 // Protected Routes (Requires Authentication)
-Route::middleware(['auth:sanctum'])->group(function () {});
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::apiResource('dashboard', App\Http\Controllers\Api\Binance\BinanceController::class)->only(['index']);
+});

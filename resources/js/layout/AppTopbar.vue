@@ -45,10 +45,10 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action" v-tooltip.bottom="'My Profile'">
-                        <i class="pi pi-user"></i>
-                        <span>My Profile</span>
+                    <button type="button" class="layout-topbar-action" @click="toggleDarkMode" v-tooltip.bottom="isDarkTheme ? 'Dark Mode' : ' Light Mode'">
+                        <i :class="['pi', { 'pi-moon': isDarkTheme, 'pi-sun': !isDarkTheme }]"></i>
                     </button>
+
                     <button type="button" class="layout-topbar-action" v-tooltip.bottom="'Logout'">
                         <i class="pi pi-sign-out"></i>
                         <span>Logout</span>
