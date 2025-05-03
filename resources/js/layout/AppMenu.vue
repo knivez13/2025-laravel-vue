@@ -37,7 +37,7 @@ const model = ref([
                     { label: 'Game Type', icon: 'pi pi-fw pi-home', to: '/admin/message4', meta: 'user' },
                     { label: 'Agent Type', icon: 'pi pi-fw pi-home', to: '/admin/message5', meta: 'user' },
                     { label: 'Video Type', icon: 'pi pi-fw pi-home', to: '/admin/message6', meta: 'user' },
-                    { label: 'Bank Type', icon: 'pi pi-fw pi-home', to: '/admin/message7', meta: 'user' },
+                    { label: 'Bank Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/bankType', meta: 'user' },
                     { label: 'Game Provider', icon: 'pi pi-fw pi-home', to: '/admin/message8', meta: 'user' }
                 ]
             }

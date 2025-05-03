@@ -10,7 +10,7 @@ use App\Repositories\BaseRepository;
 class BankTypeRepository extends BaseRepository implements BankTypeInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'code' => ['required', 'string', 'unique:bank_types,code'],
         'description' => ['required', 'string'],
     ];
 

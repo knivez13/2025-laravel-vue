@@ -14,7 +14,7 @@ class GamePresentAnnouncementController extends Controller
 {
     protected $interface;
 
-    public function __construct(GamePresentAnnounementInterface $interface)
+    public function __construct(GamePresentAnnouncementInterface $interface)
     {
         $this->interface = $interface;
     }

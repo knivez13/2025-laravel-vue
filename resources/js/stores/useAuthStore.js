@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
                     this.error = 'Wrong Username or Password';
                 } else if (data) {
                     this.token = data?.response_data;
-                    router.push('/manage-rental/dashboard');
+                    router.push('/admin/dashboard');
                 }
             } catch (error) {
                 console.error('Login Error:', error);

@@ -5,7 +5,6 @@ import AppSidebar from './AppSidebar.vue';
 import AppTopbar from './AppTopbar.vue';
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import CryptoJS from 'crypto-js';
 
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 

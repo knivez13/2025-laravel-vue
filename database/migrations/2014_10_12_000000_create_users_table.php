@@ -18,9 +18,18 @@ return new class extends Migration
             $table->string('referral_code')->nullable();
             $table->string('contact_no')->nullable();
             $table->string('avatar')->nullable();
-            $table->decimal('commission', 18, 10)->default(0);
-            $table->decimal('balance', 18, 10)->default(0);
-            $table->decimal('cashout', 18, 10)->default(0);
+            $table->decimal('sabong_com', 18, 10)->default(0);
+            $table->decimal('lotto_com', 18, 10)->default(0);
+            $table->decimal('sports_com', 18, 10)->default(0);
+            $table->decimal('casino_com', 18, 10)->default(0);
+
+            $table->decimal('min_bet_time', 18, 10)->default(0);
+            $table->decimal('max_bet_time', 18, 10)->default(0);
+            $table->decimal('max_bet_game', 18, 10)->default(0);
+            $table->decimal('max_bet_draw', 18, 10)->default(0);
+
+            $table->decimal('balance_ammount', 18, 10)->default(0);
+            $table->decimal('cash_out_amount', 18, 10)->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

@@ -32,7 +32,7 @@ export default defineConfig({
                 enabled: true,
                 filepath: './.eslintrc-auto-import.json'
             },
-            imports: ['vue', 'vue-router', 'pinia', '@vueuse/core'],
+            imports: ['vue', 'vue-router', 'pinia', '@vueuse/core', 'vue-i18n'],
             vueTemplate: true
         }),
         viteImagemin({

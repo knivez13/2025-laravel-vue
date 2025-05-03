@@ -2,7 +2,21 @@
 import { useLayout } from '@/layout/composables/layout';
 import AppConfigurator from './AppConfigurator.vue';
 
+import { useDefaultStore } from '@/stores/useDefaultStore.js';
+const { isDarkCheck, isDarkToggle } = useDefaultStore();
+const { language, isDark } = storeToRefs(useDefaultStore());
+
+const selectedCountry = ref();
+const { t, locale } = useI18n();
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
+
+function changeLanguage(lang) {
+    locale.value = lang;
+}
+
+onMounted(() => {
+    isDarkCheck();
+});
 </script>
 
 <template>
@@ -36,6 +50,9 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
         <div class="layout-topbar-actions">
             <AppConfigurator />
+            <button type="button" class="layout-topbar-action" @click="isDarkToggle">
+                <i :class="['pi', { 'pi-moon': isDark, 'pi-sun': !isDark }]"></i>
+            </button>
             <button
                 class="layout-topbar-menu-button layout-topbar-action"
                 v-styleclass="{ selector: '@next', enterFromClass: 'hidden', enterActiveClass: 'animate-scalein', leaveToClass: 'hidden', leaveActiveClass: 'animate-fadeout', hideOnOutsideClick: true }"
@@ -45,6 +62,29 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
+                    <Select v-model="selectedCountry" :options="language" optionLabel="name" placeholder="Select a Country" class="w-full md:w-56">
+                        <template #value="slotProps">
+                            <div v-if="slotProps.value" class="flex items-center">
+                                <img :alt="slotProps.value.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`mr-2 flag flag-${slotProps.value.code.toLowerCase()}`" style="width: 18px" />
+                                <div>{{ slotProps.value.name }}</div>
+                            </div>
+                            <span v-else>
+                                {{ slotProps.placeholder }}
+                            </span>
+                        </template>
+                        <template #option="slotProps">
+                            <div class="flex items-center">
+                                <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`mr-2 flag flag-${slotProps.option.code.toLowerCase()}`" style="width: 18px" />
+                                <div>{{ slotProps.option.name }}</div>
+                            </div>
+                        </template>
+                        <template #dropdownicon>
+                            <i class="pi pi-map" />
+                        </template>
+                        <template #header>
+                            <div class="font-medium p-3">Available Language</div>
+                        </template>
+                    </Select>
                     <button type="button" class="layout-topbar-action" v-tooltip.bottom="'My Profile'">
                         <i class="pi pi-user"></i>
                         <span>My Profile</span>
@@ -58,3 +98,11 @@ const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
         </div>
     </div>
 </template>
+
+<!-- <div class="grid grid-cols-12 gap-8">
+    <h1>{{ t('welcome') }}</h1>
+    <p>{{ t('message') }}</p>
+
+    <Button @click="changeLanguage('en')">English</Button>
+    <Button @click="changeLanguage('fr')">Français</Button>
+</div> -->
