@@ -41,6 +41,7 @@ export const useAuthStore = defineStore('auth', {
             this.processing = true;
             this.token = null;
             this.error = null;
+
             try {
                 await api.csrf();
                 const { data } = await api.login(credentials);

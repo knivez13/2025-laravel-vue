@@ -10,7 +10,7 @@ use App\Models\Maintenance\AgentType;
 class AgentTypeRepository extends BaseRepository implements AgentTypeInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'code' => ['required', 'string', 'unique:agent_types,code'],
         'description' => ['required', 'string'],
     ];
 
