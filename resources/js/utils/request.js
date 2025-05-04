@@ -22,7 +22,7 @@ service.interceptors.request.use(
             const api = new Resource('sample');
             const authStore = useAuthStore();
             const token = authStore.get_token;
-            console.log('Request Token:', token); // Debugging
+            // console.log('Request Token:', token); // Debugging
             if (token) {
                 config.headers['Authorization'] = `Bearer ${api.decrypt(token)['token']}`; // Set JWT token
             }

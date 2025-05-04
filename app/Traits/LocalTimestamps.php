@@ -7,19 +7,19 @@ trait LocalTimestamps
     public function getCreatedAtAttribute($value)
     {
         // Convert the stored UTC timestamp to your desired timezone
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y h:i a') : null;
+        return $value ? \Carbon\Carbon::parse($value)->timezone('Asia/Manila')->format('m/d/Y h:i a') : null;
     }
 
     public function getUpdatedAtAttribute($value)
     {
         // Convert the stored UTC timestamp to your desired timezone
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y h:i a') : null;
+        return $value ? \Carbon\Carbon::parse($value)->timezone('Asia/Manila')->format('m/d/Y h:i a') : null;
     }
 
     public function getDeletedAtAttribute($value)
     {
         // Convert the stored UTC timestamp to your desired timezone
-        return $value ? \Carbon\Carbon::parse($value)->format('m/d/Y h:i a') : null;
+        return $value ? \Carbon\Carbon::parse($value)->timezone('Asia/Manila')->format('m/d/Y h:i a') : null;
     }
 
     public function setCreatedAtAttribute($value)
