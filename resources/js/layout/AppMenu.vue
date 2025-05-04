@@ -34,11 +34,11 @@ const model = ref([
                     { label: 'Game Present', icon: 'pi pi-fw pi-home', to: '/admin/message1', meta: 'user' },
                     { label: 'Game Announcement', icon: 'pi pi-fw pi-home', to: '/admin/message2', meta: 'user' },
                     { label: 'Game Videos', icon: 'pi pi-fw pi-home', to: '/admin/message3', meta: 'user' },
-                    { label: 'Game Type', icon: 'pi pi-fw pi-home', to: '/admin/message4', meta: 'user' },
-                    { label: 'Agent Type', icon: 'pi pi-fw pi-home', to: '/admin/message5', meta: 'user' },
-                    { label: 'Video Type', icon: 'pi pi-fw pi-home', to: '/admin/message6', meta: 'user' },
+                    { label: 'Game Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/gameType', meta: 'user' },
+                    { label: 'Agent Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/agentType', meta: 'user' },
+                    { label: 'Video Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/videoType', meta: 'user' },
                     { label: 'Bank Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/bankType', meta: 'user' },
-                    { label: 'Game Provider', icon: 'pi pi-fw pi-home', to: '/admin/message8', meta: 'user' }
+                    { label: 'Game Provider', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/provider', meta: 'user' }
                 ]
             }
         ]

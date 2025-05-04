@@ -10,7 +10,7 @@ use App\Repositories\BaseRepository;
 class GameTypeRepository extends BaseRepository implements GameTypeInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'code' => ['required', 'string', 'unique:game_types,code'],
         'description' => ['required', 'string'],
     ];
 

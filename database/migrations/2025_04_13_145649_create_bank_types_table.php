@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Maintenance\BankType;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -24,6 +25,19 @@ return new class extends Migration
             $table->uuid('deleted_by')->nullable();
             $table->foreign('deleted_by')->references('id')->on('users');
         });
+
+        BankType::create([
+            'code' => 'Others',
+            'description' => 'Others',
+        ]);
+        BankType::create([
+            'code' => 'E-Wallet',
+            'description' => 'E-Wallet',
+        ]);
+        BankType::create([
+            'code' => 'Bank',
+            'description' => 'Bank',
+        ]);
     }
 
     /**

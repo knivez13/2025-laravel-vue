@@ -10,7 +10,7 @@ use App\Models\Maintenance\VideoType;
 class VideoTypeRepository extends BaseRepository implements VideoTypeInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'code' => ['required', 'string', 'unique:video_types,code'],
         'description' => ['required', 'string'],
     ];
 

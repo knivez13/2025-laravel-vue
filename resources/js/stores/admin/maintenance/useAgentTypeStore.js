@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/bankType');
+const api = new Resource('maintenance/agentType');
 import { useToast } from 'primevue/usetoast';
 
-export const useBankTypeStore = defineStore('admin-maintenance-bank-type', {
+export const useAgentTypeStore = defineStore('admin-maintenance-agent-type', {
     state: () => ({
         token: null,
         toast: useToast(),

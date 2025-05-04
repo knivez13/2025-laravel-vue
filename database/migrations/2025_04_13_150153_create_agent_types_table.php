@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Maintenance\AgentType;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -24,6 +25,16 @@ return new class extends Migration
             $table->uuid('deleted_by')->nullable();
             $table->foreign('deleted_by')->references('id')->on('users');
         });
+
+        AgentType::create([
+            'code' => 'Incorporator',
+            'description' => 'Incorporator',
+        ]);
+
+        AgentType::create([
+            'code' => 'Master Agent',
+            'description' => 'Master Agent',
+        ]);
     }
 
     /**

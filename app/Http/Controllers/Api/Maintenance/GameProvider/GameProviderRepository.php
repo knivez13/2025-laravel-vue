@@ -10,7 +10,7 @@ use App\Models\Maintenance\GameProvider;
 class GameProviderRepository extends BaseRepository implements GameProviderInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'code' => ['required', 'string', 'unique:game_providers,code'],
         'description' => ['required', 'string'],
     ];
 
