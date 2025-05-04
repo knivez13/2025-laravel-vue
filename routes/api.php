@@ -9,7 +9,6 @@ Route::controller(\App\Http\Controllers\Api\Auth\AuthController::class)->group(f
 
 // Protected Routes (Requires Authentication)
 Route::middleware(['auth:sanctum'])->group(function () {
-
     Route::prefix('maintenance')->name('maintenance.')->group(function () {
         Route::apiResource('agentGameCommission', App\Http\Controllers\Api\Maintenance\AgentGameCommission\AgentGameCommissionController::class)->except(['show']);
         Route::apiResource('agentType', App\Http\Controllers\Api\Maintenance\AgentType\AgentTypeController::class)->except(['show']);
