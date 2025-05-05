@@ -9,6 +9,7 @@ const adminRoutes = [
             { path: 'gameType', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/GameType.vue') },
             { path: 'videoType', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/VideoType.vue') },
             { path: 'provider', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/Provider.vue') },
+            { path: 'gameVideo', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/LiveVideo.vue') },
             { path: 'property-list', meta: { access: 'user' }, component: () => import('@/views/CreateProperty.vue') }
         ]
     }

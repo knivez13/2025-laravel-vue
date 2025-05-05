@@ -27,13 +27,21 @@ return new class extends Migration
         });
 
         AgentType::create([
-            'code' => 'Incorporator',
-            'description' => 'Incorporator',
+            'code' => 'Super',
+            'description' => 'Super',
         ]);
 
         AgentType::create([
-            'code' => 'Master Agent',
-            'description' => 'Master Agent',
+            'code' => 'Senior',
+            'description' => 'Senior',
+        ]);
+        AgentType::create([
+            'code' => 'Master',
+            'description' => 'Master',
+        ]);
+        AgentType::create([
+            'code' => 'Agent',
+            'description' => 'Agent',
         ]);
     }
 

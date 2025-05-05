@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreign('game_type_id')->references('id')->on('game_types');
             $table->uuid('video_type_id')->nullable();
             $table->foreign('video_type_id')->references('id')->on('video_types');
-            $table->string('video_name');
-            $table->string('video_code')->nullable();
+            $table->string('name');
+            $table->string('code')->nullable();
             $table->string('app_name')->nullable();
             $table->string('stream_key')->nullable();
             $table->string('url')->nullable();
