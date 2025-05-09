@@ -13,25 +13,27 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->unique();
-            $table->string('email')->unique();
-            $table->string('referral_code')->nullable();
+            $table->string('username')->unique();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('address')->nullable();
             $table->string('contact_no')->nullable();
+            $table->string('email')->nullable();
+            $table->string('referral_code')->nullable();
             $table->string('avatar')->nullable();
-            $table->decimal('sabong_com', 18, 10)->default(0);
-            $table->decimal('lotto_com', 18, 10)->default(0);
-            $table->decimal('sports_com', 18, 10)->default(0);
-            $table->decimal('casino_com', 18, 10)->default(0);
+            $table->decimal('min_bet_time', 18, 8)->default(0);
+            $table->decimal('max_bet_time', 18, 8)->default(0);
+            $table->decimal('max_bet_game', 18, 8)->default(0);
+            $table->decimal('max_bet_draw', 18, 8)->default(0);
 
-            $table->decimal('min_bet_time', 18, 10)->default(0);
-            $table->decimal('max_bet_time', 18, 10)->default(0);
-            $table->decimal('max_bet_game', 18, 10)->default(0);
-            $table->decimal('max_bet_draw', 18, 10)->default(0);
-
-            $table->decimal('balance_ammount', 18, 10)->default(0);
-            $table->decimal('cash_out_amount', 18, 10)->default(0);
+            $table->string('ip_address')->nullable();
+            $table->timestamp('last_online')->nullable();
+            $table->decimal('commission_amount', 18, 8)->default(0);
+            $table->decimal('balance_amount', 18, 8)->default(0);
+            $table->decimal('cash_out_amount', 18, 8)->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->tinyInteger('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

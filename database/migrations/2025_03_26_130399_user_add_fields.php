@@ -44,7 +44,7 @@ return new class extends Migration
 
         $user = User::create([
             // 'emp_id' => 'SA-001',
-            'name' => 'Bonjour',
+            'username' => 'bonjour',
             // 'middle_name' => 'Lopez',
             // 'last_name' => 'De Guzman',
             'email' => 'bonjourdeguzman@gmail.com',
