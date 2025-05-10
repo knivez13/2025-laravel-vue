@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Maintenance\BankType;
 
 use Carbon\Carbon;
+use App\Helper\ApiCheckEnc;
 use App\Helper\ApiResponse;
 use App\Helper\AccessHelper;
 use Illuminate\Http\Request;
@@ -25,11 +26,7 @@ class BankTypeController extends Controller
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-
-            $data = $request->has('encrypt') || strpos(json_encode($request->all()), 'encrypt') !== false
-                ? new Request(ApiEncResponse::decryptJson($request['encrypt']))
-                : $request;
-
+            $data = new Request(ApiCheckEnc::check($request['encrypt']));
             $filters = $data->only(['keyword']);
             $perPage = (int) $data->input('rows', 10);
             $sortBy = $data->input('sortBy', 'id');

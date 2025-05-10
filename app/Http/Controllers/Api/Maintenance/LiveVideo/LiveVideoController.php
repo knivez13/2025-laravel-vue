@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Maintenance\LiveVideo;
 
+use App\Helper\ApiCheckEnc;
 use App\Helper\ApiResponse;
 use App\Helper\AccessHelper;
 use Illuminate\Http\Request;
@@ -23,10 +24,7 @@ class LiveVideoController extends Controller
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-
-            $data = $request->has('encrypt') || strpos(json_encode($request->all()), 'encrypt') !== false
-                ? new Request(ApiEncResponse::decryptJson($request['encrypt']))
-                : $request;
+            $data = new Request(ApiCheckEnc::check($request['encrypt']));
 
             $filters = $data->only(['keyword']);
             $perPage = (int) $data->input('rows', 10);
@@ -35,7 +33,6 @@ class LiveVideoController extends Controller
             $page =  $data->input('page', 1);
 
             $res = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
-
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);
