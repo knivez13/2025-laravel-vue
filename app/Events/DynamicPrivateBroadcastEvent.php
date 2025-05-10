@@ -17,17 +17,19 @@ class DynamicPrivateBroadcastEvent implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
+    public $user;
     public $channel;
 
-    public function __construct($data, $channel)
+    public function __construct($user, $data, $channel)
     {
+        $this->user = $user;       // Dynamic user
         $this->data = ApiEncResponse::encryptJson(["data" => $data]);       // Dynamic data
         $this->channel = $channel; // Dynamic channel
     }
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel($this->channel),
+            new PrivateChannel($this->channel . '.' . $this->user->id), // Dynamic channel
         ];
     }
 }
