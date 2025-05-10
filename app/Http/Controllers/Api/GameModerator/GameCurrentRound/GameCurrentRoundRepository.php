@@ -17,6 +17,8 @@ class GameCurrentRoundRepository extends BaseRepository implements GameCurrentRo
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
+    protected bool $cacheData = false;
+    protected string $cacheName = 'video_type';
 
     public function __construct(GameCurrentRound $model)
     {

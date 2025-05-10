@@ -17,6 +17,8 @@ class GameProviderRepository extends BaseRepository implements GameProviderInter
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
+    protected bool $cacheData = true;
+    protected string $cacheName = 'game_provider';
 
     public function __construct(GameProvider $model)
     {

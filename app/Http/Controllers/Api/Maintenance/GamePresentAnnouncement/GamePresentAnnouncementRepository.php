@@ -17,6 +17,8 @@ class GamePresentAnnouncementRepository extends BaseRepository implements GamePr
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
+    protected bool $cacheData = true;
+    protected string $cacheName = 'game_present_announcement';
 
     public function __construct(GamePresentAnnouncement $model)
     {

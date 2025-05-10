@@ -17,6 +17,8 @@ class VideoTypeRepository extends BaseRepository implements VideoTypeInterface
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
+    protected bool $cacheData = true;
+    protected string $cacheName = 'video_type';
 
     public function __construct(VideoType $model)
     {

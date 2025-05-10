@@ -17,6 +17,8 @@ class AgentTypeRepository extends BaseRepository implements AgentTypeInterface
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
+    protected bool $cacheData = true;
+    protected string $cacheName = 'agent_types';
 
     public function __construct(AgentType $model)
     {

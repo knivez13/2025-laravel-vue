@@ -17,6 +17,8 @@ class BankTypeRepository extends BaseRepository implements BankTypeInterface
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
+    protected bool $cacheData = true;
+    protected string $cacheName = 'bank_types';
 
     public function __construct(BankType $model)
     {
