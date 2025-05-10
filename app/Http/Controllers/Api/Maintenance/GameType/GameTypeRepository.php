@@ -18,7 +18,7 @@ class GameTypeRepository extends BaseRepository implements GameTypeInterface
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
     protected bool $cacheData = true;
-    protected string $cacheName = 'game_types';
+    protected string $cacheName = 'game_type';
 
     public function __construct(GameType $model)
     {

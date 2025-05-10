@@ -147,14 +147,14 @@ const show_edit = async (data) => {
 
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <Select v-model="form.game_type_id" :options="[]" optionLabel="name" class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <Select v-model="form.game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
                         <label class="block font-semibold">Game Type</label>
                     </FloatLabel>
                     <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <Select v-model="form.game_type_id" :options="[]" optionLabel="name" class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <Select v-model="form.game_type_id" :options="api.decrypt(token)['video_type']" optionLabel="code" optionValue="id" class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
                         <label class="block font-semibold">Video Type</label>
                     </FloatLabel>
                     <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
