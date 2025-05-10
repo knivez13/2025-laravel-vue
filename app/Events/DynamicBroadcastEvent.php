@@ -12,30 +12,22 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
-class TestWebSocket implements ShouldBroadcastNow
+class DynamicBroadcastEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $data;
-    public function __construct($data)
+    public $channel;
+
+
+    public function __construct($data, $channel)
     {
-        $this->data = ApiEncResponse::encryptJson(["date" => $data]);
+        $this->data = ApiEncResponse::encryptJson(["data" => $data]);       // Dynamic data
+        $this->channel = $channel; // Dynamic channel
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
+    public function broadcastOn()
     {
-        return [
-            new Channel('testing'),
-        ];
-    }
-
-    public function broadcastAs(): string
-    {
-        return 'TestEvent';
+        return new Channel($this->channel); // Broadcast on dynamic channel
     }
 }

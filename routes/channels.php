@@ -16,3 +16,15 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('{type}.{id}', function ($user, $type, $id) {
+    if ($type === 'user') {
+        return (string) $user->id === (string) $id;
+    }
+
+    if ($type === 'group') {
+        return $user->groups->contains($id);
+    }
+
+    return false;
+});

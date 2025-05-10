@@ -9,9 +9,13 @@ const api = new Resource('sample');
 const { layoutConfig, layoutState, isSidebarActive } = useLayout();
 
 onMounted(async () => {
-    await window.Echo.channel('testing').listen('.TestEvent', (e) => {
-        console.log(api.decrypt(e.data));
+    await window.Echo.channel('chat').listen('DynamicBroadcastEvent', (e) => {
+        console.log({ public: api.decrypt(e.data) });
     });
+
+    // await window.Echo.private('chat_private.123123abcd').listen('DynamicPrivateBroadcastEvent', (e) => {
+    //     console.log({ private: api.decrypt(e.data) });
+    // });
 });
 
 const outsideClickListener = ref(null);
