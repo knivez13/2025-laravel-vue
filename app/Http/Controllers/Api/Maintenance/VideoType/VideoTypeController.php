@@ -31,7 +31,7 @@ class VideoTypeController extends Controller
             $sortOrder = $data->input('sortOrder', 'asc');
             $page =  $data->input('page', 1);
 
-            $res = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
+            $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
 
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {
