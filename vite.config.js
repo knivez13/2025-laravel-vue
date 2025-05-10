@@ -25,6 +25,9 @@ export default defineConfig({
             }
         }),
         Components({
+            dirs: ['resources/js/components'],
+            directoryAsNamespace: true,
+            collapseSamePrefixes: true,
             resolvers: [PrimeVueResolver()]
         }),
         AutoImport({

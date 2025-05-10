@@ -13,8 +13,14 @@ const title = ref('Game Video');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({
+    game_type_id: null,
+    video_type_id: null,
+    name: null,
     code: null,
-    description: null
+    app_name: null,
+    stream_key: null,
+    url: null,
+    server_ip: null
 });
 
 const search = async () => {
@@ -142,29 +148,30 @@ const show_edit = async (data) => {
             }"
             :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
         >
+            {{ form }}
             <div v-focustrap class="flex flex-col gap-4 w-full mb-2">
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
 
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <Select v-model="form.game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <Select v-model="form.game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" class="w-full" :invalid="error?.status == 422 && error?.validation['game_type_id']" />
                         <label class="block font-semibold">Game Type</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['game_type_id']">{{ error.validation['game_type_id'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <Select v-model="form.game_type_id" :options="api.decrypt(token)['video_type']" optionLabel="code" optionValue="id" class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <Select v-model="form.video_type_id" :options="api.decrypt(token)['video_type']" optionLabel="code" optionValue="id" class="w-full" :invalid="error?.status == 422 && error?.validation['video_type_id']" />
                         <label class="block font-semibold">Video Type</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['video_type_id']">{{ error.validation['video_type_id'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <InputText v-model="form.code" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <InputText v-model="form.name" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['name']" />
                         <label class="block font-semibold">Name</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['name']">{{ error.validation['name'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
@@ -175,31 +182,37 @@ const show_edit = async (data) => {
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <InputText v-model="form.code" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <InputText v-model="form.app_name" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['app_name']" />
                         <label class="block font-semibold">App Name</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['app_name']">{{ error.validation['app_name'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <InputText v-model="form.code" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <InputText v-model="form.stream_key" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['stream_key']" />
                         <label class="block font-semibold">Stream Key</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['stream_key']">{{ error.validation['stream_key'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <InputText v-model="form.code" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <InputText v-model="form.url" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['url']" />
                         <label class="block font-semibold">Url</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['url']">{{ error.validation['url'] }}</small>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatLabel class="w-full" variant="on">
-                        <InputText v-model="form.code" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['code']" />
+                        <InputText v-model="form.server_ip" type="text" autofocus class="w-full" :invalid="error?.status == 422 && error?.validation['server_ip']" />
                         <label class="block font-semibold">Server IP Address</label>
                     </FloatLabel>
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['server_ip']">{{ error.validation['server_ip'] }}</small>
+                </div>
+                <!-- <div class="flex flex-col gap-2 w-full">
+                    <FloatInput v-model="form.description" label="Server IP Address" name="server_ip" :error="error" autofocus />
+                </div> -->
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatSelect v-model="form.game_type_ids" label="Country" name="game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
             </div>
             <div class="flex items-center gap-2">

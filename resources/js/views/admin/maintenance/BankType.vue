@@ -145,11 +145,17 @@ const show_edit = async (data) => {
             <div v-focustrap class="flex flex-col gap-4 w-full mb-2">
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
 
-                <div class="flex flex-col gap-2 w-full">
+                {{ form }}
+                <!-- <div class="flex flex-col gap-2 w-full">
                     <label class="block font-semibold">Code</label>
                     <InputText v-model="form.code" type="text" autofocus :invalid="error?.status == 422 && error?.validation['code']" />
                     <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                </div> -->
+
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatInput v-model="form.code" label="Code" name="code" :error="error" autofocus />
                 </div>
+
                 <div class="flex flex-col gap-2 w-full">
                     <label class="block font-semibold">Description</label>
                     <Textarea v-model="form.description" rows="5" :invalid="error?.status == 422 && error?.validation['description']" />
