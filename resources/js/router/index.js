@@ -12,11 +12,6 @@ const routes = [
         children: landingRoutes
     },
     {
-        path: '/manage-rental',
-        component: AppLayout,
-        children: manageRentalRoutes
-    },
-    {
         path: '/admin',
         component: AppLayout,
         children: adminRoutes

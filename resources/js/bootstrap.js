@@ -19,6 +19,7 @@ import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
+axios.get('/sanctum/csrf-cookie');
 
 // production
 // window.Echo = new Echo({

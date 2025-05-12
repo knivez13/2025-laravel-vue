@@ -18,12 +18,16 @@ const service = axios.create({
 // Request Interceptor
 service.interceptors.request.use(
     (config) => {
-        const api = new Resource('sample');
-        const authStore = useAuthStore();
-        const token = authStore.get_token;
-        // console.log('Request Token:', token); // Debugging
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${api.decrypt(token)['token']}`; // Set JWT token
+        try {
+            const api = new Resource('sample');
+            const authStore = useAuthStore();
+            const token = authStore.get_token;
+            // console.log('Request Token:', token); // Debugging
+            if (token) {
+                config.headers['Authorization'] = `Bearer ${api.decrypt(token)['token']}`; // Set JWT token
+            }
+        } catch (error) {
+            console.log(error);
         }
         return config;
     },

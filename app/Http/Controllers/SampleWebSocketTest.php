@@ -3,14 +3,20 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Events\TestWebSocket;
+
+use App\Events\DynamicBroadcastEvent;
+use App\Events\DynamicPrivateBroadcastEvent;
 
 class SampleWebSocketTest extends Controller
 {
     public function test()
     {
-        event(new TestWebSocket(Carbon::now()->setTimezone('Asia/Manila')->format('l, jS F Y, g:i A')));
+        event(new DynamicBroadcastEvent(Carbon::now()->setTimezone('Asia/Manila')->format('l, jS F Y, g:i A'), 'chat'));
+        return "sadasda";
+    }
+    public function privateTest()
+    {
+        event(new DynamicPrivateBroadcastEvent(Carbon::now()->setTimezone('Asia/Manila')->format('l, jS F Y, g:i A'), 'chat_private.123123abcd'));
         return "sadasda";
     }
 }

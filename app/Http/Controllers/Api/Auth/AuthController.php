@@ -22,12 +22,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'username' => 'required|string|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
+        $input = Arr::only($data, ['username', 'password']);
 
-        return ApiResponse::success($this->authRepository->register($data), 'register success');
+        return ApiResponse::success($this->authRepository->register($input), 'register success');
     }
 
     public function login(Request $request)
@@ -35,14 +35,15 @@ class AuthController extends Controller
         $data = ApiEncResponse::decryptJson($request['encrypt']);
 
         $validator = Validator::make($data, [
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required',
         ]);
 
         if ($validator->fails()) {
             return ApiResponse::failed('Validation Error.', $validator->errors(), 422);
         }
-        $input = Arr::only($data, ['email', 'password']);
+        $input = Arr::only($data, ['username', 'password']);
+        $input['ip_address'] = $request->ip();
         return ApiResponse::success($this->authRepository->login($input), 'login success');
     }
 

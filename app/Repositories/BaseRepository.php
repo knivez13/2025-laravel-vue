@@ -5,12 +5,13 @@ namespace App\Repositories;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use App\Services\ValidationService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use App\Services\ValidationService;
 
 class BaseRepository implements BaseRepositoryInterface
 {
@@ -19,6 +20,8 @@ class BaseRepository implements BaseRepositoryInterface
     protected array $filterableFields = [];
     protected array $relationshipTable = [];
     protected array $filteredInsertData = [];
+    protected bool $cacheData = false;
+    protected string $cacheName = '';
 
     public function __construct(Model $model)
     {
@@ -47,6 +50,9 @@ class BaseRepository implements BaseRepositoryInterface
     public function create(array $data): bool
     {
         return DB::transaction(function () use ($data) {
+            if ($this->cacheData) {
+                Cache::forget($this->cacheName);
+            }
             $this->validateData($data);
             $input = $this->prepareDataForInsert($data);
             $this->model->create($input);
@@ -60,6 +66,9 @@ class BaseRepository implements BaseRepositoryInterface
     public function update(string $id, array $data): bool
     {
         return DB::transaction(function () use ($id, $data) {
+            if ($this->cacheData) {
+                Cache::forget($this->cacheName);
+            }
             $this->validateData($data, $id);
             $record = $this->model->find($id);
             if (!$record) {
@@ -76,6 +85,9 @@ class BaseRepository implements BaseRepositoryInterface
     public function delete(string $id): bool
     {
         return DB::transaction(function () use ($id) {
+            if ($this->cacheData) {
+                Cache::forget($this->cacheName);
+            }
             $record = $this->model->find($id);
             return $record ? $record->delete() : false;
         });
@@ -87,6 +99,9 @@ class BaseRepository implements BaseRepositoryInterface
     public function restore(string $id): bool
     {
         return DB::transaction(function () use ($id) {
+            if ($this->cacheData) {
+                Cache::forget($this->cacheName);
+            }
             $record = $this->model->onlyTrashed()->findOrFail($id);
             return $record->restore();
         });
@@ -98,6 +113,9 @@ class BaseRepository implements BaseRepositoryInterface
     public function forceDelete(string $id): bool
     {
         return DB::transaction(function () use ($id) {
+            if ($this->cacheData) {
+                Cache::forget($this->cacheName);
+            }
             $record = $this->model->onlyTrashed()->findOrFail($id);
             return $record->forceDelete();
         });
@@ -108,6 +126,9 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function getDeleted(int $perPage = 10): LengthAwarePaginator
     {
+        if ($this->cacheData) {
+            Cache::forget($this->cacheName);
+        }
         return $this->model->onlyTrashed()->paginate($perPage);
     }
 
@@ -116,6 +137,10 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1): LengthAwarePaginator
     {
+        if ($this->cacheData) {
+            Cache::rememberForever($this->cacheName, fn() => $this->model->get());
+        }
+
         $query = $this->model->query();
 
         // Apply search filters

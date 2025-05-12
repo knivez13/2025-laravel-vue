@@ -9,44 +9,17 @@ Route::controller(\App\Http\Controllers\Api\Auth\AuthController::class)->group(f
 
 // Protected Routes (Requires Authentication)
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::prefix('maintenance')->group(function () {
-        $resources = [
-            'amenities'             => 'Amenity',
-            'appliances'            => 'Appliances',
-            'file-type'             => 'FileType',
-            'mode-payment'          => 'ModePayment',
-            'price-type'            => 'PriceType',
-            'prop-category'         => 'PropCategory',
-            'prop-condition'        => 'PropCondition',
-            'prop-listType'         => 'PropListType',
-            'prop-status'           => 'PropStatus',
-            'prop-type'             => 'PropType',
-            'utility'               => 'Utility',
-            'near-location-filter'  => 'NearLocationFilter',
-        ];
-
-        foreach ($resources as $route => $controller) {
-            Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\Maintenance\\$controller\\{$controller}Controller")->except(['show']);
-        }
-    });
-    Route::prefix('subscription')->group(function () {
-        $subscriptions = [
-            'subscription-type' => 'SubscriptionType',
-            'user-subscription' => 'UserSubscription',
-        ];
-
-        foreach ($subscriptions as $route => $controller) {
-            Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\Subscription\\$controller\\{$controller}Controller")->except(['show']);
-        }
-    });
-    Route::prefix('users')->group(function () {
-        $subscriptions = [
-            'user-list' => 'UserList',
-            'role' => 'Role',
-        ];
-
-        foreach ($subscriptions as $route => $controller) {
-            Route::apiResource($route, "\\App\\Http\\Controllers\\Api\\User\\$controller\\{$controller}Controller")->except(['destroy', 'store']);
-        }
+    
+    Route::prefix('maintenance')->name('maintenance.')->group(function () {
+        Route::apiResource('agentGameCommission', App\Http\Controllers\Api\Maintenance\AgentGameCommission\AgentGameCommissionController::class)->except(['show']);
+        Route::apiResource('agentType', App\Http\Controllers\Api\Maintenance\AgentType\AgentTypeController::class)->except(['show']);
+        Route::apiResource('bankType', App\Http\Controllers\Api\Maintenance\BankType\BankTypeController::class)->except(['show']);
+        Route::apiResource('gamePresent', App\Http\Controllers\Api\Maintenance\GamePresent\GamePresentController::class)->except(['show']);
+        Route::apiResource('gamePresentAnnouncement', App\Http\Controllers\Api\Maintenance\GamePresentAnnouncement\GamePresentAnnouncementController::class)->except(['show']);
+        Route::apiResource('gamePresentOption', App\Http\Controllers\Api\Maintenance\GamePresentOption\GamePresentOptionController::class)->except(['show']);
+        Route::apiResource('gameProvider', App\Http\Controllers\Api\Maintenance\GameProvider\GameProviderController::class)->except(['show']);
+        Route::apiResource('gameType', App\Http\Controllers\Api\Maintenance\GameType\GameTypeController::class)->except(['show']);
+        Route::apiResource('liveVideo', App\Http\Controllers\Api\Maintenance\LiveVideo\LiveVideoController::class)->except(['show']);
+        Route::apiResource('videoType', App\Http\Controllers\Api\Maintenance\VideoType\VideoTypeController::class)->except(['show']);
     });
 });
