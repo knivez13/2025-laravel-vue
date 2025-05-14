@@ -112,10 +112,10 @@ const show_edit = async (data) => {
                     tableStyle="min-width: 20rem"
                     scrollDirection="both"
                 >
-                    <Column field="code" sortable header="Code"></Column>
-                    <Column field="description" sortable header="Description"></Column>
-                    <Column field="created_at" sortable header="Created Date"></Column>
-                    <Column field="updated_at" sortable header="Updated Date"></Column>
+                    <Column field="code" sortable header="Code" class="grid-table-line" />
+                    <Column field="description" sortable header="Description" class="grid-table-line" />
+                    <Column field="created_at" sortable header="Created Date" class="grid-table-line" />
+                    <Column field="updated_at" sortable header="Updated Date" class="grid-table-line" />
                     <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="data">
                             <div class="text-end">
@@ -146,14 +146,10 @@ const show_edit = async (data) => {
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
 
                 <div class="flex flex-col gap-2 w-full">
-                    <label class="block font-semibold">Code</label>
-                    <InputText v-model="form.code" type="text" autofocus :invalid="error?.status == 422 && error?.validation['code']" />
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['code']">{{ error.validation['code'] }}</small>
+                    <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <label class="block font-semibold">Description</label>
-                    <Textarea v-model="form.description" rows="5" :invalid="error?.status == 422 && error?.validation['description']" />
-                    <small class="text-rose-500" v-if="error?.status == 422 && error?.validation['description']">{{ error.validation['description'] }}</small>
+                    <FloatTextArea v-model="form.description" label="Description" rows="5" name="description" :error="error" autofocus />
                 </div>
             </div>
             <div class="flex items-center gap-2">

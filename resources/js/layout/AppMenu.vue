@@ -31,8 +31,8 @@ const model = ref([
                 icon: 'pi pi-fw pi-user',
                 meta: 'user',
                 items: [
-                    { label: 'Game Present', icon: 'pi pi-fw pi-home', to: '/admin/message1', meta: 'user' },
-                    { label: 'Game Announcement', icon: 'pi pi-fw pi-home', to: '/admin/message2', meta: 'user' },
+                    { label: 'Game Present', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/gamePresent', meta: 'user' },
+                    { label: 'Game Announcement', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/gamePresentAnnouncement', meta: 'user' },
                     { label: 'Game Videos', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/gameVideo', meta: 'user' },
                     { label: 'Game Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/gameType', meta: 'user' },
                     { label: 'Agent Type', icon: 'pi pi-fw pi-home', to: '/admin/maintenance/agentType', meta: 'user' },

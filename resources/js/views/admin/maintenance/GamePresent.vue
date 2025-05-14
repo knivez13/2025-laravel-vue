@@ -1,23 +1,23 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useBankTypeStore();
-const { error, processing, token, option } = storeToRefs(useBankTypeStore());
+import { useGamePresentStore } from '@/stores/admin/maintenance/useGamePresentStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useGamePresentStore();
+const { error, processing, token, option } = storeToRefs(useGamePresentStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Bank Type');
+const title = ref('Game Present');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({
-    code: null,
+    game_present_id: null,
     description: null
 });
 const assign_value = async (e) => {
-    form.value.code = e?.code ?? null;
+    form.value.game_present_id = e?.game_present_id ?? null;
     form.value.description = e?.description ?? null;
 };
 

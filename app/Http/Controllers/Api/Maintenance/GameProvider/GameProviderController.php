@@ -60,7 +60,7 @@ class GameProviderController extends Controller
             $data = ApiEncResponse::decryptJson($request['encrypt']);
             $res = $this->interface->create($data['data']);
             if ($res) {
-                $newRequest = new Request($data['head']);
+                $newRequest = new Request(['encrypt' => ApiEncResponse::encryptJson($data['head'])]);
                 return $this->index($newRequest);
             }
         } catch (\Throwable $e) {
@@ -75,7 +75,7 @@ class GameProviderController extends Controller
             $data = ApiEncResponse::decryptJson($request['encrypt']);
             $res = $this->interface->update($id, $data['data']);
             if ($res) {
-                $newRequest = new Request($data['head']);
+                $newRequest = new Request(['encrypt' => ApiEncResponse::encryptJson($data['head'])]);
                 return $this->index($newRequest);
             }
         } catch (\Throwable $e) {

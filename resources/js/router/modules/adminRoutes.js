@@ -10,7 +10,8 @@ const adminRoutes = [
             { path: 'videoType', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/VideoType.vue') },
             { path: 'provider', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/Provider.vue') },
             { path: 'gameVideo', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/LiveVideo.vue') },
-            { path: 'property-list', meta: { access: 'user' }, component: () => import('@/views/CreateProperty.vue') }
+            { path: 'gamePresent', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/GamePresent.vue') },
+            { path: 'gamePresentAnnouncement', meta: { access: 'user' }, component: () => import('@/views/admin/maintenance/GamePresentAnnouncement.vue') }
         ]
     }
 ];

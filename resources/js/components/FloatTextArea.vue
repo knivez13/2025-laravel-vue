@@ -15,6 +15,7 @@ import { computed, ref, watch } from 'vue';
 const props = defineProps({
     modelValue: [String, Number],
     label: { type: String, required: true },
+    rows: { type: Number, required: false },
     name: { type: String, required: true },
     autofocus: { type: Boolean, default: false },
     variant: { type: String, default: 'on' },

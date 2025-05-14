@@ -16,11 +16,13 @@ class LiveVideoRepository extends BaseRepository implements LiveVideoInterface
         'stream_key' => ['string'],
         'url' => ['string'],
         'server_ip' => ['string'],
+        'name' => ['string'],
+        'code' => ['string'],
     ];
 
     protected array $filterableFields = ['code', 'description']; // Fields to search in
-    protected array $relationshipTable = ['createdBy', 'updatedBy'];
-    protected array $filteredInsertData = ['game_type_id', 'video_type_id', 'video_name', 'video_code', 'app_name', 'stream_key', 'url', 'server_ip'];
+    protected array $relationshipTable = ['createdBy', 'updatedBy', 'gameType', 'videoType'];
+    protected array $filteredInsertData = ['name', 'code', 'game_type_id', 'video_type_id', 'video_name', 'video_code', 'app_name', 'stream_key', 'url', 'server_ip'];
     protected bool $cacheData = true;
     protected string $cacheName = 'live_video';
 
