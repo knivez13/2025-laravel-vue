@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Maintenance\GameType;
+use App\Models\Maintenance\LiveVideo;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Maintenance\GameProvider;
 use App\Http\Controllers\Api\Maintenance\GamePresent\GamePresentInterface;
 
 class GamePresentController extends Controller
@@ -35,6 +39,9 @@ class GamePresentController extends Controller
             $page =  $data->input('page', 1);
 
             $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
+            $res['game_type'] =  Cache::rememberForever('game_type', fn() => GameType::get());
+            $res['game_provider'] =  Cache::rememberForever('game_provider', fn() => GameProvider::get());
+            $res['live_video'] =  Cache::rememberForever('live_video', fn() => LiveVideo::get());
 
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {

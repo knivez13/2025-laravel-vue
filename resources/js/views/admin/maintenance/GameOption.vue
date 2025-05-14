@@ -1,23 +1,23 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { useGameAnnouncementStore } from '@/stores/admin/maintenance/useGameAnnouncementStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useGameAnnouncementStore();
-const { error, processing, token, option } = storeToRefs(useGameAnnouncementStore());
+import { useGameOptionStore } from '@/stores/admin/maintenance/useGameOptionStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useGameOptionStore();
+const { error, processing, token, option } = storeToRefs(useGameOptionStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Game Announcement');
+const title = ref('Game Option');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({
-    game_present_id: null,
+    code: null,
     description: null
 });
 const assign_value = async (e) => {
-    form.value.game_present_id = e?.game_present_id ?? null;
+    form.value.code = e?.code ?? null;
     form.value.description = e?.description ?? null;
 };
 
@@ -146,7 +146,7 @@ const show_edit = async (data) => {
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
 
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatSelect v-model="form.game_present_id" label="Game Present" name="game_present_id" :options="api.decrypt(token)['game_present']" optionLabel="code" optionValue="id" :error="error" />
+                    <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatTextArea v-model="form.description" label="Description" rows="5" name="description" :error="error" autofocus />

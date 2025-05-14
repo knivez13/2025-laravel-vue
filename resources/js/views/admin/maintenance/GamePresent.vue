@@ -13,12 +13,30 @@ const title = ref('Game Present');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({
-    game_present_id: null,
-    description: null
+    code: null,
+    description: null,
+    min_bet: 0,
+    max_bet: 0,
+    max_total_bet: 0,
+    bet_opt_winner: 0,
+    game_type_id: null,
+    game_provider_id: null,
+    live_one_id: null,
+    live_two_id: null,
+    live_three_id: null
 });
 const assign_value = async (e) => {
-    form.value.game_present_id = e?.game_present_id ?? null;
+    form.value.code = e?.code ?? null;
     form.value.description = e?.description ?? null;
+    form.value.min_bet = e?.min_bet ?? 0;
+    form.value.max_bet = e?.max_bet ?? 0;
+    form.value.max_total_bet = e?.max_total_bet ?? 0;
+    form.value.bet_opt_winner = e?.bet_opt_winner ?? 0;
+    form.value.game_type_id = e?.game_type_id ?? null;
+    form.value.game_provider_id = e?.game_provider_id ?? null;
+    form.value.live_one_id = e?.live_one_id ?? null;
+    form.value.live_two_id = e?.live_two_id ?? null;
+    form.value.live_three_id = e?.live_three_id ?? null;
 };
 
 const search = async () => {
@@ -146,10 +164,37 @@ const show_edit = async (data) => {
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
 
                 <div class="flex flex-col gap-2 w-full">
+                    <FloatSelect v-model="form.game_type_id" label="Game Type" name="game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" :error="error" />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatSelect v-model="form.game_type_id" label="Game Type" name="game_type_id" :options="api.decrypt(token)['game_provider']" optionLabel="code" optionValue="id" :error="error" />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
                     <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatTextArea v-model="form.description" label="Description" rows="5" name="description" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.min_bet" label="min_bet" name="min_bet" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.max_bet" label="max_bet" name="max_bet" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.max_total_bet" label="max_total_bet" name="max_total_bet" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.bet_opt_winner" label="bet_opt_winner" name="bet_opt_winner" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatSelect v-model="form.live_one_id" label="live_one_id" name="live_one_id" :options="api.decrypt(token)['live_video']" optionLabel="code" optionValue="id" :error="error" />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatSelect v-model="form.live_two_id" label="live_two_id" name="live_two_id" :options="api.decrypt(token)['live_video']" optionLabel="code" optionValue="id" :error="error" />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatSelect v-model="form.live_three_id" label="live_three_id" name="live_three_id" :options="api.decrypt(token)['live_video']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
             </div>
             <div class="flex items-center gap-2">

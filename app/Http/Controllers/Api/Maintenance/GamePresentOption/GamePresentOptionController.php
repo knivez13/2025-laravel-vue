@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Maintenance\GamePresent;
 use App\Http\Controllers\Api\Maintenance\GamePresentOption\GamePresentOptionInterface;
 
 class GamePresentOptionController extends Controller
@@ -35,6 +37,7 @@ class GamePresentOptionController extends Controller
             $page =  $data->input('page', 1);
 
             $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
+            $res['game_present'] =  Cache::rememberForever('game_present', fn() => GamePresent::get());
 
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {

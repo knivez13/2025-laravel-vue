@@ -10,13 +10,13 @@ use App\Models\Maintenance\GamePresentAnnouncement;
 class GamePresentAnnouncementRepository extends BaseRepository implements GamePresentAnnouncementInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'game_present_id' => ['required', 'string'],
         'description' => ['required', 'string'],
     ];
 
-    protected array $filterableFields = ['code', 'description']; // Fields to search in
+    protected array $filterableFields = ['description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
-    protected array $filteredInsertData = ['code', 'description'];
+    protected array $filteredInsertData = ['game_present_id', 'description'];
     protected bool $cacheData = true;
     protected string $cacheName = 'game_present_announcement';
 
