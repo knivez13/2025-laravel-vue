@@ -59,6 +59,21 @@ class BaseRepository implements BaseRepositoryInterface
             return true;
         });
     }
+    /**
+     * Create a new record.
+     */
+    public function createID(array $data): string
+    {
+        return DB::transaction(function () use ($data) {
+            if ($this->cacheData) {
+                Cache::forget($this->cacheName);
+            }
+            $this->validateData($data);
+            $input = $this->prepareDataForInsert($data);
+            $data = $this->model->create($input);
+            return $data->id;
+        });
+    }
 
     /**
      * Update an existing record by ID.
@@ -89,6 +104,7 @@ class BaseRepository implements BaseRepositoryInterface
                 Cache::forget($this->cacheName);
             }
             $record = $this->model->find($id);
+            $record->update(['deleted_by' => Auth::id()]);
             return $record ? $record->delete() : false;
         });
     }

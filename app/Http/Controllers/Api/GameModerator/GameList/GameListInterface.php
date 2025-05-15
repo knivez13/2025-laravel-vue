@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\BaseRepositoryInterface;
 
 interface GameListInterface extends BaseRepositoryInterface
-
 {
-    //
+    public function createRound(string $id, int $round): bool;
 }

@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use App\Models\Maintenance\GamePresent;
 use App\Http\Controllers\Api\GameModerator\GameList\GameListInterface;
 
 class GameListController extends Controller
@@ -35,6 +37,7 @@ class GameListController extends Controller
             $page =  $data->input('page', 1);
 
             $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
+            $res['game_present'] =  Cache::rememberForever('game_present', fn() => GamePresent::get());
 
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {
@@ -58,11 +61,15 @@ class GameListController extends Controller
         try {
             AccessHelper::check('CanAddMaintenance');
             $data = ApiEncResponse::decryptJson($request['encrypt']);
-            $res = $this->interface->create($data['data']);
-            if ($res) {
-                $newRequest = new Request(['encrypt' => ApiEncResponse::encryptJson($data['head'])]);
-                return $this->index($newRequest);
+            $resID = $this->interface->createID($data['data']);
+            if ($resID) {
+                $res = $this->interface->createRound($resID, $data['data']['total_round']);
+                if ($res) {
+                    $newRequest = new Request(['encrypt' => ApiEncResponse::encryptJson($data['head'])]);
+                    return $this->index($newRequest);
+                }
             }
+            return $res;
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);
         }

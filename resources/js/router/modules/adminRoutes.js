@@ -1,6 +1,7 @@
 const adminRoutes = [
     { path: 'dashboard', meta: { access: 'user' }, component: () => import('@/views/CreateProperty.vue') },
     { path: 'message', meta: { access: 'user' }, component: () => import('@/views/CreateProperty.vue') },
+    { path: 'liveGames', meta: { access: 'user' }, component: () => import('@/views/admin/LiveGames.vue') },
     {
         path: 'maintenance',
         children: [

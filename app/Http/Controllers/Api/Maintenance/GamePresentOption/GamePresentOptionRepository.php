@@ -10,13 +10,15 @@ use App\Models\Maintenance\GamePresentOption;
 class GamePresentOptionRepository extends BaseRepository implements GamePresentOptionInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'game_present_id' => ['required', 'string'],
+        'code' => ['required', 'string'],
         'description' => ['required', 'string'],
+        'color' => ['required', 'string'],
     ];
 
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
-    protected array $filteredInsertData = ['code', 'description'];
+    protected array $filteredInsertData = ['code', 'description', 'color', 'multiplier', 'game_present_id'];
     protected bool $cacheData = true;
     protected string $cacheName = 'game_present_option';
 

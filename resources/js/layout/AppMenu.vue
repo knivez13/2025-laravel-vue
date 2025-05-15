@@ -24,7 +24,7 @@ const model = ref([
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard', meta: 'user' },
             { label: 'Earnings', icon: 'pi pi-fw pi-home', to: '/admin/message1', meta: 'user' },
-            { label: 'Live Games', icon: 'pi pi-fw pi-home', to: '/admin/message2', meta: 'user' },
+            { label: 'Live Games', icon: 'pi pi-fw pi-home', to: '/admin/liveGames', meta: 'user' },
             { label: 'Agent & Player', icon: 'pi pi-fw pi-home', to: '/admin/messag3e', meta: 'user' },
             {
                 label: 'Maintenance',

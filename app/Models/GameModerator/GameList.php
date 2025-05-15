@@ -5,6 +5,7 @@ namespace App\Models\GameModerator;
 use App\Models\User;
 use App\Traits\Uuids;
 use App\Traits\LocalTimestamps;
+use App\Models\Maintenance\GamePresent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,5 +26,10 @@ class GameList extends Model
     public function deletedBy()
     {
         return $this->belongsTo(User::class, 'deleted_by')->select('id', 'name');
+    }
+
+    public function gamePresent()
+    {
+        return $this->belongsTo(GamePresent::class, 'game_present_id')->select('id', 'code');
     }
 }

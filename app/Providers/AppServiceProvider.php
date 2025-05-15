@@ -26,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
             \App\Http\Controllers\Api\Maintenance\LiveVideo\LiveVideoInterface::class                               => \App\Http\Controllers\Api\Maintenance\LiveVideo\LiveVideoRepository::class,
             \App\Http\Controllers\Api\Maintenance\VideoType\VideoTypeInterface::class                               => \App\Http\Controllers\Api\Maintenance\VideoType\VideoTypeRepository::class,
 
+
+            \App\Http\Controllers\Api\GameModerator\GameList\GameListInterface::class                               => \App\Http\Controllers\Api\GameModerator\GameList\GameListRepository::class,
+
         ];
 
         foreach ($maintenanceBindings as $interface => $repository) {
