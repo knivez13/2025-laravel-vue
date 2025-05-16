@@ -1,6 +1,7 @@
 const adminRoutes = [
-    { path: 'dashboard', meta: { access: 'user' }, component: () => import('@/views/CreateProperty.vue') },
-    { path: 'message', meta: { access: 'user' }, component: () => import('@/views/CreateProperty.vue') },
+    { path: 'dashboard', meta: { access: 'user' }, component: () => import('@/views/admin/Dashboard.vue') },
+    { path: 'agentPlayer', meta: { access: 'user' }, component: () => import('@/views/admin/AgentPlayer.vue') },
+    { path: 'earning', meta: { access: 'user' }, component: () => import('@/views/admin/Earning.vue') },
     { path: 'liveGames', meta: { access: 'user' }, component: () => import('@/views/admin/LiveGames.vue') },
     {
         path: 'maintenance',

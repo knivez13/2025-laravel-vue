@@ -9,11 +9,11 @@ const model = ref([
         meta: 'user',
         items: [
             { label: 'Home', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Live Casino', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Scatter Game', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Lotto', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Sabong', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Sports Betting', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            // { label: 'Live Casino', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            // { label: 'Scatter Game', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            // { label: 'Lotto', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            // { label: 'Sabong', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
+            // { label: 'Sports Betting', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
             { label: 'Betting History', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
             { label: 'Transaction', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' }
         ]
@@ -23,9 +23,9 @@ const model = ref([
         meta: 'user',
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard', meta: 'user' },
-            { label: 'Earnings', icon: 'pi pi-fw pi-home', to: '/admin/message1', meta: 'user' },
+            { label: 'Earnings', icon: 'pi pi-fw pi-home', to: '/admin/earning', meta: 'user' },
             { label: 'Live Games', icon: 'pi pi-fw pi-home', to: '/admin/liveGames', meta: 'user' },
-            { label: 'Agent & Player', icon: 'pi pi-fw pi-home', to: '/admin/messag3e', meta: 'user' },
+            { label: 'Agent & Player', icon: 'pi pi-fw pi-home', to: '/admin/agentPlayer', meta: 'user' },
             {
                 label: 'Maintenance',
                 icon: 'pi pi-fw pi-user',

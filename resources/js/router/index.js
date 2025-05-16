@@ -2,13 +2,13 @@ import AppLayout from '@/layout/AppLayout.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/useAuthStore.js';
 import landingRoutes from '@/router/modules/landingRoutes.js';
-import manageRentalRoutes from '@/router/modules/manageRentalRoutes.js';
 import adminRoutes from '@/router/modules/adminRoutes.js';
 
 // Define Routes
 const routes = [
     {
-        path: '/',
+        path: '/console',
+        component: AppLayout,
         children: landingRoutes
     },
     {
@@ -16,6 +16,7 @@ const routes = [
         component: AppLayout,
         children: adminRoutes
     },
+    { path: '/', meta: { access: 'user' }, component: () => import('@/views/Login.vue') },
     { path: '/login', meta: { access: 'user' }, component: () => import('@/views/Login.vue') },
     { path: '/auth/access', meta: { access: 'user' }, component: () => import('@/views/Access.vue') },
     { path: '/auth/error', meta: { access: 'user' }, component: () => import('@/views/Error.vue') }

@@ -1,32 +1,32 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { useGameOptionStore } from '@/stores/admin/maintenance/useGameOptionStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useGameOptionStore();
-const { error, processing, token, option } = storeToRefs(useGameOptionStore());
+import { useEarningStore } from '@/stores/admin/useEarningStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useEarningStore();
+const { error, processing, token, option } = storeToRefs(useEarningStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Game Option');
+const title = ref('Earnings');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({
-    order_list: null,
     game_present_id: null,
-    code: null,
-    description: null,
-    color: null,
-    multiplier: 0
+    game_name: null,
+    event_name: null,
+    total_round: null,
+    multiplier: null,
+    game_name: null
 });
 const assign_value = async (e) => {
-    form.value.order_list = e?.order_list ?? null;
     form.value.game_present_id = e?.game_present_id ?? null;
-    form.value.code = e?.code ?? null;
-    form.value.description = e?.description ?? null;
-    form.value.color = e?.color ?? null;
-    form.value.multiplier = e?.multiplier ?? 0;
+    form.value.game_name = e?.game_name ?? null;
+    form.value.event_name = e?.event_name ?? null;
+    form.value.total_round = e?.total_round ?? null;
+    form.value.multiplier = e?.multiplier ?? null;
+    form.value.rate = e?.rate ?? null;
 };
 
 const search = async () => {
@@ -121,11 +121,15 @@ const show_edit = async (data) => {
                     scrollDirection="both"
                 >
                     <Column field="game_present.code" header="Game Present" class="grid-table-line" />
-                    <Column field="code" sortable header="Code" class="grid-table-line" />
-                    <Column field="description" sortable header="Description" class="grid-table-line" />
-                    <Column field="color" sortable header="Color" class="grid-table-line" />
-                    <Column field="multiplier" sortable header="Multiplier" class="grid-table-line" />
-                    <Column field="order_list" sortable header="Order List" class="grid-table-line" />
+                    <Column field="event_name" sortable header="Event Name" class="grid-table-line" />
+                    <Column field="game_name" sortable header="Game Name" class="grid-table-line" />
+                    <Column field="total_round" sortable header="No. Round" class="grid-table-line" />
+                    <Column field="multiplier" sortable header="Multiplier" class="grid-table-line">
+                        <template #body="data"> x{{ data.data.multiplier }} </template>
+                    </Column>
+                    <Column field="rate" sortable header="Rake" class="grid-table-line">
+                        <template #body="data"> {{ data.data.rate }}% </template>
+                    </Column>
                     <Column field="created_at" sortable header="Created Date" class="grid-table-line" />
                     <Column field="updated_at" sortable header="Updated Date" class="grid-table-line" />
                     <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
@@ -156,24 +160,23 @@ const show_edit = async (data) => {
         >
             <div v-focustrap class="flex flex-col gap-4 w-full mb-2">
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
-
                 <div class="flex flex-col gap-2 w-full">
                     <FloatSelect v-model="form.game_present_id" label="Game Present" name="game_present_id" :options="api.decrypt(token)['game_present']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />
+                    <FloatText v-model="form.game_name" label="game_name" name="game_name" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatTextArea v-model="form.description" label="Description" rows="5" name="description" :error="error" autofocus />
+                    <FloatText v-model="form.event_name" label="event_name" name="event_name" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.order_list" label="order_list" name="order_list" :error="error" autofocus />
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatText v-model="form.color" label="color" name="color" :error="error" autofocus />
+                    <FloatNumber v-model="form.total_round" label="total_round" name="total_round" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatNumber v-model="form.multiplier" label="multiplier" name="multiplier" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.rate" label="rate" name="rate" :error="error" autofocus />
                 </div>
             </div>
             <div class="flex items-center gap-2">

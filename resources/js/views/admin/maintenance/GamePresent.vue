@@ -167,7 +167,7 @@ const show_edit = async (data) => {
                     <FloatSelect v-model="form.game_type_id" label="Game Type" name="game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatSelect v-model="form.game_type_id" label="Game Type" name="game_type_id" :options="api.decrypt(token)['game_provider']" optionLabel="code" optionValue="id" :error="error" />
+                    <FloatSelect v-model="form.game_provider_id" label="Game Provider" name="game_provider_id" :options="api.decrypt(token)['game_provider']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />

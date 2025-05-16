@@ -4,15 +4,14 @@ import AppConfigurator from './AppConfigurator.vue';
 
 import { useDefaultStore } from '@/stores/useDefaultStore.js';
 const { isDarkCheck, isDarkToggle } = useDefaultStore();
-const { language, isDark } = storeToRefs(useDefaultStore());
+const { isDark } = storeToRefs(useDefaultStore());
 
-const selectedCountry = ref();
-const { t, locale } = useI18n();
 const { toggleMenu, toggleDarkMode, isDarkTheme } = useLayout();
 
-function changeLanguage(lang) {
-    locale.value = lang;
-}
+// const { t, locale } = useI18n();
+// function changeLanguage(lang) {
+//     locale.value = lang;
+// }
 
 onMounted(() => {
     isDarkCheck();
@@ -62,29 +61,6 @@ onMounted(() => {
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <Select v-model="selectedCountry" :options="language" optionLabel="name" placeholder="Select a Country" class="w-full md:w-56">
-                        <template #value="slotProps">
-                            <div v-if="slotProps.value" class="flex items-center">
-                                <img :alt="slotProps.value.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`mr-2 flag flag-${slotProps.value.code.toLowerCase()}`" style="width: 18px" />
-                                <div>{{ slotProps.value.name }}</div>
-                            </div>
-                            <span v-else>
-                                {{ slotProps.placeholder }}
-                            </span>
-                        </template>
-                        <template #option="slotProps">
-                            <div class="flex items-center">
-                                <img :alt="slotProps.option.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" :class="`mr-2 flag flag-${slotProps.option.code.toLowerCase()}`" style="width: 18px" />
-                                <div>{{ slotProps.option.name }}</div>
-                            </div>
-                        </template>
-                        <template #dropdownicon>
-                            <i class="pi pi-map" />
-                        </template>
-                        <template #header>
-                            <div class="font-medium p-3">Available Language</div>
-                        </template>
-                    </Select>
                     <button type="button" class="layout-topbar-action" v-tooltip.bottom="'My Profile'">
                         <i class="pi pi-user"></i>
                         <span>My Profile</span>
