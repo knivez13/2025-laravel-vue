@@ -8,14 +8,9 @@ const model = ref([
         label: 'Menu',
         meta: 'user',
         items: [
-            { label: 'Home', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            // { label: 'Live Casino', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            // { label: 'Scatter Game', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            // { label: 'Lotto', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            // { label: 'Sabong', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            // { label: 'Sports Betting', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Betting History', icon: 'pi pi-fw pi-home', to: '/manage-rental/dashboard', meta: 'user' },
-            { label: 'Transaction', icon: 'pi pi-fw pi-home', to: '/manage-rental/create-property', meta: 'user' }
+            { label: 'Home', icon: 'pi pi-fw pi-home', to: '/game/dashboard', meta: 'user' },
+            { label: 'Betting History', icon: 'pi pi-fw pi-home', to: '/game/betHistory', meta: 'user' },
+            { label: 'Transaction', icon: 'pi pi-fw pi-home', to: '/game/transaction', meta: 'user' }
         ]
     },
     {

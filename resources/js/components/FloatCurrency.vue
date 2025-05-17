@@ -1,7 +1,7 @@
 <template>
     <div>
         <FloatLabel class="w-full" :variant="variant">
-            <InputNumber v-model="model" :autofocus="autofocus" class="w-full" :invalid="isInvalid" :min="1" :maxFractionDigits="8" :minFractionDigits="2" />
+            <InputNumber v-model="model" mode="currency" :currency="currency" :autofocus="autofocus" class="w-full" :invalid="isInvalid" :min="0" :maxFractionDigits="8" :minFractionDigits="2" />
             <label class="block font-semibold">{{ label }}</label>
         </FloatLabel>
         <small class="text-rose-500" v-if="isInvalid">{{ error.validation?.[name] }}</small>
@@ -16,6 +16,7 @@ const props = defineProps({
     modelValue: [String, Number],
     label: { type: String, required: true },
     name: { type: String, required: true },
+    currency: { type: String, required: true },
     autofocus: { type: Boolean, default: false },
     variant: { type: String, default: 'on' },
     error: { type: Object, default: () => ({}) }

@@ -1,15 +1,15 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { useLiveGamesStore } from '@/stores/admin/useLiveGamesStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useLiveGamesStore();
-const { error, processing, token, option } = storeToRefs(useLiveGamesStore());
+import { useBetHistoryStore } from '@/stores/player/useBetHistoryStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useBetHistoryStore();
+const { error, processing, token, option } = storeToRefs(useBetHistoryStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Earnings');
+const title = ref('Bet History');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({

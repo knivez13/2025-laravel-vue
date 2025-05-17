@@ -1,15 +1,15 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { useTransactionStore } from '@/stores/player/useTransactionStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useTransactionStore();
-const { error, processing, token, option } = storeToRefs(useTransactionStore());
+import { useDashboardStore } from '@/stores/player/useDashboardStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useDashboardStore();
+const { error, processing, token, option } = storeToRefs(useDashboardStore());
 const keyword = ref(null);
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
-const title = ref('Transaction');
+const title = ref('Dashboard');
 const func = ref(null);
 const select_id = ref(null);
 const form = ref({

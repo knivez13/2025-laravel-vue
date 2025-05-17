@@ -7,7 +7,7 @@ import adminRoutes from '@/router/modules/adminRoutes.js';
 // Define Routes
 const routes = [
     {
-        path: '/console',
+        path: '/game',
         component: AppLayout,
         children: landingRoutes
     },

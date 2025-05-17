@@ -30,7 +30,7 @@ function changeLanguage(lang) {
                     </div>
                 </template>
                 <template #dropdownicon>
-                    <i class="pi pi-map" />
+                    <i class="pi pi-language" />
                 </template>
                 <template #header>
                     <div class="font-medium p-3">Available Language</div>
@@ -39,6 +39,7 @@ function changeLanguage(lang) {
             <Avatar label="P" class="mb-5" size="xlarge" />
             <ButtonGroup class="w-full">
                 <Button variant="outlined" label="Save" class="w-full" />
+                <!-- <InputText v-model="data[field]" autofocus fluid /> -->
                 <Button icon="pi pi-refresh" style="width: 25%" />
             </ButtonGroup>
         </div>
