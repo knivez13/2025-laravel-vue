@@ -6,6 +6,7 @@ import { useToast } from 'primevue/usetoast';
 export const useLiveGamesStore = defineStore('admin-live-games', {
     state: () => ({
         token: null,
+        gameConsole: null,
         toast: useToast(),
         processing: false,
         error: [],
@@ -27,11 +28,15 @@ export const useLiveGamesStore = defineStore('admin-live-games', {
     }),
     getters: {
         get_token: (state) => state.token,
-        decode_token: (state) => api.decrypt(state.token)
+        decode_token: (state) => api.decrypt(state.token),
+        decode_gameConsole: (state) => api.decrypt(state.gameConsole)
     },
     actions: {
         set_processing(data) {
             this.processing = data;
+        },
+        async set_gameConsole(data) {
+            this.gameConsole = api.encrypt(data);
         },
         set_keywords(data) {
             this.option.keywords = data;

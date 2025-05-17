@@ -2,9 +2,11 @@
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
 import { useLiveGamesStore } from '@/stores/admin/useLiveGamesStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useLiveGamesStore();
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_gameConsole, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useLiveGamesStore();
 const { error, processing, token, option } = storeToRefs(useLiveGamesStore());
 const keyword = ref(null);
+import router from '@/router';
+
 onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
@@ -17,16 +19,19 @@ const form = ref({
     game_name: null,
     event_name: null,
     total_round: null,
-    multiplier: null,
-    game_name: null
+    multiplier: 1,
+    game_name: null,
+    rate: 0,
+    padding: 0
 });
 const assign_value = async (e) => {
     form.value.game_present_id = e?.game_present_id ?? null;
     form.value.game_name = e?.game_name ?? null;
     form.value.event_name = e?.event_name ?? null;
     form.value.total_round = e?.total_round ?? null;
-    form.value.multiplier = e?.multiplier ?? null;
-    form.value.rate = e?.rate ?? null;
+    form.value.multiplier = e?.multiplier ?? 1;
+    form.value.rate = e?.rate ?? 0;
+    form.value.padding = e?.padding ?? 0;
 };
 
 const search = async () => {
@@ -79,6 +84,11 @@ const show_edit = async (data) => {
     assign_value(data.data);
     await tigger_modal(true);
 };
+const show_control = async (data) => {
+    await set_gameConsole(data.data);
+    console.log(data.data);
+    router.push('/admin/liveGames/sabongConsole');
+};
 </script>
 
 <template>
@@ -92,11 +102,11 @@ const show_edit = async (data) => {
                         <InputIcon>
                             <i class="fa fa-duotone fa-search" />
                         </InputIcon>
-                        <InputText placeholder="Keyword Search" class="w-full" v-model="keyword" @keypress.enter="search()" />
+                        <InputText size="small" placeholder="Keyword Search" class="w-full" v-model="keyword" @keypress.enter="search()" />
                     </IconField>
                 </div>
                 <div class="col-span-6 md:col-span-6 text-end">
-                    <Button outlined severity="secondary" icon="pi pi-plus" v-tooltip.top="'Add New'" label="Add New" @click="open_modal(true)" />
+                    <Button size="small" outlined severity="secondary" icon="pi pi-plus" v-tooltip.top="'Add New'" label="Add New" @click="open_modal(true)" />
                 </div>
             </div>
             <div class="field">
@@ -119,6 +129,7 @@ const show_edit = async (data) => {
                     showGridlines
                     tableStyle="min-width: 20rem"
                     scrollDirection="both"
+                    size="small"
                 >
                     <Column field="game_present.code" header="Game Present" class="grid-table-line" />
                     <Column field="event_name" sortable header="Event Name" class="grid-table-line" />
@@ -132,11 +143,12 @@ const show_edit = async (data) => {
                     </Column>
                     <Column field="created_at" sortable header="Created Date" class="grid-table-line" />
                     <Column field="updated_at" sortable header="Updated Date" class="grid-table-line" />
-                    <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
+                    <Column field="actions" header="Action" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="data">
                             <div class="text-end">
-                                <Button text type="button" v-tooltip.top="'Edit'" @click="show_edit(data)" icon="pi pi-pencil" severity="info" class="h-8 w-8 mr-2"></Button>
-                                <!-- <Button text type="button" v-tooltip.top="'Delete'" @click="destroy(data)" icon="pi pi-trash" class="h-8 w-8" severity="danger"></Button> -->
+                                <Button text type="button" v-tooltip.top="'Edit'" @click="show_edit(data)" icon="pi pi-pencil" severity="info" size="small"></Button>
+                                <Button text type="button" v-tooltip.top="'Control'" @click="show_control(data)" icon="pi pi-cog" severity="success" size="small"></Button>
+                                <Button text type="button" v-tooltip.top="'End'" @click="show_edit(data)" icon="pi pi-trash" severity="danger" size="small"></Button>
                             </div>
                         </template>
                     </Column>
@@ -177,6 +189,9 @@ const show_edit = async (data) => {
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatNumber v-model="form.rate" label="rate" name="rate" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.padding" label="Padding" name="padding" :error="error" autofocus />
                 </div>
             </div>
             <div class="flex items-center gap-2">

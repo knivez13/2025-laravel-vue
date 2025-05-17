@@ -26,8 +26,8 @@ export const useBankTypeStore = defineStore('admin-maintenance-bank-type', {
         }
     }),
     getters: {
-        get_token: (state) => state.token,
-        decode_token: (state) => api.decrypt(state.token)
+        get_token: (state) => state.token
+        // decode_token: (state) => api.decrypt(state.token)
     },
     actions: {
         set_processing(data) {

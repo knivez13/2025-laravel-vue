@@ -26,8 +26,8 @@ export const useAgentTypeStore = defineStore('admin-maintenance-agent-type', {
         }
     }),
     getters: {
-        get_token: (state) => state.token,
-        decode_token: (state) => api.decrypt(state.token)
+        get_token: (state) => state.token
+        // decode_token: (state) => api.decrypt(state.token)
     },
     actions: {
         set_processing(data) {

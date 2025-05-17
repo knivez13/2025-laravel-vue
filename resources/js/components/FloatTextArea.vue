@@ -1,7 +1,7 @@
 <template>
     <div>
         <FloatLabel class="w-full" :variant="variant">
-            <Textarea v-model="model" :rows="rows" class="w-full" :invalid="isInvalid" />
+            <Textarea size="small" v-model="model" :rows="rows" class="w-full" :invalid="isInvalid" />
             <label class="block font-semibold">{{ label }}</label>
         </FloatLabel>
         <small class="text-rose-500" v-if="isInvalid">{{ error.validation?.[name] }}</small>

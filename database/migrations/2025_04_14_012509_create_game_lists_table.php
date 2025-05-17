@@ -21,7 +21,9 @@ return new class extends Migration
 
             $table->integer('total_round')->default(0);
             $table->integer('multiplier')->default(0);
-            $table->decimal('rate', 18, 2)->default(0);
+            $table->decimal('rate', 18, 6)->default(0);
+
+            $table->decimal('padding', 18, 8)->default(0);
 
             $table->timestamps();
             $table->softDeletes();

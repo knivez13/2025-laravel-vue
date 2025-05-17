@@ -92,11 +92,11 @@ const show_edit = async (data) => {
                         <InputIcon>
                             <i class="fa fa-duotone fa-search" />
                         </InputIcon>
-                        <InputText placeholder="Keyword Search" class="w-full" v-model="keyword" @keypress.enter="search()" />
+                        <InputText size="small" placeholder="Keyword Search" class="w-full" v-model="keyword" @keypress.enter="search()" />
                     </IconField>
                 </div>
                 <div class="col-span-6 md:col-span-6 text-end">
-                    <Button outlined severity="secondary" icon="pi pi-plus" v-tooltip.top="'Add New'" label="Add New" @click="open_modal(true)" />
+                    <Button size="small" outlined severity="secondary" icon="pi pi-plus" v-tooltip.top="'Add New'" label="Add New" @click="open_modal(true)" />
                 </div>
             </div>
             <div class="field">
@@ -119,6 +119,7 @@ const show_edit = async (data) => {
                     showGridlines
                     tableStyle="min-width: 20rem"
                     scrollDirection="both"
+                    size="small"
                 >
                     <Column field="game_present.code" header="Game Present" class="grid-table-line" />
                     <Column field="code" sortable header="Code" class="grid-table-line" />
@@ -131,7 +132,7 @@ const show_edit = async (data) => {
                     <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
                         <template #body="data">
                             <div class="text-end">
-                                <Button text type="button" v-tooltip.top="'Edit'" @click="show_edit(data)" icon="pi pi-pencil" severity="info" class="h-8 w-8 mr-2"></Button>
+                                <Button size="small" text type="button" v-tooltip.top="'Edit'" @click="show_edit(data)" icon="pi pi-pencil" severity="info" class="h-8 w-8 mr-2"></Button>
                                 <!-- <Button text type="button" v-tooltip.top="'Delete'" @click="destroy(data)" icon="pi pi-trash" class="h-8 w-8" severity="danger"></Button> -->
                             </div>
                         </template>
@@ -177,8 +178,8 @@ const show_edit = async (data) => {
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <Button outlined :disabled="processing" :loading="processing" type="button" label="Cancel" severity="warn" @click="open_modal(false)"></Button>
-                <Button outlined :disabled="processing" :loading="processing" type="button" label="Save" severity="success" @click="save()"></Button>
+                <Button size="small" outlined :disabled="processing" :loading="processing" type="button" label="Cancel" severity="warn" @click="open_modal(false)"></Button>
+                <Button size="small" outlined :disabled="processing" :loading="processing" type="button" label="Save" severity="success" @click="save()"></Button>
             </div>
         </Dialog>
     </div>

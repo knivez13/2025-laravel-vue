@@ -1,7 +1,7 @@
 <template>
     <div>
         <FloatLabel class="w-full" :variant="variant">
-            <InputNumber v-model="model" :autofocus="autofocus" class="w-full" :invalid="isInvalid" :min="1" :maxFractionDigits="8" :minFractionDigits="2" />
+            <InputNumber size="small" v-model="model" :autofocus="autofocus" class="w-full" :invalid="isInvalid" :min="1" :maxFractionDigits="8" :minFractionDigits="2" />
             <label class="block font-semibold">{{ label }}</label>
         </FloatLabel>
         <small class="text-rose-500" v-if="isInvalid">{{ error.validation?.[name] }}</small>

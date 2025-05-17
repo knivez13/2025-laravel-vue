@@ -36,7 +36,9 @@ function changeLanguage(lang) {
                     <div class="font-medium p-3">Available Language</div>
                 </template>
             </Select>
-            <Avatar label="P" class="mb-5" size="xlarge" />
+            <Avatar label="P" class="mb-1" size="xlarge" />
+            <div>Role</div>
+            <div class="mb-5">Agent Level</div>
             <ButtonGroup class="w-full">
                 <Button variant="outlined" label="Save" class="w-full" />
                 <!-- <InputText v-model="data[field]" autofocus fluid /> -->

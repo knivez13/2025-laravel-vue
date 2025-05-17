@@ -1,7 +1,7 @@
 <template>
     <div>
         <FloatLabel class="w-full" :variant="variant">
-            <Select v-model="model" :options="options" :optionLabel="optionLabel" :optionValue="optionValue" :autofocus="autofocus" class="w-full" :invalid="isInvalid" />
+            <Select size="small" v-model="model" :options="options" :optionLabel="optionLabel" :optionValue="optionValue" :autofocus="autofocus" class="w-full" :invalid="isInvalid" />
             <label class="block font-semibold">{{ label }}</label>
         </FloatLabel>
         <small class="text-rose-500" v-if="isInvalid">{{ error.validation?.[name] }}</small>

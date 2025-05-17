@@ -26,8 +26,8 @@ export const useGameAnnouncementStore = defineStore('admin-maintenance-announcem
         }
     }),
     getters: {
-        get_token: (state) => state.token,
-        decode_token: (state) => api.decrypt(state.token)
+        get_token: (state) => state.token
+        // decode_token: (state) => api.decrypt(state.token)
     },
     actions: {
         set_processing(data) {
