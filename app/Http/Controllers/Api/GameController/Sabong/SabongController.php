@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\GameModerator\GameCurrentRound;
+namespace App\Http\Controllers\Api\GameController\Sabong;
 
 use App\Helper\ApiCheckEnc;
 use App\Helper\ApiResponse;
@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Api\GameModerator\GameCurrentRound\GameCurrentRoundInterface;
+use App\Http\Controllers\Api\GameController\Sabong\SabongInterface;
 
-class GameCurrentRoundController extends Controller
+class SabongController extends Controller
 {
     protected $interface;
 
-    public function __construct(GameCurrentRoundInterface $interface)
+    public function __construct(SabongInterface $interface)
     {
         $this->interface = $interface;
     }
@@ -24,10 +24,7 @@ class GameCurrentRoundController extends Controller
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-
             $data = new Request(ApiCheckEnc::check($request['encrypt']));
-
-
             $filters = $data->only(['keyword']);
             $perPage = (int) $data->input('rows', 10);
             $sortBy = $data->input('sortBy', 'id');
@@ -35,7 +32,6 @@ class GameCurrentRoundController extends Controller
             $page =  $data->input('page', 1);
 
             $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
-
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);

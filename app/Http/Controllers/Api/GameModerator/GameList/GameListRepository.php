@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers\Api\GameModerator\GameList;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GameModerator\GameList;

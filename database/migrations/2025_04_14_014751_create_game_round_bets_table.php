@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('before_amount', 18, 10)->default(0);
             $table->decimal('after_amount', 18, 10)->default(0);
             $table->tinyInteger('is_win')->default(0);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();
