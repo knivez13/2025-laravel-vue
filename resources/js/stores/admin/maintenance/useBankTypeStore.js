@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/bankType');
+const api = new Resource('admin/maintenance/bankType');
 import { useToast } from 'primevue/usetoast';
 
 export const useBankTypeStore = defineStore('admin-maintenance-bank-type', {

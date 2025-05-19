@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/gamePresentAnnouncement');
+const api = new Resource('admin/maintenance/gamePresentAnnouncement');
 import { useToast } from 'primevue/usetoast';
 
 export const useGameAnnouncementStore = defineStore('admin-maintenance-announcement', {

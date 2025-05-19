@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('gameList');
+const api = new Resource('admin/gameList');
 import { useToast } from 'primevue/usetoast';
 
 export const useAgentPlayerStore = defineStore('admin-agent-player', {

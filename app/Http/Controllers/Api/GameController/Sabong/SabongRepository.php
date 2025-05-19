@@ -27,6 +27,14 @@ class SabongRepository extends BaseRepository implements SabongInterface
         parent::__construct($model);
     }
 
+    public function sabongConsole(string $id): array
+    {
+        return DB::transaction(function () use ($id) {
+
+            return ['id' => $id];
+        });
+    }
+
     public function nextRound(array $data): bool
     {
         return DB::transaction(function () use ($data) {

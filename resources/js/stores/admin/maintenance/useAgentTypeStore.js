@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/agentType');
+const api = new Resource('admin/maintenance/agentType');
 import { useToast } from 'primevue/usetoast';
 
 export const useAgentTypeStore = defineStore('admin-maintenance-agent-type', {

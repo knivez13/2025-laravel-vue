@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/gameProvider');
+const api = new Resource('admin/maintenance/gameProvider');
 import { useToast } from 'primevue/usetoast';
 
 export const useProviderStore = defineStore('admin-maintenance-provider', {

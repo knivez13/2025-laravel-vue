@@ -74,14 +74,7 @@ class GameListController extends Controller
             return ExceptionHelper::handle($e);
         }
     }
-    // 0=idel / live
-    // 1=current
-    // 2=open
-    // 3=closed
-    // 4=declared /closed
-    // 5=cancel
-    // 6=lock
-    // 7=reset
+
     public function update(Request $request, $id)
     {
         try {

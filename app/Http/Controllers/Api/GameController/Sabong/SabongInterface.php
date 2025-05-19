@@ -8,6 +8,7 @@ use App\Repositories\BaseRepositoryInterface;
 
 interface SabongInterface extends BaseRepositoryInterface
 {
+    public function sabongConsole(string $id): array;
     public function nextRound(array $data): bool;
     public function openRound(array $data): bool;
     public function closeRound(array $data): bool;

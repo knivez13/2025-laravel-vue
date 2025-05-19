@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
 
             \App\Http\Controllers\Api\GameModerator\GameList\GameListInterface::class                               => \App\Http\Controllers\Api\GameModerator\GameList\GameListRepository::class,
+            \App\Http\Controllers\Api\GameController\Sabong\SabongInterface::class                                  => \App\Http\Controllers\Api\GameController\Sabong\SabongRepository::class,
 
         ];
 

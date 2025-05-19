@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/videoType');
+const api = new Resource('admin/maintenance/videoType');
 import { useToast } from 'primevue/usetoast';
 
 export const useVideoTypeStore = defineStore('admin-maintenance-video-type', {

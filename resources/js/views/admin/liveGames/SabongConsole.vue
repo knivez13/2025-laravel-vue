@@ -18,6 +18,9 @@ const form = ref();
                         <source src="movie.ogg" type="video/ogg" />
                         Your browser does not support the video tag.
                     </video>
+                    <!-- <div class="relative w-full aspect-video">
+                        <iframe src="https://player.castr.com/ss_d4b5a93033f311f09128e9b6bc90400c" allowfullscreen frameborder="0" class="w-full h-full"></iframe>
+                    </div> -->
                     <table class="table-fixed w-full mb-2 mt-2 card p-0 m-0">
                         <tr v-if="1 == 2">
                             <td style="width: 70%"><Button size="small" label="OPEN" severity="info" /></td>

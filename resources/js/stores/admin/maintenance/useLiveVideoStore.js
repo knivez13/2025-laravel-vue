@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
-const api = new Resource('maintenance/liveVideo');
+const api = new Resource('admin/maintenance/liveVideo');
 import { useToast } from 'primevue/usetoast';
 
 export const useLiveVideoStore = defineStore('admin-maintenance-live-video', {
