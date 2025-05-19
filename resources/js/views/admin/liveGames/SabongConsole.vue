@@ -1,19 +1,32 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
-import { useLiveGamesStore } from '@/stores/admin/useLiveGamesStore.js';
-const { fnShow } = useLiveGamesStore();
-const { bet, option, round, gameConsole } = storeToRefs(useLiveGamesStore());
+import { useSabongConsoleStore } from '@/stores/admin/useSabongConsoleStore.js';
+const { fnShow, fnSelectRound } = useSabongConsoleStore();
+const { game, bet, round, option } = storeToRefs(useSabongConsoleStore());
 
 onBeforeMount(async () => {
     await fnShow();
 });
-const form = ref();
-</script>
 
+const form = ref({
+    game_list_id: null,
+    game_round_id: null,
+    current_round_id: null
+});
+
+const selectRound = async (data) => {
+    form.value.game_list_id = data.data.game_list_id;
+    form.value.game_round_id = data.data.id;
+    await fnSelectRound(form.value);
+};
+</script>
 <template>
     <div>
         <Fluid>
+            {{ game ? api.decrypt(game) : [] }}
+            <br />
+            {{ form }}
             <div class="grid grid-cols-3 gap-1">
                 <div class="col-span-3 md:col-span-1 gap-2">
                     <video class="w-full" controls>
@@ -25,40 +38,42 @@ const form = ref();
                         <iframe src="https://player.castr.com/ss_d4b5a93033f311f09128e9b6bc90400c" allowfullscreen frameborder="0" class="w-full h-full"></iframe>
                     </div> -->
                     <table class="table-fixed w-full mb-2 mt-2 card p-0 m-0">
-                        <tr v-if="1 == 2">
-                            <td style="width: 70%"><Button size="small" label="OPEN" severity="info" /></td>
-                            <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
-                        </tr>
-                        <tr v-if="1 == 2">
-                            <td style="width: 70%"><Button size="small" label="CLOSE" severity="info" /></td>
-                            <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
-                        </tr>
-                        <tr v-if="1 == 1">
-                            <td colspan="2" style="width: 100%">
-                                <div class="mb-3">Select Main Bet Winners</div>
-                                <ButtonGroup class="w-full gap-2">
-                                    <Button v-slot="slotProps" asChild>
-                                        <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-red-500">MERON</button>
-                                    </Button>
-                                    <Button v-slot="slotProps" asChild>
-                                        <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-blue-500">WALA</button>
-                                    </Button>
-                                    <Button v-slot="slotProps" asChild>
-                                        <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-green-500">DRAW</button>
-                                    </Button>
-                                </ButtonGroup>
-                                <div class="mt-2">Select Side Bet Winners (If any)</div>
-                            </td>
-                        </tr>
-                        <tr v-if="1 == 1">
-                            <td style="width: 70%"><Button size="small" label="Declare" severity="info" /></td>
-                            <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
-                        </tr>
-                        <tr v-if="1 == 2">
-                            <td colspan="2" style="width: 100%">
-                                <Button size="small" label="Next Round" severity="info" />
-                            </td>
-                        </tr>
+                        <tbody>
+                            <tr v-if="1 == 1">
+                                <td style="width: 70%"><Button size="small" label="OPEN" severity="info" /></td>
+                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
+                            </tr>
+                            <tr v-if="1 == 1">
+                                <td style="width: 70%"><Button size="small" label="CLOSE" severity="info" /></td>
+                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
+                            </tr>
+                            <tr v-if="1 == 1">
+                                <td colspan="2" style="width: 100%">
+                                    <div class="mb-3">Select Main Bet Winners</div>
+                                    <ButtonGroup class="w-full gap-2">
+                                        <Button v-slot="slotProps" asChild>
+                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-red-500">MERON</button>
+                                        </Button>
+                                        <Button v-slot="slotProps" asChild>
+                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-blue-500">WALA</button>
+                                        </Button>
+                                        <Button v-slot="slotProps" asChild>
+                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-green-500">DRAW</button>
+                                        </Button>
+                                    </ButtonGroup>
+                                    <div class="mt-2">Select Side Bet Winners (If any)</div>
+                                </td>
+                            </tr>
+                            <tr v-if="1 == 1">
+                                <td style="width: 70%"><Button size="small" label="Declare" severity="info" /></td>
+                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
+                            </tr>
+                            <tr v-if="1 == 1">
+                                <td colspan="2" style="width: 100%">
+                                    <Button size="small" label="Next Round" severity="info" />
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div class="col-span-3 md:col-span-1 gap-2">
@@ -112,7 +127,7 @@ const form = ref();
                             </th>
                         </tr>
                     </table>
-                    <DataTable :value="[]" class="w-full mb-2" size="small">
+                    <DataTable :value="bet ? api.decrypt(bet) : []" class="w-full mb-2" size="small">
                         <Column field="code" header="Name" class="grid-table-line"></Column>
                         <Column field="code" header="Login ID" class="grid-table-line"></Column>
                         <Column field="name" header="Bet Amount" class="grid-table-line"></Column>
@@ -121,12 +136,12 @@ const form = ref();
                     </DataTable>
                 </div>
                 <div class="col-span-3 md:col-span-1 gap-2">
-                    <DataTable :value="api.decrypt(round)" class="w-full" size="small" scrollable scrollHeight="500px">
+                    <DataTable :value="round ? api.decrypt(round) : []" class="w-full" size="small" scrollable scrollHeight="500px">
                         <Column field="round_no" header="#" class="grid-table-line"></Column>
                         <Column field="id" header="Action" class="grid-table-line">
                             <template #body="data">
                                 <div>
-                                    <Button text type="button" v-tooltip.top="'Select'" @click="console.log(data)" icon="pi pi-download" severity="info" size="small"></Button>
+                                    <Button text type="button" v-tooltip.top="'Select'" @click="selectRound(data)" icon="pi pi-download" severity="info" size="small"></Button>
                                     <!-- <Button text type="button" v-tooltip.top="'Lock'" @click="console.log(data)" icon="pi pi-lock" severity="info" size="small"></Button>
                                     <Button text type="button" v-tooltip.top="'Reset'" @click="console.log(data)" icon="pi pi-undo" severity="info" size="small"></Button> -->
                                 </div>

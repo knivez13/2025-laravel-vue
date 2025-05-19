@@ -96,7 +96,23 @@ class Resource {
     }
 
     // Decrypt a resource
+    // decrypt(resource) {
+    //     const key = resource.slice(-32);
+    //     const encryptedData = resource.slice(0, resource.length - 32);
+    //     const iv = CryptoJS.enc.Utf8.parse(key.substring(0, 16));
+    //     const decrypted = CryptoJS.AES.decrypt(encryptedData, CryptoJS.enc.Utf8.parse(key), {
+    //         iv,
+    //         mode: CryptoJS.mode.CBC,
+    //         padding: CryptoJS.pad.Pkcs7
+    //     });
+    //     return JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted));
+    // }
     decrypt(resource) {
+        if (!resource || typeof resource !== 'string') {
+            console.error('Invalid resource:', resource);
+            return null;
+        }
+
         const key = resource.slice(-32);
         const encryptedData = resource.slice(0, resource.length - 32);
         const iv = CryptoJS.enc.Utf8.parse(key.substring(0, 16));
@@ -105,7 +121,13 @@ class Resource {
             mode: CryptoJS.mode.CBC,
             padding: CryptoJS.pad.Pkcs7
         });
-        return JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted));
+
+        try {
+            return JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted));
+        } catch (e) {
+            console.error('Decryption failed:', e);
+            return null;
+        }
     }
 }
 

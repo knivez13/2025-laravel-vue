@@ -21,7 +21,7 @@ class GameListRepository extends BaseRepository implements GameListInterface
     ];
 
     protected array $filterableFields = ['game_name', 'event_name']; // Fields to search in
-    protected array $relationshipTable = ['createdBy', 'updatedBy', 'gamePresent'];
+    protected array $relationshipTable = ['gamePresent', 'currentRound'];
     protected array $filteredInsertData = ['game_present_id', 'game_name', 'event_name', 'total_round', 'multiplier', 'rate', 'padding'];
     protected bool $cacheData = false;
     protected string $cacheName = 'game_list';

@@ -26,12 +26,52 @@ class SabongRepository implements SabongInterface
         });
     }
 
+    // 0=idel / live
+    // 1=current
+    // 2=open
+    // 3=closed
+    // 4=declared /closed
+    // 5=cancel
+    // 6=lock
+    // 7=reset
+
+    public function selectRound(array $data): array
+    {
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            GameList::find($data['game_list_id'])
+                ->update([
+                    'current_round_id' => $data['game_round_id'],
+                    'updated_by' => $user->id,
+                ]);
+            GameListRound::find($data['game_round_id'])->update([
+                'status' => 1,
+                'updated_by' => $user->id,
+            ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
+        });
+    }
+
     public function nextRound(array $data): bool
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
 
-            return true;
+            GameListRound::where()->where()->where()->first();
+            GameList::find($data['game_list_id'])
+                ->update([
+                    'current_round_id' => $data['game_round_id'],
+                    'updated_by' => $user->id,
+                ]);
+            GameListRound::find($data['game_round_id'])->update([
+                'status' => 1,
+                'updated_by' => $user->id,
+            ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function openRound(array $data): bool
@@ -76,14 +116,7 @@ class SabongRepository implements SabongInterface
         });
     }
 
-    public function selectRound(array $data): bool
-    {
-        return DB::transaction(function () use ($data) {
-            $user = Auth::user();
 
-            return true;
-        });
-    }
 
     public function resetRound(array $data): bool
     {

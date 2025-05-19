@@ -119,7 +119,7 @@ const show_edit = async (data) => {
                     @sort="sort"
                     update:sortOrder
                     :loading="processing"
-                    :value="api.decrypt(token)['list']['data']"
+                    :value="token ? api.decrypt(token)['list']['data'] : []"
                     :scrollable="true"
                     :rowsPerPageOptions="[10, 20, 50, 100]"
                     :lazy="true"

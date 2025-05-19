@@ -35,6 +35,18 @@ class SabongController extends Controller
         }
     }
 
+    public function selectRound(Request $request)
+    {
+        try {
+            AccessHelper::check('CanAddMaintenance');
+            $data = ApiEncResponse::decryptJson($request['encrypt']);
+            $res = $this->interface->selectRound($data);
+            return ApiResponse::success($res, 'insert success');
+        } catch (\Throwable $e) {
+            return ExceptionHelper::handle($e);
+        }
+    }
+
     // 0=idel / live
     // 1=current
     // 2=open

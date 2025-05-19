@@ -18,9 +18,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('sabong')->name('sabong.')->group(function () {
             Route::apiResource('console', App\Http\Controllers\Api\GameController\Sabong\SabongController::class)->only(['show']);
 
-            // Route::controller(\App\Http\Controllers\Api\GameController\Sabong\SabongController::class)->group(function () {
-            //     Route::get('sabong/{$id}', 'sabong');
-            // });
+            Route::controller(\App\Http\Controllers\Api\GameController\Sabong\SabongController::class)->group(function () {
+                Route::post('sabongconsole/selectRound', 'selectRound');
+            });
         });
 
         Route::prefix('maintenance')->name('maintenance.')->group(function () {

@@ -33,8 +33,9 @@ class GameList extends Model
     {
         return $this->belongsTo(GamePresent::class, 'game_present_id')->select('id', 'code');
     }
-    public function gameOption()
+
+    public function currentRound()
     {
-        return $this->hasMany(GamePresentOption::class,);
+        return $this->belongsTo(GameListRound::class, 'current_round_id');
     }
 }

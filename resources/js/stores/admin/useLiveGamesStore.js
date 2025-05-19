@@ -3,13 +3,9 @@ import Resource from '@/api/resource.js';
 const api = new Resource('admin/gameList');
 import { useToast } from 'primevue/usetoast';
 
-export const useLiveGamesStore = defineStore('admin-live-games', {
+export const useLiveGamesStore = defineStore('admin-live-game', {
     state: () => ({
         token: null,
-        gameConsole: null,
-        bet: null,
-        option: null,
-        round: null,
         toast: useToast(),
         processing: false,
         error: [],
@@ -30,16 +26,12 @@ export const useLiveGamesStore = defineStore('admin-live-games', {
         }
     }),
     getters: {
-        get_token: (state) => state.token,
-        decode_token: (state) => api.decrypt(state.token),
-        decode_gameConsole: (state) => api.decrypt(state.gameConsole)
+        get_token: (state) => state.token
+        // decode_token: (state) => api.decrypt(state.token)
     },
     actions: {
         set_processing(data) {
             this.processing = data;
-        },
-        async set_gameConsole(data) {
-            this.gameConsole = api.encrypt(data);
         },
         set_keywords(data) {
             this.option.keywords = data;
@@ -152,22 +144,6 @@ export const useLiveGamesStore = defineStore('admin-live-games', {
                 const { data } = await api.destroy2({ head: filters, id });
                 this.token = data?.response_data;
                 this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Deleted Success', life: 3000 });
-            } catch (e) {
-                this.handleError(e);
-            } finally {
-                this.processing = false;
-            }
-        },
-
-        async fnShow() {
-            const id = api.decrypt(this.gameConsole)['id'];
-            const api2 = new Resource('admin/sabong/console');
-            try {
-                await api2.csrf();
-                const { data } = await api2.get(id);
-                this.bet = api.encrypt(api.decrypt(data?.response_data)['bet']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
-                this.option = api.encrypt(api.decrypt(data?.response_data)['option']);
             } catch (e) {
                 this.handleError(e);
             } finally {

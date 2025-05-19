@@ -15,6 +15,6 @@ interface SabongInterface
     public function declareRound(array $data): bool;
     public function cancelRound(array $data): bool;
     public function lockRound(array $data): bool;
-    public function selectRound(array $data): bool;
+    public function selectRound(array $data): array;
     public function resetRound(array $data): bool;
 }
