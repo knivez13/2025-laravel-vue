@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\BaseRepositoryInterface;
 
-interface SabongInterface extends BaseRepositoryInterface
+interface SabongInterface
 {
     public function sabongConsole(string $id): array;
     public function nextRound(array $data): bool;

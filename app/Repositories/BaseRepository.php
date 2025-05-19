@@ -41,7 +41,7 @@ class BaseRepository implements BaseRepositoryInterface
      */
     public function find(string $id): ?Model
     {
-        return DB::transaction(fn() => $this->model->find($id));
+        return DB::transaction(fn() => $this->model->with($this->relationshipTable)->find($id));
     }
 
     /**

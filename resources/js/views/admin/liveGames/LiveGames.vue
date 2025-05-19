@@ -86,7 +86,6 @@ const show_edit = async (data) => {
 };
 const show_control = async (data) => {
     await set_gameConsole(data.data);
-    console.log(data.data);
     router.push('/admin/liveGames/sabongConsole');
 };
 </script>

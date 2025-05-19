@@ -8,30 +8,21 @@ use App\Http\Controllers\Controller;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GameModerator\GameList;
+use App\Models\GameModerator\GameRoundBet;
+use App\Models\GameModerator\GameListRound;
+use App\Models\Maintenance\GamePresentOption;
 
-class SabongRepository extends BaseRepository implements SabongInterface
+class SabongRepository implements SabongInterface
 {
-    protected array $rules = [
-        'code' => ['required', 'string', 'unique:bank_types,code'],
-        'description' => ['required', 'string'],
-    ];
-
-    protected array $filterableFields = ['code', 'description']; // Fields to search in
-    protected array $relationshipTable = ['createdBy', 'updatedBy'];
-    protected array $filteredInsertData = ['code', 'description'];
-    protected bool $cacheData = true;
-    protected string $cacheName = 'bank_types';
-
-    public function __construct(GameList $model)
-    {
-        parent::__construct($model);
-    }
 
     public function sabongConsole(string $id): array
     {
         return DB::transaction(function () use ($id) {
-
-            return ['id' => $id];
+            $game = GameList::find($id);
+            $res['option'] = GamePresentOption::where('game_present_id', $game['game_present_id'])->orderBy('order_list', 'asc')->get();
+            $res['round'] = GameListRound::where('game_list_id', $id)->orderBy('round_no', 'asc')->get();
+            $res['bet'] = GameRoundBet::where('game_list_id', $id)->where('game_round_id', $game['current_round_id'])->get();
+            return $res;
         });
     }
 

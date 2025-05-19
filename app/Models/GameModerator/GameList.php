@@ -7,6 +7,7 @@ use App\Traits\Uuids;
 use App\Traits\LocalTimestamps;
 use App\Models\Maintenance\GamePresent;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Maintenance\GamePresentOption;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -31,5 +32,9 @@ class GameList extends Model
     public function gamePresent()
     {
         return $this->belongsTo(GamePresent::class, 'game_present_id')->select('id', 'code');
+    }
+    public function gameOption()
+    {
+        return $this->hasMany(GamePresentOption::class,);
     }
 }

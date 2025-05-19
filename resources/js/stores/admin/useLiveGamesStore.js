@@ -7,6 +7,9 @@ export const useLiveGamesStore = defineStore('admin-live-games', {
     state: () => ({
         token: null,
         gameConsole: null,
+        bet: null,
+        option: null,
+        round: null,
         toast: useToast(),
         processing: false,
         error: [],
@@ -149,6 +152,22 @@ export const useLiveGamesStore = defineStore('admin-live-games', {
                 const { data } = await api.destroy2({ head: filters, id });
                 this.token = data?.response_data;
                 this.toast.add({ severity: 'success', summary: 'Notification', detail: 'Deleted Success', life: 3000 });
+            } catch (e) {
+                this.handleError(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+
+        async fnShow() {
+            const id = api.decrypt(this.gameConsole)['id'];
+            const api2 = new Resource('admin/sabong/console');
+            try {
+                await api2.csrf();
+                const { data } = await api2.get(id);
+                this.bet = api.encrypt(api.decrypt(data?.response_data)['bet']);
+                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                this.option = api.encrypt(api.decrypt(data?.response_data)['option']);
             } catch (e) {
                 this.handleError(e);
             } finally {

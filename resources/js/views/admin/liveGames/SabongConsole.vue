@@ -2,9 +2,12 @@
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
 import { useLiveGamesStore } from '@/stores/admin/useLiveGamesStore.js';
-const { fnFetch } = useLiveGamesStore();
-const { error, processing, gameConsole } = storeToRefs(useLiveGamesStore());
+const { fnShow } = useLiveGamesStore();
+const { bet, option, round, gameConsole } = storeToRefs(useLiveGamesStore());
 
+onBeforeMount(async () => {
+    await fnShow();
+});
 const form = ref();
 </script>
 
@@ -110,20 +113,27 @@ const form = ref();
                         </tr>
                     </table>
                     <DataTable :value="[]" class="w-full mb-2" size="small">
-                        <Column field="code" header="Name"></Column>
-                        <Column field="code" header="Login ID"></Column>
-                        <Column field="name" header="Bet Amount"></Column>
-                        <Column field="category" header="Option"></Column>
-                        <Column field="quantity" header="Balance"></Column>
+                        <Column field="code" header="Name" class="grid-table-line"></Column>
+                        <Column field="code" header="Login ID" class="grid-table-line"></Column>
+                        <Column field="name" header="Bet Amount" class="grid-table-line"></Column>
+                        <Column field="category" header="Option" class="grid-table-line"></Column>
+                        <Column field="quantity" header="Balance" class="grid-table-line"></Column>
                     </DataTable>
                 </div>
                 <div class="col-span-3 md:col-span-1 gap-2">
-                    <DataTable :value="[]" class="w-full" size="small">
-                        <Column field="code" header="#"></Column>
-                        <Column field="name" header="Action"></Column>
-                        <Column field="category" header="Status"></Column>
-                        <Column field="quantity" header="Winner"></Column>
-                        <Column field="quantity" header="Other"></Column>
+                    <DataTable :value="api.decrypt(round)" class="w-full" size="small" scrollable scrollHeight="500px">
+                        <Column field="round_no" header="#" class="grid-table-line"></Column>
+                        <Column field="id" header="Action" class="grid-table-line">
+                            <template #body="data">
+                                <div>
+                                    <Button text type="button" v-tooltip.top="'Select'" @click="console.log(data)" icon="pi pi-download" severity="info" size="small"></Button>
+                                    <!-- <Button text type="button" v-tooltip.top="'Lock'" @click="console.log(data)" icon="pi pi-lock" severity="info" size="small"></Button>
+                                    <Button text type="button" v-tooltip.top="'Reset'" @click="console.log(data)" icon="pi pi-undo" severity="info" size="small"></Button> -->
+                                </div>
+                            </template>
+                        </Column>
+                        <Column field="status" header="Status" class="grid-table-line"></Column>
+                        <Column field="win_option_id" header="Winner" class="grid-table-line"></Column>
                     </DataTable>
                 </div>
             </div>

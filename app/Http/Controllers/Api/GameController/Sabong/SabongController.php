@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
+use App\Models\GameModerator\GameList;
+use App\Models\GameModerator\GameRoundBet;
+use App\Models\GameModerator\GameListRound;
+use App\Models\Maintenance\GamePresentOption;
 use App\Http\Controllers\Api\GameController\Sabong\SabongInterface;
 
 class SabongController extends Controller
@@ -20,49 +24,17 @@ class SabongController extends Controller
         $this->interface = $interface;
     }
 
-    public function index(Request $request)
-    {
-        try {
-            AccessHelper::check('CanAddMaintenance');
-            $data = new Request(ApiCheckEnc::check($request['encrypt']));
-            $filters = $data->only(['keyword']);
-            $perPage = (int) $data->input('rows', 10);
-            $sortBy = $data->input('sortBy', 'id');
-            $sortOrder = $data->input('sortOrder', 'asc');
-            $page =  $data->input('page', 1);
-
-            $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
-            return ApiResponse::success($res, 'fetch success');
-        } catch (\Throwable $e) {
-            return ExceptionHelper::handle($e);
-        }
-    }
-
     public function show($id)
     {
         try {
             AccessHelper::check('CanAddMaintenance');
-            $res = $this->interface->find($id);
+            $res = $this->interface->sabongConsole($id);
             return ApiResponse::success($res, 'insert success');
         } catch (\Throwable $e) {
             return ExceptionHelper::handle($e);
         }
     }
 
-    public function store(Request $request)
-    {
-        try {
-            AccessHelper::check('CanAddMaintenance');
-            $data = ApiEncResponse::decryptJson($request['encrypt']);
-            $res = $this->interface->create($data['data']);
-            if ($res) {
-                $newRequest = new Request(['encrypt' => ApiEncResponse::encryptJson($data['head'])]);
-                return $this->index($newRequest);
-            }
-        } catch (\Throwable $e) {
-            return ExceptionHelper::handle($e);
-        }
-    }
     // 0=idel / live
     // 1=current
     // 2=open
@@ -71,28 +43,5 @@ class SabongController extends Controller
     // 5=cancel
     // 6=lock
     // 7=reset
-    public function update(Request $request, $id)
-    {
-        try {
-            AccessHelper::check('CanAddMaintenance');
-            $data = ApiEncResponse::decryptJson($request['encrypt']);
-            $res = $this->interface->update($id, $data['data']);
-            if ($res) {
-                $newRequest = new Request(['encrypt' => ApiEncResponse::encryptJson($data['head'])]);
-                return $this->index($newRequest);
-            }
-        } catch (\Throwable $e) {
-            return ExceptionHelper::handle($e);
-        }
-    }
 
-    public function destroy($id)
-    {
-        try {
-            $res = $this->interface->delete($id);
-            return ApiResponse::success($res, 'insert success');
-        } catch (\Throwable $e) {
-            return ExceptionHelper::handle($e);
-        }
-    }
 }

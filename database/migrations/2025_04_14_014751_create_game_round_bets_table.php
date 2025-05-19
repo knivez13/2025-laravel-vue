@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->uuid('game_list_id')->nullable();
+            $table->foreign('game_list_id')->references('id')->on('game_lists');
             $table->uuid('game_round_id')->nullable();
             $table->foreign('game_round_id')->references('id')->on('game_list_rounds');
             $table->uuid('bet_option_id')->nullable();

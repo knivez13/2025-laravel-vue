@@ -11,9 +11,18 @@ Route::controller(\App\Http\Controllers\Api\Auth\AuthController::class)->group(f
 Route::middleware(['auth:sanctum'])->group(function () {
 
 
-    Route::apiResource('gameList', App\Http\Controllers\Api\GameModerator\GameList\GameListController::class);
 
     Route::prefix('admin')->name('admin.')->group(function () {
+        Route::apiResource('gameList', App\Http\Controllers\Api\GameModerator\GameList\GameListController::class);
+
+        Route::prefix('sabong')->name('sabong.')->group(function () {
+            Route::apiResource('console', App\Http\Controllers\Api\GameController\Sabong\SabongController::class)->only(['show']);
+
+            // Route::controller(\App\Http\Controllers\Api\GameController\Sabong\SabongController::class)->group(function () {
+            //     Route::get('sabong/{$id}', 'sabong');
+            // });
+        });
+
         Route::prefix('maintenance')->name('maintenance.')->group(function () {
             Route::apiResource('agentGameCommission', App\Http\Controllers\Api\Maintenance\AgentGameCommission\AgentGameCommissionController::class)->except(['show']);
             Route::apiResource('agentType', App\Http\Controllers\Api\Maintenance\AgentType\AgentTypeController::class)->except(['show']);
