@@ -1,25 +1,16 @@
 <script setup>
 import Resource from '@/api/resource.js';
-import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore.js';
-import { storeToRefs } from 'pinia';
-import { ref, computed, onBeforeMount } from 'vue';
-
-// API Resource
 const api = new Resource('sample');
+import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore.js';
+const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, trigger_modal } = useBankTypeStore();
+const { error, processing, token, option } = storeToRefs(useBankTypeStore());
 
-// Store Setup
-const bankTypeStore = useBankTypeStore();
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, trigger_modal } = bankTypeStore;
-const { error, processing, token, option } = storeToRefs(bankTypeStore);
-
-// UI State
 const title = ref('Bank Type');
 const keyword = ref(null);
 const func = ref(null);
 const selectId = ref(null);
 const form = ref({ code: null, description: null });
 
-// Computed
 const tableData = computed(() => {
     try {
         return token.value ? (api.decrypt(token.value)?.list?.data ?? []) : [];
@@ -36,13 +27,11 @@ const totalRecords = computed(() => {
     }
 });
 
-// Lifecycle
 onBeforeMount(async () => {
     await resetTable();
     await fnFetch();
 });
 
-// Methods
 const assignValue = (data = {}) => {
     form.value.code = data.code ?? null;
     form.value.description = data.description ?? null;
@@ -94,7 +83,6 @@ const showEdit = async (row) => {
     await trigger_modal(true);
 };
 
-// Column config for reusable table
 const columns = [
     { field: 'code', header: 'Code', sortable: true, class: 'grid-table-line' },
     { field: 'description', header: 'Description', sortable: true, class: 'grid-table-line' },
@@ -117,8 +105,6 @@ const columns = [
     <div>
         <div class="card">
             <h6 class="text-xl mb-5">{{ title }}</h6>
-
-            <!-- Search & Add -->
             <div class="grid grid-cols-12 mb-4">
                 <div class="col-span-6">
                     <IconField>
@@ -130,11 +116,8 @@ const columns = [
                     <Button size="small" outlined severity="secondary" icon="pi pi-plus" label="Add New" v-tooltip.top="'Add New'" @click="openModal(true)" />
                 </div>
             </div>
-
-            <!-- Table -->
             <div class="field">
                 <VueDataTable :value="tableData" :loading="processing" :option="option" :totalRecords="totalRecords" :columns="columns" @page="fetch" @sort="sort">
-                    <!-- Action Buttons -->
                     <template #actions="{ data }">
                         <div class="text-end">
                             <Button text size="small" icon="pi pi-pencil" severity="info" class="h-8 w-8 mr-2" v-tooltip.top="'Edit'" @click="showEdit(data)" />
@@ -143,8 +126,6 @@ const columns = [
                 </VueDataTable>
             </div>
         </div>
-
-        <!-- Dialog Modal -->
         <Dialog
             v-model:visible="option.show_modal"
             modal
@@ -160,11 +141,9 @@ const columns = [
         >
             <div v-focustrap class="flex flex-col gap-4 w-full mb-2">
                 <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
-
                 <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />
                 <FloatTextArea v-model="form.description" label="Description" name="description" rows="5" :error="error" />
             </div>
-
             <div class="flex items-center gap-2">
                 <Button size="small" outlined type="button" label="Cancel" severity="warn" :disabled="processing" :loading="processing" @click="openModal(false)" />
                 <Button size="small" outlined type="button" label="Save" severity="success" :disabled="processing" :loading="processing" @click="save" />
