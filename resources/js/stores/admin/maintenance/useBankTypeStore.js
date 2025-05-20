@@ -42,7 +42,7 @@ export const useBankTypeStore = defineStore('admin-maintenance-bank-type', {
         set_page(data) {
             this.option.page = data;
         },
-        tigger_modal(data) {
+        trigger_modal(data) {
             this.option.show_modal = data;
         },
         set_sort(data) {
