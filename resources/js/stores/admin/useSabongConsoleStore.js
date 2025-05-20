@@ -42,7 +42,71 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                console.log(api.decrypt(data?.response_data));
+                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+        async fnNextRound(res) {
+            const api2 = new Resource('admin/sabong/sabongconsole/nextRound');
+            try {
+                await api2.csrf();
+                const { data } = await api2.store(res);
+                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+        async fnOpenRound(res) {
+            const api2 = new Resource('admin/sabong/sabongconsole/openRound');
+            try {
+                await api2.csrf();
+                const { data } = await api2.store(res);
+                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+        async fnCloseRound(res) {
+            const api2 = new Resource('admin/sabong/sabongconsole/closeRound');
+            try {
+                await api2.csrf();
+                const { data } = await api2.store(res);
+                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+        async fnDeclareRound(res) {
+            const api2 = new Resource('admin/sabong/sabongconsole/declareRound');
+            try {
+                await api2.csrf();
+                const { data } = await api2.store(res);
+                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+        async fnCancelRound(res) {
+            const api2 = new Resource('admin/sabong/sabongconsole/cancelRound');
+            try {
+                await api2.csrf();
+                const { data } = await api2.store(res);
                 this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
                 this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
             } catch (e) {

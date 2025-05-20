@@ -20,6 +20,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
             Route::controller(\App\Http\Controllers\Api\GameController\Sabong\SabongController::class)->group(function () {
                 Route::post('sabongconsole/selectRound', 'selectRound');
+                Route::post('sabongconsole/openRound', 'openRound');
+                Route::post('sabongconsole/closeRound', 'closeRound');
+                Route::post('sabongconsole/declareRound', 'declareRound');
+                Route::post('sabongconsole/cancelRound', 'cancelRound');
+                Route::post('sabongconsole/nextRound', 'nextRound');
             });
         });
 

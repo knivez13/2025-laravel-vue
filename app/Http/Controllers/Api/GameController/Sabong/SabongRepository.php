@@ -54,18 +54,18 @@ class SabongRepository implements SabongInterface
         });
     }
 
-    public function nextRound(array $data): bool
+    public function nextRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
-
-            GameListRound::where()->where()->where()->first();
+            $round_no = !empty($data['current_round_id']) ? GameListRound::find($data['current_round_id'])->round_no : 0;
+            $res['round2'] = GameListRound::where('game_list_id', $data['game_list_id'])->where('round_no', $round_no + 1)->orderBy('round_no', 'asc')->first();
             GameList::find($data['game_list_id'])
                 ->update([
-                    'current_round_id' => $data['game_round_id'],
+                    'current_round_id' => $res['round2']->id,
                     'updated_by' => $user->id,
                 ]);
-            GameListRound::find($data['game_round_id'])->update([
+            GameListRound::find($res['round2']->id)->update([
                 'status' => 1,
                 'updated_by' => $user->id,
             ]);
@@ -74,7 +74,65 @@ class SabongRepository implements SabongInterface
             return $res;
         });
     }
-    public function openRound(array $data): bool
+    public function openRound(array $data): array
+    {
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            GameListRound::find($data['current_round_id'])
+                ->update([
+                    'status' => 2,
+                    'updated_by' => $user->id,
+                ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
+        });
+    }
+    public function closeRound(array $data): array
+    {
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            GameListRound::find($data['current_round_id'])
+                ->update([
+                    'status' => 3,
+                    'updated_by' => $user->id,
+                ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
+        });
+    }
+    public function declareRound(array $data): array
+    {
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            GameListRound::find($data['current_round_id'])
+                ->update([
+                    'status' => 4,
+                    'win_option_id' => $data['win_option_id'],
+                    'updated_by' => $user->id,
+                ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
+        });
+    }
+    public function cancelRound(array $data): array
+    {
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            GameListRound::find($data['current_round_id'])
+                ->update([
+                    'status' => 5,
+                    'updated_by' => $user->id,
+                ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
+        });
+    }
+
+    public function lockRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
@@ -82,43 +140,10 @@ class SabongRepository implements SabongInterface
             return true;
         });
     }
-    public function closeRound(array $data): bool
-    {
-        return DB::transaction(function () use ($data) {
-            $user = Auth::user();
-
-            return true;
-        });
-    }
-    public function declareRound(array $data): bool
-    {
-        return DB::transaction(function () use ($data) {
-            $user = Auth::user();
-
-            return true;
-        });
-    }
-    public function cancelRound(array $data): bool
-    {
-        return DB::transaction(function () use ($data) {
-            $user = Auth::user();
-
-            return true;
-        });
-    }
-
-    public function lockRound(array $data): bool
-    {
-        return DB::transaction(function () use ($data) {
-            $user = Auth::user();
-
-            return true;
-        });
-    }
 
 
 
-    public function resetRound(array $data): bool
+    public function resetRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();

@@ -2,12 +2,13 @@
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
 import { useSabongConsoleStore } from '@/stores/admin/useSabongConsoleStore.js';
-const { fnShow, fnSelectRound } = useSabongConsoleStore();
+const { fnShow, fnSelectRound, fnOpenRound, fnCloseRound, fnDeclareRound, fnCancelRound, fnNextRound } = useSabongConsoleStore();
 const { game, bet, round, option } = storeToRefs(useSabongConsoleStore());
 
 onBeforeMount(async () => {
     await fnShow();
 });
+const winner = ref([]);
 
 const form = ref({
     game_list_id: null,
@@ -19,6 +20,39 @@ const selectRound = async (data) => {
     form.value.game_list_id = data.data.game_list_id;
     form.value.game_round_id = data.data.id;
     await fnSelectRound(form.value);
+};
+const nextRound = async () => {
+    form.value.game_list_id = api.decrypt(game.value)['id'];
+    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    await fnNextRound(form.value);
+};
+
+const openRound = async () => {
+    form.value.game_list_id = api.decrypt(game.value)['id'];
+    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    await fnOpenRound(form.value);
+};
+const closeRound = async () => {
+    form.value.game_list_id = api.decrypt(game.value)['id'];
+    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    await fnCloseRound(form.value);
+};
+const selectWinner = async (data) => {
+    console.log(data);
+    winner.value = data;
+};
+const declareRound = async () => {
+    console.log('declare');
+    form.value.game_list_id = api.decrypt(game.value)['id'];
+    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    form.value.win_option_id = winner.value.id;
+    await fnDeclareRound(form.value);
+    winner.value = [];
+};
+const cancelRound = async () => {
+    form.value.game_list_id = api.decrypt(game.value)['id'];
+    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    await fnCancelRound(form.value);
 };
 </script>
 <template>
@@ -40,37 +74,31 @@ const selectRound = async (data) => {
                     <table class="table-fixed w-full mb-2 mt-2 card p-0 m-0">
                         <tbody>
                             <tr v-if="1 == 1">
-                                <td style="width: 70%"><Button size="small" label="OPEN" severity="info" /></td>
-                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
+                                <td style="width: 70%"><Button size="small" label="OPEN" severity="info" @click="openRound()" /></td>
+                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" @click="cancelRound()" /></td>
                             </tr>
                             <tr v-if="1 == 1">
-                                <td style="width: 70%"><Button size="small" label="CLOSE" severity="info" /></td>
-                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
+                                <td style="width: 70%"><Button size="small" label="CLOSE" severity="info" @click="closeRound()" /></td>
+                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" @click="cancelRound()" /></td>
                             </tr>
                             <tr v-if="1 == 1">
                                 <td colspan="2" style="width: 100%">
-                                    <div class="mb-3">Select Main Bet Winners</div>
+                                    <div class="mb-3">Select Main Bet Winners :{{ winner.code }}</div>
                                     <ButtonGroup class="w-full gap-2">
-                                        <Button v-slot="slotProps" asChild>
-                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-red-500">MERON</button>
-                                        </Button>
-                                        <Button v-slot="slotProps" asChild>
-                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-blue-500">WALA</button>
-                                        </Button>
-                                        <Button v-slot="slotProps" asChild>
-                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black bg-green-500">DRAW</button>
+                                        <Button v-slot="slotProps" asChild v-for="item in api.decrypt(option)" :key="item.id">
+                                            <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black" :class="'bg-' + item.color + '-500'" @click="selectWinner(item)">{{ item.code }}</button>
                                         </Button>
                                     </ButtonGroup>
                                     <div class="mt-2">Select Side Bet Winners (If any)</div>
                                 </td>
                             </tr>
                             <tr v-if="1 == 1">
-                                <td style="width: 70%"><Button size="small" label="Declare" severity="info" /></td>
-                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" /></td>
+                                <td style="width: 70%"><Button size="small" label="Declare" severity="info" @click="declareRound()" /></td>
+                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" @click="cancelRound()" /></td>
                             </tr>
                             <tr v-if="1 == 1">
                                 <td colspan="2" style="width: 100%">
-                                    <Button size="small" label="Next Round" severity="info" />
+                                    <Button size="small" label="Next Round" severity="info" @click="nextRound()" />
                                 </td>
                             </tr>
                         </tbody>
