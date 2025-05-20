@@ -9,6 +9,26 @@ onBeforeMount(async () => {
     re_fetch();
     await fnFetch();
 });
+const totalRecords = computed(() => {
+    if (!token.value) return 0;
+    try {
+        const decrypted = api.decrypt(token.value);
+        return decrypted?.list?.total ?? 0;
+    } catch (e) {
+        console.error('Failed to decrypt token:', e);
+        return 0;
+    }
+});
+const tableData = computed(() => {
+    if (!token.value) return [];
+    try {
+        const decrypted = api.decrypt(token.value);
+        return decrypted?.list?.data ?? [];
+    } catch (e) {
+        console.error('Failed to decrypt token:', e);
+        return [];
+    }
+});
 const title = ref('Bank Type');
 const func = ref(null);
 const select_id = ref(null);
@@ -16,6 +36,7 @@ const form = ref({
     code: null,
     description: null
 });
+
 const assign_value = async (e) => {
     form.value.code = e?.code ?? null;
     form.value.description = e?.description ?? null;
@@ -96,12 +117,12 @@ const show_edit = async (data) => {
                     v-model:sortField="option.sortBy"
                     v-model:rows="option.rows"
                     v-model:sortOrder="option.sortOrder"
-                    v-model:totalRecords="api.decrypt(token)['list']['total']"
+                    v-model:totalRecords="totalRecords"
                     @page="fetch"
                     @sort="sort"
                     update:sortOrder
                     :loading="processing"
-                    :value="token ? api.decrypt(token)['list']['data'] : []"
+                    :value="tableData"
                     :scrollable="true"
                     :rowsPerPageOptions="[10, 20, 50, 100]"
                     :lazy="true"
