@@ -1,6 +1,6 @@
 <script setup>
-import useBankType from '@/composables/admin/maintenance/useBankType.js';
-const { keyword, form, func, title, error, processing, option, tableData, totalRecords, columns, search, fetch, sort, save, openModal, showEdit } = useBankType();
+import useScript from '@/composables/admin/maintenance/useBankType.js';
+const { keyword, form, func, title, error, processing, option, tableData, totalRecords, columns, search, fetch, sort, save, openModal, showEdit } = useScript();
 </script>
 
 <template>

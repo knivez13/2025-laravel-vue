@@ -1,6 +1,6 @@
 // import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore';
 import useDynamicStore from '@/composables/stores/useDynamicStore';
-const useStore = useDynamicStore('admin-maintenance-bank-type', 'admin/maintenance/bankType');
+const useStore = useDynamicStore('admin-maintenance-agent-type', 'admin/maintenance/agentType');
 import useCrudComposable from '@/composables/scripts/useCrudComposable';
 
 const formDefinition = {
@@ -25,8 +25,8 @@ const columnDefinition = [
     }
 ];
 
-export default function useBankType() {
-    const crud = useCrudComposable('sample', useStore, columnDefinition, formDefinition, 'Bank Type');
+export default function useAgentType() {
+    const crud = useCrudComposable('sample', useStore, columnDefinition, formDefinition, 'Agent Type');
     const customFunction = () => {
         console.log('This is a custom function specific to Bank Type');
     };
