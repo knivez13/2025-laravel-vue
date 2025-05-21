@@ -1,3 +1,6 @@
+// import useDynamicStore from '@/stores/useDynamicStore';
+// export const useBankTypeStore = useDynamicStore('admin-maintenance-bank-type', 'admin/maintenance/bankType');
+
 import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
 const api = new Resource('admin/maintenance/bankType');

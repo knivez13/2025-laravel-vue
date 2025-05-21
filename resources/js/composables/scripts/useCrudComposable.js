@@ -1,21 +1,27 @@
+// composables/useCrudComposable.js
 import { ref, computed, onBeforeMount } from 'vue';
-import Resource from '@/api/resource.js';
-import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore.js';
+import Resource from '@/api/resource';
 import { storeToRefs } from 'pinia';
 
-const api = new Resource('sample');
+export default function useCrudComposable(resourceName, useStore, columnsDef, formDef, titleLabel = '') {
+    const api = new Resource(resourceName);
+    const store = useStore();
 
-export default function useBankType() {
-    const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, trigger_modal } = useBankTypeStore();
-    const { error, processing, token, option } = storeToRefs(useBankTypeStore());
+    const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, trigger_modal } = store;
+
+    const { error, processing, token, option } = storeToRefs(store);
+
     const keyword = ref(null);
-    const title = ref('Bank Type');
+    const title = ref(titleLabel || resourceName);
     const func = ref(null);
     const select_id = ref(null);
-    const form = ref({
-        code: null,
-        description: null
-    });
+    const form = ref({ ...formDef });
+
+    const assignValue = (e = {}) => {
+        for (const key in formDef) {
+            form.value[key] = e[key] ?? null;
+        }
+    };
 
     const tableData = computed(() => {
         try {
@@ -32,11 +38,6 @@ export default function useBankType() {
             return 0;
         }
     });
-
-    const assignValue = (e = {}) => {
-        form.value.code = e.code ?? null;
-        form.value.description = e.description ?? null;
-    };
 
     const search = async () => {
         set_keywords(keyword.value);
@@ -59,10 +60,7 @@ export default function useBankType() {
     };
 
     const sort = async (event) => {
-        await set_sort({
-            sortBy: event.sortField,
-            sortOrder: event.sortOrder
-        });
+        await set_sort({ sortBy: event.sortField, sortOrder: event.sortOrder });
         await fnFetch();
     };
 
@@ -87,23 +85,6 @@ export default function useBankType() {
         await trigger_modal(true);
     };
 
-    const columns = [
-        { field: 'code', header: 'Code', sortable: true, class: 'grid-table-line' },
-        { field: 'description', header: 'Description', sortable: true, class: 'grid-table-line' },
-        { field: 'created_at', header: 'Created Date', sortable: true, class: 'grid-table-line' },
-        { field: 'updated_at', header: 'Updated Date', sortable: true, class: 'grid-table-line' },
-        {
-            field: 'actions',
-            header: '',
-            frozen: true,
-            alignFrozen: 'right',
-            class: 'grid-table-line',
-            style: 'width: 1%',
-            headerStyle: 'text-align: center',
-            bodyStyle: 'text-align: center; overflow: visible'
-        }
-    ];
-
     onBeforeMount(async () => {
         await resetTable();
         await fnFetch();
@@ -119,7 +100,7 @@ export default function useBankType() {
         option,
         tableData,
         totalRecords,
-        columns,
+        columns: columnsDef,
         search,
         resetTable,
         fetch,

@@ -1,5 +1,5 @@
 <script setup>
-import useBankType from '@/composables/admin/maintenance/useBankType.js';
+import useBankType from '@/composables/scripts/admin/maintenance/useBankType.js';
 const { keyword, form, func, title, error, processing, option, tableData, totalRecords, columns, search, fetch, sort, save, openModal, showEdit } = useBankType();
 </script>
 
@@ -7,7 +7,6 @@ const { keyword, form, func, title, error, processing, option, tableData, totalR
     <div>
         <div class="card">
             <h6 class="text-xl mb-5">{{ title }}</h6>
-
             <div class="grid grid-cols-12 mb-4">
                 <div class="col-span-6">
                     <IconField>
@@ -19,7 +18,6 @@ const { keyword, form, func, title, error, processing, option, tableData, totalR
                     <Button size="small" outlined severity="secondary" icon="pi pi-plus" v-tooltip.top="'Add New'" label="Add New" @click="openModal(true)" />
                 </div>
             </div>
-
             <div class="field">
                 <VueDataTable :value="tableData" :loading="processing" :option="option" :totalRecords="totalRecords" :columns="columns" @page="fetch" @sort="sort">
                     <template #actions="{ data }">
