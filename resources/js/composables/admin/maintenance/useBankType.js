@@ -1,5 +1,6 @@
-// composables/admin/maintenance/useBankType.js
-import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore';
+// import { useBankTypeStore } from '@/stores/admin/maintenance/useBankTypeStore';
+import useDynamicStore from '@/composables/stores/useDynamicStore';
+const useBankTypeStore = useDynamicStore('admin-maintenance-bank-type', 'admin/maintenance/bankType');
 import useCrudComposable from '@/composables/scripts/useCrudComposable';
 
 const formDefinition = {
