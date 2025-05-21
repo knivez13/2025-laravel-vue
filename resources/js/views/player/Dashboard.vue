@@ -60,6 +60,76 @@ const show_control = (data) => {
 
 <template>
     <div>
+        <div class="mb-4 w-full" style="display: flex; flex-wrap: wrap; gap: 5px; justify-content: center">
+            <button class="chip red" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">5K</div>
+            </button>
+
+            <button class="chip green" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">10K</div>
+            </button>
+
+            <button class="chip blue" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">20K</div>
+            </button>
+
+            <button class="chip black" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">30K</div>
+            </button>
+
+            <button class="chip yellow" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">50K</div>
+            </button>
+            <button class="chip yellow" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">100K</div>
+            </button>
+            <button class="chip yellow" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">200K</div>
+            </button>
+            <button class="chip yellow" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">500K</div>
+            </button>
+            <button class="chip yellow" @click="console.log(5)">
+                <div class="outer-ring"></div>
+                <div class="border-ring"></div>
+                <div class="middle-ring"></div>
+                <div class="inner-ring"></div>
+                <div class="center">1M</div>
+            </button>
+        </div>
+
         <div className="card">
             <div class="grid grid-cols-12 mb-4">
                 <div class="col-span-6 md:col-span-6">
@@ -138,3 +208,94 @@ const show_control = (data) => {
         </Dialog>
     </div>
 </template>
+<style scoped>
+.chip {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 13px;
+    --chip-color: #d32f2f;
+    --text-color: white;
+    flex-shrink: 0;
+    font-family: sans-serif;
+}
+
+.chip .outer-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background-image: repeating-conic-gradient(white 0deg 20deg, var(--chip-color) 20deg 40deg);
+    z-index: 0;
+}
+
+.chip .border-ring {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background-color: var(--chip-color);
+    z-index: 1;
+}
+
+.chip .middle-ring {
+    position: absolute;
+    inset: 5px;
+    border: 3px solid white;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.chip .inner-ring {
+    position: absolute;
+    inset: 10px;
+    border: 2px solid white;
+    border-radius: 50%;
+    z-index: 3;
+}
+
+.chip .center {
+    position: relative;
+    z-index: 4;
+    color: var(--text-color);
+}
+
+/* Color Variants */
+.chip.red {
+    --chip-color: #d32f2f;
+    --text-color: black;
+}
+
+.chip.green {
+    --chip-color: #388e3c;
+    --text-color: black;
+}
+
+.chip.blue {
+    --chip-color: #1976d2;
+    --text-color: black;
+}
+
+.chip.black {
+    --chip-color: #000000;
+    --text-color: white;
+}
+
+.chip.purple {
+    --chip-color: #7b1fa2;
+    --text-color: black;
+}
+
+.chip.yellow {
+    --chip-color: #fbc02d;
+    --text-color: black;
+}
+
+.chip.white {
+    --chip-color: #ffffff;
+    --text-color: black;
+}
+</style>

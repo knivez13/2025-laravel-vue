@@ -136,8 +136,14 @@ class SabongRepository implements SabongInterface
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
-
-            return true;
+            GameListRound::find($data['current_round_id'])
+                ->update([
+                    'status' => 6,
+                    'updated_by' => $user->id,
+                ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
 
@@ -147,8 +153,38 @@ class SabongRepository implements SabongInterface
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
+            GameList::find($data['game_list_id'])
+                ->update([
+                    'current_round_id' => $data['game_round_id'],
+                    'updated_by' => $user->id,
+                ]);
+            GameListRound::find($data['game_round_id'])
+                ->update([
+                    'status' => 3,
+                    'updated_by' => $user->id,
+                ]);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
+        });
+    }
 
-            return true;
+    public function betRound(array $data): array
+    {
+        return DB::transaction(function () use ($data) {
+            $user = Auth::user();
+            GameRoundBet::create([
+                'user_id' => $user->id,
+                'game_list_id' => $data['game_list_id'],
+                'game_round_id' => $data['current_round_id'],
+                'bet_option_id' => $data['bet_option_id'],
+                'bet_amount' => $data['bet_amount'],
+                'before_amount' => $user->balance_amount,
+                'after_amount' => $user->balance_amount - $data['bet_amount'],
+                'created_by' => $user->id,
+            ]);
+            $res = [];
+            return $res;
         });
     }
 }
