@@ -18,17 +18,19 @@ const form = ref({
     game_present_id: null,
     game_name: null,
     event_name: null,
-    total_round: null,
-    multiplier: null,
-    game_name: null
+    total_round: 0,
+    multiplier: 0,
+    rate: 0,
+    padding: 0
 });
 const assign_value = async (e) => {
     form.value.game_present_id = e?.game_present_id ?? null;
-    form.value.game_name = e?.game_name ?? null;
-    form.value.event_name = e?.event_name ?? null;
-    form.value.total_round = e?.total_round ?? null;
-    form.value.multiplier = e?.multiplier ?? null;
-    form.value.rate = e?.rate ?? null;
+    form.value.game_name = e?.game_name ?? 'Sabong';
+    form.value.event_name = e?.event_name ?? 'Derbi';
+    form.value.total_round = e?.total_round ?? 300;
+    form.value.multiplier = e?.multiplier ?? 1;
+    form.value.rate = e?.rate ?? 5;
+    form.value.padding = e?.padding ?? 1000000;
 };
 
 const open_modal = async (data) => {
@@ -81,6 +83,7 @@ const show_control = (data) => {
                     <Column field="rate" header="Rake" class="grid-table-line">
                         <template #body="data"> {{ data.data.rate }}% </template>
                     </Column>
+                    <Column field="padding" header="Padding Amount" class="grid-table-line" />
                     <Column field="created_at" header="Created Date" class="grid-table-line" />
                     <Column field="updated_at" header="Updated Date" class="grid-table-line" />
                     <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
@@ -116,19 +119,22 @@ const show_control = (data) => {
                     <FloatSelect v-model="form.game_present_id" label="Game Present" name="game_present_id" :options="api.decrypt(token)['game_present']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatText v-model="form.game_name" label="game_name" name="game_name" :error="error" autofocus />
+                    <FloatText v-model="form.game_name" label="Game Name" name="game_name" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatText v-model="form.event_name" label="event_name" name="event_name" :error="error" autofocus />
+                    <FloatText v-model="form.event_name" label="Event Name" name="event_name" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.total_round" label="total_round" name="total_round" :error="error" autofocus />
+                    <FloatNumber v-model="form.total_round" label="Total Round" name="total_round" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.multiplier" label="multiplier" name="multiplier" :error="error" autofocus />
+                    <FloatNumber v-model="form.multiplier" label="Multiplier" name="multiplier" :error="error" autofocus />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.rate" label="rate" name="rate" :error="error" autofocus />
+                    <FloatNumber v-model="form.rate" label="Rate" name="rate" :error="error" autofocus />
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <FloatNumber v-model="form.padding" label="Padding Amount" name="padding" :error="error" autofocus />
                 </div>
             </div>
             <div class="flex items-center gap-2">

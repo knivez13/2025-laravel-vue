@@ -109,6 +109,17 @@ class SabongController extends Controller
             return ExceptionHelper::handle($e);
         }
     }
+    public function betRound(Request $request)
+    {
+        try {
+            AccessHelper::check('CanAddMaintenance');
+            $data = ApiEncResponse::decryptJson($request['encrypt']);
+            $res = $this->interface->betRound($data);
+            return ApiResponse::success($res, 'insert success');
+        } catch (\Throwable $e) {
+            return ExceptionHelper::handle($e);
+        }
+    }
 
 
 

@@ -20,7 +20,8 @@ const model = ref([
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard', meta: 'user' },
             { label: 'Earnings', icon: 'pi pi-fw pi-home', to: '/admin/earning', meta: 'user' },
             { label: 'Live Games', icon: 'pi pi-fw pi-home', to: '/admin/liveGames', meta: 'user' },
-            { label: 'Agent & Player', icon: 'pi pi-fw pi-home', to: '/admin/agentPlayer', meta: 'user' },
+            { label: 'Agent', icon: 'pi pi-fw pi-home', to: '/admin/agentPlayer', meta: 'user' },
+            { label: 'Player', icon: 'pi pi-fw pi-home', to: '/admin/agentPlayer', meta: 'user' },
             {
                 label: 'Maintenance',
                 icon: 'pi pi-fw pi-user',

@@ -43,13 +43,15 @@ return new class extends Migration
         }
 
         $user = User::create([
-            // 'emp_id' => 'SA-001',
-            'username' => 'bonjour',
-            // 'middle_name' => 'Lopez',
-            // 'last_name' => 'De Guzman',
-            'email' => 'bonjourdeguzman@gmail.com',
-            // 'contact_no' => '09666594533',
-            // 'status' => 1,
+            'username' => 'systemadmin',
+            'first_name' => 'System',
+            'last_name' => 'Admin',
+            'email' => 'systemadmin@gmail.com',
+            'min_bet_time' => 5000,
+            'max_bet_time' => 1000000,
+            'max_bet_game' => 5000000,
+            'max_bet_draw' => 1000000,
+            'balance_amount' => 1000000000000000000000000,
             'password' => Hash::make('password'),
         ]);
         $role = Role::create(['name' => 'SystemAdmin']);

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('game_commissions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
+
             $table->uuid('game_present_id')->nullable();
             $table->foreign('game_present_id')->references('id')->on('game_presents');
 
@@ -26,10 +26,10 @@ return new class extends Migration
             $table->uuid('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
 
-            $table->decimal('bet_amount', 18, 10)->default(0);
-            $table->decimal('before_amount', 18, 10)->default(0);
-            $table->decimal('after_amount', 18, 10)->default(0);
-            $table->decimal('profit', 18, 10)->default(0);
+            $table->decimal('bet_amount', 30, 8)->default(0);
+            $table->decimal('before_amount', 30, 8)->default(0);
+            $table->decimal('after_amount', 30, 8)->default(0);
+            $table->decimal('profit', 30, 8)->default(0);
 
             $table->uuid('agent_id')->nullable();
             $table->foreign('agent_id')->references('id')->on('users');

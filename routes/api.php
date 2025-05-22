@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::post('sabongconsole/declareRound', 'declareRound');
                 Route::post('sabongconsole/cancelRound', 'cancelRound');
                 Route::post('sabongconsole/nextRound', 'nextRound');
+                Route::post('sabongconsole/betRound', 'betRound');
             });
         });
 

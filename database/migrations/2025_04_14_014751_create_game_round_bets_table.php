@@ -21,11 +21,11 @@ return new class extends Migration
             $table->foreign('game_round_id')->references('id')->on('game_list_rounds');
             $table->uuid('bet_option_id')->nullable();
             $table->foreign('bet_option_id')->references('id')->on('game_present_options');
-            $table->decimal('bet_amount', 18, 10)->default(0);
-            $table->decimal('before_amount', 18, 10)->default(0);
-            $table->decimal('after_amount', 18, 10)->default(0);
-            $table->decimal('ods_meron', 18, 10)->default(0);
-            $table->decimal('ods_wala', 18, 10)->default(0);
+            $table->decimal('bet_amount', 30, 8)->default(0);
+            $table->decimal('before_amount', 30, 8)->default(0);
+            $table->decimal('after_amount', 30, 8)->default(0);
+            $table->decimal('ods_meron', 18, 8)->default(0);
+            $table->decimal('ods_wala', 18, 8)->default(0);
             $table->tinyInteger('is_win')->default(0);
             $table->timestamps();
             $table->softDeletes();

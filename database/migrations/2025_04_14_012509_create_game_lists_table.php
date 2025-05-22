@@ -22,10 +22,10 @@ return new class extends Migration
             $table->integer('total_round')->default(0);
             $table->integer('multiplier')->default(0);
             $table->decimal('rate', 18, 6)->default(0);
-            $table->decimal('ods_meron', 18, 10)->default(0);
-            $table->decimal('ods_wala', 18, 10)->default(0);
+            $table->decimal('ods_meron', 18, 8)->default(0);
+            $table->decimal('ods_wala', 18, 8)->default(0);
 
-            $table->decimal('padding', 18, 8)->default(0);
+            $table->decimal('padding', 30, 8)->default(0);
 
             $table->timestamps();
             $table->softDeletes();

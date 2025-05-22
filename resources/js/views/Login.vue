@@ -7,7 +7,7 @@ const { loginUser } = useAuthStore();
 const { error, processing } = storeToRefs(useAuthStore());
 
 const form = ref({
-    username: 'bonjour',
+    username: 'systemadmin',
     password: 'password'
 });
 

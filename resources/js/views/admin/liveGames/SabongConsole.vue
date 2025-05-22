@@ -2,13 +2,58 @@
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
 import { useSabongConsoleStore } from '@/stores/admin/useSabongConsoleStore.js';
-const { fnShow, fnSelectRound, fnOpenRound, fnCloseRound, fnDeclareRound, fnCancelRound, fnNextRound } = useSabongConsoleStore();
-const { game, bet, round, option } = storeToRefs(useSabongConsoleStore());
+const { fnShow, fnSelectRound, fnOpenRound, fnCloseRound, fnDeclareRound, fnCancelRound, fnNextRound, fnBetRound } = useSabongConsoleStore();
+const { game, bet, round, option, sum } = storeToRefs(useSabongConsoleStore());
 
 onBeforeMount(async () => {
     await fnShow();
 });
 const winner = ref([]);
+
+const bets = computed(() => {
+    try {
+        return bet.value ? (api.decrypt(bet.value) ?? []) : [];
+    } catch {
+        return [];
+    }
+});
+const rounds = computed(() => {
+    try {
+        return round.value ? (api.decrypt(round.value) ?? []) : [];
+    } catch {
+        return [];
+    }
+});
+const games = computed(() => {
+    try {
+        return game.value ? (api.decrypt(game.value) ?? []) : [];
+    } catch {
+        return [];
+    }
+});
+const sums = computed(() => {
+    try {
+        return sum.value ? (api.decrypt(sum.value) ?? []) : [];
+    } catch {
+        return [];
+    }
+});
+
+const meron_id = computed(() => {
+    try {
+        return option.value ? (api.decrypt(option.value).filter((item) => item.code === 'MERON')[0]['id'] ?? null) : null;
+    } catch {
+        return null;
+    }
+});
+
+const wala_id = computed(() => {
+    try {
+        return option.value ? (api.decrypt(option.value).filter((item) => item.code === 'WALA')[0]['id'] ?? null) : null;
+    } catch {
+        return null;
+    }
+});
 
 const form = ref({
     game_list_id: null,
@@ -22,19 +67,19 @@ const selectRound = async (data) => {
     await fnSelectRound(form.value);
 };
 const nextRound = async () => {
-    form.value.game_list_id = api.decrypt(game.value)['id'];
-    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    form.value.game_list_id = games.value['id'];
+    form.value.current_round_id = games.value['current_round_id'];
     await fnNextRound(form.value);
 };
 
 const openRound = async () => {
-    form.value.game_list_id = api.decrypt(game.value)['id'];
-    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    form.value.game_list_id = games.value['id'];
+    form.value.current_round_id = games.value['current_round_id'];
     await fnOpenRound(form.value);
 };
 const closeRound = async () => {
-    form.value.game_list_id = api.decrypt(game.value)['id'];
-    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    form.value.game_list_id = games.value['id'];
+    form.value.current_round_id = games.value['current_round_id'];
     await fnCloseRound(form.value);
 };
 const selectWinner = async (data) => {
@@ -43,24 +88,36 @@ const selectWinner = async (data) => {
 };
 const declareRound = async () => {
     console.log('declare');
-    form.value.game_list_id = api.decrypt(game.value)['id'];
-    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    form.value.game_list_id = games.value['id'];
+    form.value.current_round_id = games.value['current_round_id'];
     form.value.win_option_id = winner.value.id;
     await fnDeclareRound(form.value);
     winner.value = [];
 };
 const cancelRound = async () => {
-    form.value.game_list_id = api.decrypt(game.value)['id'];
-    form.value.current_round_id = api.decrypt(game.value)['current_round_id'];
+    form.value.game_list_id = games.value['id'];
+    form.value.current_round_id = games.value['current_round_id'];
     await fnCancelRound(form.value);
+};
+const betRound = async (option, amount) => {
+    form.value.game_list_id = games.value['id'];
+    form.value.current_round_id = games.value['current_round_id'];
+    form.value.bet_option_id = option;
+    form.value.bet_amount = amount;
+    await fnBetRound(form.value);
 };
 </script>
 <template>
     <div>
         <Fluid>
-            {{ game ? api.decrypt(game) : [] }}
+            <!-- {{ game ? api.decrypt(game) : [] }}
+            <br />
             <br />
             {{ form }}
+            <br />
+            <br />
+            {{ sums }} -->
+
             <div class="grid grid-cols-3 gap-1">
                 <div class="col-span-3 md:col-span-1 gap-2">
                     <video class="w-full" controls>
@@ -133,29 +190,29 @@ const cancelRound = async () => {
                         <tr>
                             <th>
                                 <div class="flex gap-2">
-                                    <Button size="small" label="5k" severity="danger" />
-                                    <Button size="small" label="10k" severity="danger" />
-                                    <Button size="small" label="50k" severity="danger" />
-                                    <Button size="small" label="100k" severity="danger" />
-                                    <Button size="small" label="500k" severity="danger" />
-                                    <Button size="small" label="1M" severity="danger" />
+                                    <Button size="small" label="5k" severity="danger" @click="betRound(meron_id, 5000)" />
+                                    <Button size="small" label="10k" severity="danger" @click="betRound(meron_id, 10000)" />
+                                    <Button size="small" label="50k" severity="danger" @click="betRound(meron_id, 50000)" />
+                                    <Button size="small" label="100k" severity="danger" @click="betRound(meron_id, 100000)" />
+                                    <Button size="small" label="500k" severity="danger" @click="betRound(meron_id, 500000)" />
+                                    <Button size="small" label="1M" severity="danger" @click="betRound(meron_id, 1000000)" />
                                 </div>
                             </th>
                         </tr>
                         <tr>
                             <th>
                                 <div class="flex gap-2">
-                                    <Button size="small" label="5k" severity="info" />
-                                    <Button size="small" label="10k" severity="info" />
-                                    <Button size="small" label="50k" severity="info" />
-                                    <Button size="small" label="100k" severity="info" />
-                                    <Button size="small" label="500k" severity="info" />
-                                    <Button size="small" label="1M" severity="info" />
+                                    <Button size="small" label="5k" severity="info" @click="betRound(wala_id, 5000)" />
+                                    <Button size="small" label="10k" severity="info" @click="betRound(wala_id, 10000)" />
+                                    <Button size="small" label="50k" severity="info" @click="betRound(wala_id, 50000)" />
+                                    <Button size="small" label="100k" severity="info" @click="betRound(wala_id, 100000)" />
+                                    <Button size="small" label="500k" severity="info" @click="betRound(wala_id, 500000)" />
+                                    <Button size="small" label="1M" severity="info" @click="betRound(wala_id, 1000000)" />
                                 </div>
                             </th>
                         </tr>
                     </table>
-                    <DataTable :value="bet ? api.decrypt(bet) : []" class="w-full mb-2" size="small">
+                    <DataTable :value="bets" class="w-full mb-2" size="small">
                         <Column field="code" header="Name" class="grid-table-line"></Column>
                         <Column field="code" header="Login ID" class="grid-table-line"></Column>
                         <Column field="name" header="Bet Amount" class="grid-table-line"></Column>
@@ -164,7 +221,7 @@ const cancelRound = async () => {
                     </DataTable>
                 </div>
                 <div class="col-span-3 md:col-span-1 gap-2">
-                    <DataTable :value="round ? api.decrypt(round) : []" class="w-full" size="small" scrollable scrollHeight="500px">
+                    <DataTable :value="rounds" class="w-full" size="small" scrollable scrollHeight="500px">
                         <Column field="round_no" header="#" class="grid-table-line"></Column>
                         <Column field="id" header="Action" class="grid-table-line">
                             <template #body="data">

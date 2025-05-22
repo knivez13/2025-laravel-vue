@@ -101,7 +101,9 @@ class SabongRepository implements SabongInterface
                 'status' => 1,
                 'updated_by' => $user->id,
             ]);
-            return $this->getGameWithRounds($data['game_list_id']);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function openRound(array $data): array
@@ -148,11 +150,15 @@ class SabongRepository implements SabongInterface
                         'updated_by' => $userID->id,
                     ]);
 
-                return $this->getGameWithRounds($data['game_list_id']);
+                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+                return $res;
             }
-            return array_merge($this->getGameWithRounds($game->id), [
-                'error' => 'Round Already Open or Finished',
-            ]);
+
+            $res['error'] = 'Round Already Open or Finish';
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function closeRound(array $data): array
@@ -167,11 +173,14 @@ class SabongRepository implements SabongInterface
                         'status' => 3,
                         'updated_by' => $user->id,
                     ]);
-                return $this->getGameWithRounds($data['game_list_id']);
+                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+                return $res;
             }
-            return array_merge($this->getGameWithRounds($game->id), [
-                'error' => 'Round Open Can Close',
-            ]);
+            $res['error'] = 'Round Open Can Close';
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function declareRound(array $data): array
@@ -186,11 +195,14 @@ class SabongRepository implements SabongInterface
                         'win_option_id' => $data['win_option_id'],
                         'updated_by' => $user->id,
                     ]);
-                return $this->getGameWithRounds($data['game_list_id']);
+                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+                return $res;
             }
-            return array_merge($this->getGameWithRounds($game->id), [
-                'error' => 'Round Close Can Declare',
-            ]);
+            $res['error'] = 'Round Close Can Declare';
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function cancelRound(array $data): array
@@ -198,9 +210,10 @@ class SabongRepository implements SabongInterface
         return DB::transaction(function () use ($data) {
             $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
             if ($game->current_round_id && $game->currentRound->status == 5) {
-                return array_merge($this->getGameWithRounds($game->id), [
-                    'error' => 'Round Already Canceled',
-                ]);
+                $res['error'] = 'Round Already Canceled';
+                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+                return $res;
             }
             $user = Auth::user();
             GameListRound::find($data['current_round_id'])
@@ -208,7 +221,9 @@ class SabongRepository implements SabongInterface
                     'status' => 5,
                     'updated_by' => $user->id,
                 ]);
-            return $this->getGameWithRounds($data['game_list_id']);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function lockRound(array $data): array
@@ -222,11 +237,15 @@ class SabongRepository implements SabongInterface
                         'status' => 6,
                         'updated_by' => $user->id,
                     ]);
-                return $this->getGameWithRounds($data['game_list_id']);
+                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+                return $res;
             }
-            return array_merge($this->getGameWithRounds($game->id), [
-                'error' => 'You Need Declare First',
-            ]);
+
+            $res['error'] = 'You Need Declare First';
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     public function resetRound(array $data): array
@@ -234,9 +253,10 @@ class SabongRepository implements SabongInterface
         return DB::transaction(function () use ($data) {
             $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
             if ($game->current_round_id && $game->currentRound->status == 7 || $game->currentRound->status == 5) {
-                return array_merge($this->getGameWithRounds($game->id), [
-                    'error' => 'You Cannot Reset Round',
-                ]);
+                $res['error'] = 'You Cannot Reset Round';
+                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+                return $res;
             }
             $user = Auth::user();
             GameList::find($data['game_list_id'])
@@ -250,7 +270,9 @@ class SabongRepository implements SabongInterface
                     'win_option_id' => null,
                     'updated_by' => $user->id,
                 ]);
-            return $this->getGameWithRounds($data['game_list_id']);
+            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
+            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
+            return $res;
         });
     }
     // public function betRound(array $data): array
@@ -479,16 +501,6 @@ class SabongRepository implements SabongInterface
                 'ods_wala' => $ods_wala,
                 'pay_meron' => $final_meron_ods * 100,
                 'pay_wala' => $final_wala_ods * 100,
-            ];
-        });
-    }
-
-    private function getGameWithRounds($gameListId): array
-    {
-        return DB::transaction(function () use ($gameListId) {
-            return [
-                'game' => GameList::with(['gamePresent', 'currentRound'])->find($gameListId),
-                'round' => GameListRound::where('game_list_id', $gameListId)->orderBy('round_no', 'asc')->get(),
             ];
         });
     }

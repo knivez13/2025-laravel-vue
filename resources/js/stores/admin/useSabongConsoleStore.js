@@ -9,6 +9,7 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
         game: null,
         bet: null,
         round: null,
+        sum: null,
         option: null,
         validation: [],
         processing: false,
@@ -109,6 +110,19 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
                 const { data } = await api2.store(res);
                 this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
                 this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+            } catch (e) {
+                console.log(e);
+            } finally {
+                this.processing = false;
+            }
+        },
+        async fnBetRound(res) {
+            const api2 = new Resource('admin/sabong/sabongconsole/betRound');
+            try {
+                await api2.csrf();
+                const { data } = await api2.store(res);
+                console.log(api.decrypt(data?.response_data));
+                this.sum = api.encrypt(api.decrypt(data?.response_data)['bet']);
             } catch (e) {
                 console.log(e);
             } finally {

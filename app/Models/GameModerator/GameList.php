@@ -31,7 +31,7 @@ class GameList extends Model
 
     public function gamePresent()
     {
-        return $this->belongsTo(GamePresent::class, 'game_present_id')->select('id', 'code');
+        return $this->belongsTo(GamePresent::class, 'game_present_id');
     }
 
     public function currentRound()

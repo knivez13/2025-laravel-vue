@@ -18,7 +18,7 @@ return new class extends Migration
             $table->uuid('game_type_id')->nullable();
             $table->foreign('game_type_id')->references('id')->on('game_types');
             $table->string('code')->nullable();
-            $table->decimal('amount', 18, 2)->default(0);
+            $table->decimal('amount', 30, 8)->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->uuid('created_by')->nullable();

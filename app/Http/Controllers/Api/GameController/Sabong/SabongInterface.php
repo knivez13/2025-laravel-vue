@@ -17,4 +17,5 @@ interface SabongInterface
     public function lockRound(array $data): array;
     public function selectRound(array $data): array;
     public function resetRound(array $data): array;
+    public function betRound(array $data): array;
 }
