@@ -8,6 +8,12 @@ const formDefinition = {
     description: null
 };
 
+const formFieldDefinition = [
+        { type: 'text', name: 'code', label: 'Code' },
+        { type: 'textarea', name: 'description', label: 'Description' },
+
+    ];
+
 const columnDefinition = [
     { field: 'code', header: 'Code', sortable: true, class: 'grid-table-line' },
     { field: 'description', header: 'Description', sortable: true, class: 'grid-table-line' },
@@ -26,7 +32,7 @@ const columnDefinition = [
 ];
 
 export default function useBankType() {
-    const crud = useCrudComposable('sample', useStore, columnDefinition, formDefinition, 'Bank Type');
+    const crud = useCrudComposable('sample', useStore, columnDefinition, formDefinition, 'Bank Type', formFieldDefinition);
     const customFunction = () => {
         console.log('This is a custom function specific to Bank Type');
     };

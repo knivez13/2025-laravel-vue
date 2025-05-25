@@ -3,7 +3,7 @@ import { ref, computed, onBeforeMount } from 'vue';
 import Resource from '@/api/resource';
 import { storeToRefs } from 'pinia';
 
-export default function useCrudComposable(resourceName, useStore, columnsDef, formDef, titleLabel = '') {
+export default function useCrudComposable(resourceName, useStore, columnsDef, formDef, titleLabel = '', formFieldDefinition = []) {
     const api = new Resource(resourceName);
     const store = useStore();
 
@@ -26,6 +26,14 @@ export default function useCrudComposable(resourceName, useStore, columnsDef, fo
     const tableData = computed(() => {
         try {
             return token.value ? (api.decrypt(token.value)?.list?.data ?? []) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    const dropdownData = computed(() => {
+        try {
+            return token.value ? (api.decrypt(token.value)?.dropdown ?? []) : [];
         } catch {
             return [];
         }
@@ -107,6 +115,8 @@ export default function useCrudComposable(resourceName, useStore, columnsDef, fo
         sort,
         save,
         openModal,
-        showEdit
+        showEdit,
+        dropdownData,
+        formFieldDefinition: formFieldDefinition
     };
 }

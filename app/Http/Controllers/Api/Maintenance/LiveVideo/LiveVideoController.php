@@ -36,8 +36,8 @@ class LiveVideoController extends Controller
             $page =  $data->input('page', 1);
 
             $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
-            $res['video_type'] =  Cache::rememberForever('video_type', fn() => VideoType::get());
-            $res['game_type'] =  Cache::rememberForever('game_type', fn() => GameType::get());
+            $res['dropdown']['video_type'] =  Cache::rememberForever('video_type', fn() => VideoType::get());
+            $res['dropdown']['game_type'] =  Cache::rememberForever('game_type', fn() => GameType::get());
 
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {

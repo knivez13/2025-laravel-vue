@@ -1,6 +1,6 @@
 <script setup>
 import useScript from '@/composables/admin/maintenance/useBankType.js';
-const { keyword, form, func, title, error, processing, option, tableData, totalRecords, columns, search, fetch, sort, save, openModal, showEdit } = useScript();
+const { keyword, form, func, title, error, processing, option, tableData, formFieldDefinition, totalRecords, columns, search, fetch, sort, save, openModal, showEdit } = useScript();
 </script>
 
 <template>
@@ -28,8 +28,10 @@ const { keyword, form, func, title, error, processing, option, tableData, totalR
                 </VueDataTable>
             </div>
         </div>
+        <AutoFormDialog v-model="option.show_modal" :title="title" :func="func" :form="form" :error="error" :processing="processing" :formDefinition="formFieldDefinition" :dropdownData="dropdownData" @save="save" />
 
-        <Dialog
+        {{ formFieldDefinition }}
+        <!-- <Dialog
             v-model:visible="option.show_modal"
             modal
             :closable="false"
@@ -58,6 +60,6 @@ const { keyword, form, func, title, error, processing, option, tableData, totalR
                 <Button size="small" outlined type="button" label="Cancel" severity="warn" :disabled="processing" :loading="processing" @click="openModal(false)" />
                 <Button size="small" outlined type="button" label="Save" severity="success" :disabled="processing" :loading="processing" @click="save" />
             </div>
-        </Dialog>
+        </Dialog> -->
     </div>
 </template>
