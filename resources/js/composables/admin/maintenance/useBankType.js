@@ -9,10 +9,9 @@ const formDefinition = {
 };
 
 const formFieldDefinition = [
-        { type: 'text', name: 'code', label: 'Code' },
-        { type: 'textarea', name: 'description', label: 'Description' },
-
-    ];
+    { type: 'text', name: 'code', label: 'Code' },
+    { type: 'textarea', name: 'description', label: 'Description', rows: 5 }
+];
 
 const columnDefinition = [
     { field: 'code', header: 'Code', sortable: true, class: 'grid-table-line' },
