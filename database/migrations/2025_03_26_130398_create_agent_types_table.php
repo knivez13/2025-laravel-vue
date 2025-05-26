@@ -26,23 +26,25 @@ return new class extends Migration
             $table->foreign('deleted_by')->references('id')->on('users');
         });
 
-        AgentType::create([
+        $super = AgentType::create([
             'code' => 'Super',
             'description' => 'Super',
         ]);
 
-        AgentType::create([
+        $senior = AgentType::create([
             'code' => 'Senior',
             'description' => 'Senior',
         ]);
-        AgentType::create([
+        $master = AgentType::create([
             'code' => 'Master',
             'description' => 'Master',
         ]);
-        AgentType::create([
+        $agent = AgentType::create([
             'code' => 'Agent',
             'description' => 'Agent',
         ]);
+
+        
     }
 
     /**

@@ -16,6 +16,9 @@ return new class extends Migration
             $table->uuid('referral_by')->nullable();
             $table->foreign('referral_by')->references('id')->on('users');
 
+            $table->uuid('agent_type_id')->nullable();
+            $table->foreign('agent_type_id')->references('id')->on('agent_types');
+
             $table->uuid('created_by')->nullable();
             $table->foreign('created_by')->references('id')->on('users');
 

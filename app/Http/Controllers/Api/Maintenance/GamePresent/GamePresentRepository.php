@@ -20,7 +20,7 @@ class GamePresentRepository extends BaseRepository implements GamePresentInterfa
 
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
-    protected array $filteredInsertData = ['code', 'description', 'min_bet', 'max_bet', 'max_total_bet', 'bet_opt_winner', 'game_type_id', 'game_provider_id', 'live_one_id', 'live_two_id', 'live_three_id'];
+    protected array $filteredInsertData = ['code', 'description', 'min_bet', 'max_bet', 'max_total_bet', 'bet_opt_winner', 'game_type_id', 'live_one_id', 'live_two_id', 'live_three_id'];
     protected bool $cacheData = true;
     protected string $cacheName = 'game_present';
 

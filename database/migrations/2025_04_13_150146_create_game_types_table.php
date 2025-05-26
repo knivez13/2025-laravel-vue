@@ -30,18 +30,18 @@ return new class extends Migration
             'code' => 'Sabong',
             'description' => 'Sabong',
         ]);
-        GameType::create([
-            'code' => 'Casino',
-            'description' => 'Casino',
-        ]);
-        GameType::create([
-            'code' => 'Sports Game',
-            'description' => 'Sports Game',
-        ]);
-        GameType::create([
-            'code' => 'Lotto',
-            'description' => 'Lotto',
-        ]);
+        // GameType::create([
+        //     'code' => 'Casino',
+        //     'description' => 'Casino',
+        // ]);
+        // GameType::create([
+        //     'code' => 'Sports Game',
+        //     'description' => 'Sports Game',
+        // ]);
+        // GameType::create([
+        //     'code' => 'Lotto',
+        //     'description' => 'Lotto',
+        // ]);
     }
 
     /**

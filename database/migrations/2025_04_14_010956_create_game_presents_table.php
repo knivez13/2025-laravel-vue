@@ -23,9 +23,6 @@ return new class extends Migration
             $table->uuid('game_type_id')->nullable();
             $table->foreign('game_type_id')->references('id')->on('game_types');
 
-            $table->uuid('game_provider_id')->nullable();
-            $table->foreign('game_provider_id')->references('id')->on('game_providers');
-
             $table->uuid('live_one_id')->nullable();
             $table->foreign('live_one_id')->references('id')->on('live_videos');
             $table->uuid('live_two_id')->nullable();

@@ -20,7 +20,6 @@ const form = ref({
     max_total_bet: 0,
     bet_opt_winner: 0,
     game_type_id: null,
-    game_provider_id: null,
     live_one_id: null,
     live_two_id: null,
     live_three_id: null
@@ -33,7 +32,6 @@ const assign_value = async (e) => {
     form.value.max_total_bet = e?.max_total_bet ?? 0;
     form.value.bet_opt_winner = e?.bet_opt_winner ?? 0;
     form.value.game_type_id = e?.game_type_id ?? null;
-    form.value.game_provider_id = e?.game_provider_id ?? null;
     form.value.live_one_id = e?.live_one_id ?? null;
     form.value.live_two_id = e?.live_two_id ?? null;
     form.value.live_three_id = e?.live_three_id ?? null;
@@ -166,9 +164,6 @@ const show_edit = async (data) => {
 
                 <div class="flex flex-col gap-2 w-full">
                     <FloatSelect v-model="form.game_type_id" label="Game Type" name="game_type_id" :options="api.decrypt(token)['game_type']" optionLabel="code" optionValue="id" :error="error" />
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatSelect v-model="form.game_provider_id" label="Game Provider" name="game_provider_id" :options="api.decrypt(token)['game_provider']" optionLabel="code" optionValue="id" :error="error" />
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                     <FloatText v-model="form.code" label="Code" name="code" :error="error" autofocus />
