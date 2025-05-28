@@ -2,6 +2,11 @@ import { defineStore } from 'pinia';
 import Resource from '@/api/resource.js';
 import router from '@/router';
 const api = new Resource('currency');
+import { useToast } from 'primevue/usetoast';
+
+import { useAuthStore } from '@/stores/useAuthStore.js';
+const { set_user } = useAuthStore();
+const { user } = storeToRefs(useAuthStore());
 
 export const useSabongConsoleStore = defineStore('admin-sabong-console', {
     state: () => ({
@@ -13,7 +18,8 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
         option: null,
         validation: [],
         processing: false,
-        error: null
+        error: null,
+        toast: useToast()
     }),
     getters: {
         get_token: (state) => state.token
@@ -43,8 +49,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                }
             } catch (e) {
                 console.log(e);
             } finally {
@@ -56,8 +66,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                }
             } catch (e) {
                 console.log(e);
             } finally {
@@ -69,8 +83,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                }
             } catch (e) {
                 console.log(e);
             } finally {
@@ -82,8 +100,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                }
             } catch (e) {
                 console.log(e);
             } finally {
@@ -95,8 +117,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                }
             } catch (e) {
                 console.log(e);
             } finally {
@@ -108,8 +134,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
-                this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    this.round = api.encrypt(api.decrypt(data?.response_data)['round']);
+                }
             } catch (e) {
                 console.log(e);
             } finally {
@@ -121,8 +151,12 @@ export const useSabongConsoleStore = defineStore('admin-sabong-console', {
             try {
                 await api2.csrf();
                 const { data } = await api2.store(res);
-                console.log(api.decrypt(data?.response_data));
-                this.sum = api.encrypt(api.decrypt(data?.response_data)['bet']);
+                if (api.decrypt(data?.response_data)['error']) {
+                    this.toast.add({ severity: 'error', summary: 'Notification', detail: api.decrypt(data?.response_data)['error'], life: 3000 });
+                } else {
+                    this.game = api.encrypt(api.decrypt(data?.response_data)['game']);
+                    set_user(api.encrypt(api.decrypt(data?.response_data)['user']));
+                }
             } catch (e) {
                 console.log(e);
             } finally {

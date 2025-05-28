@@ -5,6 +5,12 @@ const { language } = storeToRefs(useDefaultStore());
 const { t, locale } = useI18n();
 const selectedCountry = ref();
 
+import Resource from '@/api/resource.js';
+const api = new Resource('sample');
+
+import { useAuthStore } from '@/stores/useAuthStore.js';
+const { user, token } = storeToRefs(useAuthStore());
+
 function changeLanguage(lang) {
     locale.value = lang;
 }
@@ -36,11 +42,11 @@ function changeLanguage(lang) {
                     <div class="font-medium p-3">Available Language</div>
                 </template>
             </Select>
-            <Avatar label="P" class="mb-1" size="xlarge" />
-            <div>Role</div>
-            <div class="mb-5">Agent Level</div>
+            <Button disabled severity="secondary" :label="api.decrypt(user)['first_name']" class="mb-1" size="xlarge" />
+            <div>{{ api.decrypt(token)['roles'][0] }}</div>
+            <div class="mb-5">{{ api.decrypt(token)['roles'][0] == 'Agent' ? 'Agent' : 'Player' }}</div>
             <ButtonGroup class="w-full">
-                <Button variant="outlined" label="Save" class="w-full" />
+                <Button variant="outlined" :label="api.decrypt(user)['balance_amount']" class="w-full" />
                 <!-- <InputText v-model="data[field]" autofocus fluid /> -->
                 <Button icon="pi pi-refresh" style="width: 25%" />
             </ButtonGroup>

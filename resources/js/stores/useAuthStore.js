@@ -7,6 +7,7 @@ const api = new Resource('currency');
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: null,
+        user: null,
         validation: [],
         processing: false,
         error: null
@@ -18,6 +19,10 @@ export const useAuthStore = defineStore('auth', {
         // Check if the user has a specific permission
         check(permission) {
             return permission === 'user' || api.decrypt(this.token)['permission'].includes(permission);
+        },
+
+        set_user(data) {
+            this.user = data;
         },
 
         // Clear user data and redirect to login
@@ -50,6 +55,7 @@ export const useAuthStore = defineStore('auth', {
                     this.error = 'Wrong Username or Password';
                 } else if (data) {
                     this.token = data?.response_data;
+                    this.user = api.encrypt(api.decrypt(data?.response_data)['user']);
                     router.push('/game/dashboard');
                 }
             } catch (error) {

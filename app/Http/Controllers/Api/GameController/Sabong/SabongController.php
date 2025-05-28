@@ -85,12 +85,6 @@ class SabongController extends Controller
         try {
             AccessHelper::check('CanAddMaintenance');
             $data = ApiEncResponse::decryptJson($request['encrypt']);
-            $validator = Validator::make($data, [
-                'win_option_id' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return ApiResponse::failed('Validation Error.', $validator->errors(), 422);
-            }
             $res = $this->interface->declareRound($data);
             return ApiResponse::success($res, 'insert success');
         } catch (\Throwable $e) {

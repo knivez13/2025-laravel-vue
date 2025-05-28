@@ -11,7 +11,8 @@ class SampleWebSocketTest extends Controller
 {
     public function test()
     {
-        event(new DynamicBroadcastEvent(Carbon::now()->setTimezone('Asia/Manila')->format('l, jS F Y, g:i A'), 'chat'));
+        // event(new DynamicBroadcastEvent(Carbon::now()->setTimezone('Asia/Manila')->format('l, jS F Y, g:i A'), 'chat'));
+        broadcast(new DynamicBroadcastEvent(Carbon::now()->setTimezone('Asia/Manila')->format('l, jS F Y, g:i A'), 'chat'));
         return "sadasda";
     }
     public function privateTest()

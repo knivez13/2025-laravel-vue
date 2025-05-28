@@ -27,6 +27,7 @@ return new class extends Migration
             $table->decimal('total_meron', 18, 8)->default(0);
             $table->decimal('total_wala', 18, 8)->default(0);
             $table->decimal('total_draw', 18, 8)->default(0);
+            $table->decimal('multiplier', 18, 8)->default(0);
 
             $table->tinyInteger('status')->default(0);
 

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api\GameController\Sabong;
 
+use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
+use App\Events\DynamicBroadcastEvent;
 use App\Models\GameModerator\GameList;
 use App\Models\GameModerator\GameRoundBet;
 use App\Models\GameModerator\GameListRound;
@@ -179,6 +181,12 @@ class SabongRepository implements SabongInterface
         return DB::transaction(function () use ($data) {
             $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
             if ($game->current_round_id && $game->currentRound->status == 3) {
+
+                if (!$data['win_option_id']) {
+                    return array_merge($this->getGameWithRounds($game->id), [
+                        'error' => 'Need to Declare Win Option',
+                    ]);
+                }
                 $user = Auth::user();
                 GameListRound::find($data['current_round_id'])
                     ->update([
@@ -253,158 +261,6 @@ class SabongRepository implements SabongInterface
             return $this->getGameWithRounds($data['game_list_id']);
         });
     }
-    // public function betRound(array $data): array
-    // {
-    //     return DB::transaction(function () use ($data) {
-    //         $userId = Auth::id();
-
-    //         // GameRoundBet::where('user_id', $userId)->delete();
-    //         // GameRoundBet::where('user_id', $userId)->forceDelete();
-    //         // User::where('id', $userId)->update(['balance_amount' => 1000000000, 'max_bet_game' => 5000000]);
-    //         // return ['message' => 'Clear All'];
-
-    //         // Eager load related user and game data
-    //         $user = User::findOrFail($userId);
-    //         $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
-
-    //         // Check if round is open
-    //         if ($game->current_round_id && $game->currentRound->status !== 2) {
-    //             return ['error' => 'Round Not Open'];
-    //         }
-
-    //         // Determine bet limits
-    //         $minBet = $user->min_bet_time > 0 ? $user->min_bet_time : $game->gamePresent->min_bet;
-    //         $maxBet = $user->max_bet_time > 0 ? $user->max_bet_time : $game->gamePresent->max_bet;
-    //         $maxBetGame = $user->max_bet_game > 0 ? $user->max_bet_game : $game->gamePresent->max_total_bet;
-
-    //         // Calculate total round bet
-    //         $roundSum = GameRoundBet::where('user_id', $userId)
-    //             ->where('game_list_id', $data['game_list_id'])
-    //             ->where('game_round_id', $data['current_round_id'])
-    //             ->sum('bet_amount');
-
-    //         $totalMaxBet = $roundSum + $data['bet_amount'];
-
-    //         // Validate all conditions
-    //         if ($data['bet_amount'] > $user->balance_amount) {
-    //             return ['error' => 'Your Bet Amount is more than your balance'];
-    //         }
-
-    //         if ($data['bet_amount'] < $minBet) {
-    //             return ['error' => 'Your Bet Amount is below the minimum bet'];
-    //         }
-
-    //         if ($data['bet_amount'] > $maxBet) {
-    //             return ['error' => 'Your Bet Amount is above the maximum bet'];
-    //         }
-
-    //         if ($totalMaxBet > $maxBetGame) {
-    //             return ['error' => 'You reached the maximum total bet amount'];
-    //         }
-
-    //         $bets = GameRoundBet::select('bet_option_id', DB::raw('SUM(bet_amount) as total'))
-    //             ->where('game_list_id', $data['game_list_id'])
-    //             ->where('game_round_id', $data['current_round_id'])
-    //             ->groupBy('bet_option_id')
-    //             ->with(['gameOption'])
-    //             ->get()
-    //             ->map(function ($item) {
-    //                 return [
-    //                     'id' => $item->bet_option_id,
-    //                     'total' => $item->total,
-    //                     'option_name' => $item['gameOption']['code'] ?? null, // customize as needed
-    //                 ];
-    //             });
-
-    //         $data_ods = json_decode($bets, true);
-    //         $meron = array_filter($data_ods, function ($item) {
-    //             return $item['option_name'] === 'MERON';
-    //         });
-    //         $wala = array_filter($data_ods, function ($item) {
-    //             return $item['option_name'] === 'WALA';
-    //         });
-    //         $draw = array_filter($data_ods, function ($item) {
-    //             return $item['option_name'] === 'DRAW';
-    //         });
-    //         $total_meron = $meron[0]['total'] ?? 0;
-    //         $total_wala = $wala[1]['total'] ?? 0;
-    //         $total_draw = $draw[3]['total'] ?? 0;
-
-    //         $rate =  ((100 - $game->rate) / 100);
-    //         $ods_meron = (($total_wala + $total_meron * $rate) / $total_meron) ?? 0.00;
-    //         $ods_wala = (($total_wala + $total_meron * $rate) / $total_wala) ?? 0.00;
-
-    //         $final_meron_ods = $ods_meron < 1.6 ? 1.6 : ($ods_meron > 2.1 ? 2.1 : $ods_meron);
-    //         $final_wala_ods = $ods_wala < 1.6 ? 1.6 : ($ods_wala > 2.1 ? 2.1 : $ods_wala);
-
-    //         // Place bet
-    //         $bet = GameRoundBet::create([
-    //             'user_id' => $userId,
-    //             'game_list_id' => $data['game_list_id'],
-    //             'game_round_id' => $data['current_round_id'],
-    //             'bet_option_id' => $data['bet_option_id'],
-    //             'bet_amount' => $data['bet_amount'],
-    //             'before_amount' => $user->balance_amount,
-    //             'after_amount' => $user->balance_amount - $data['bet_amount'],
-    //             'ods_meron' => $final_meron_ods,
-    //             'ods_wala' => $final_wala_ods,
-    //             'created_by' => $userId,
-    //         ]);
-
-    //         // Update balance
-    //         $user->decrement('balance_amount', $data['bet_amount']);
-
-    //         $bets = GameRoundBet::select('bet_option_id', DB::raw('SUM(bet_amount) as total'))
-    //             ->where('game_list_id', $data['game_list_id'])
-    //             ->where('game_round_id', $data['current_round_id'])
-    //             ->groupBy('bet_option_id')
-    //             ->with(['gameOption'])
-    //             ->get()
-    //             ->map(function ($item) {
-    //                 return [
-    //                     'id' => $item->bet_option_id,
-    //                     'total' => $item->total,
-    //                     'option_name' => $item['gameOption']['code'] ?? null, // customize as needed
-    //                 ];
-    //             });
-
-    //         $data_ods = json_decode($bets, true);
-    //         $meron = array_filter($data_ods, function ($item) {
-    //             return $item['option_name'] === 'MERON';
-    //         });
-    //         $wala = array_filter($data_ods, function ($item) {
-    //             return $item['option_name'] === 'WALA';
-    //         });
-    //         $draw = array_filter($data_ods, function ($item) {
-    //             return $item['option_name'] === 'DRAW';
-    //         });
-    //         $total_meron = $meron[0]['total'] ?? 0;
-    //         $total_wala = $wala[1]['total'] ?? 0;
-    //         $total_draw = $draw[3]['total'] ?? 0;
-
-    //         $rate =  ((100 - $game->rate) / 100);
-    //         $ods_meron = (($total_wala + $total_meron * $rate) / $total_meron) ?? 0.00;
-    //         $ods_wala = (($total_wala + $total_meron * $rate) / $total_wala) ?? 0.00;
-
-    //         $final_meron_ods = $ods_meron < 1.6 ? 1.6 : ($ods_meron > 2.1 ? 2.1 : $ods_meron);
-    //         $final_wala_ods = $ods_wala < 1.6 ? 1.6 : ($ods_wala > 2.1 ? 2.1 : $ods_wala);
-
-    //         return [
-    //             // 'bet' => GameRoundBet::where('game_list_id', $data['game_list_id'])->where('game_round_id', $game['current_round_id'])->get(),
-    //             'user' => $user->fresh(),
-    //             'bet' => $bets,
-    //             'total_meron' => $total_meron,
-    //             'total_wala' => $total_wala,
-    //             'total_draw' => $total_draw,
-    //             'multiplier' => $game->multiplier,
-    //             'rate' => $rate,
-    //             'ods_meron' => $ods_meron,
-    //             'ods_wala' => $ods_wala,
-    //             'pay_meron' => $final_meron_ods * 100,
-    //             'pay_wala' => $final_wala_ods * 100,
-    //         ];
-    //     });
-    // }
 
     public function betRound(array $data): array
     {
@@ -463,22 +319,37 @@ class SabongRepository implements SabongInterface
 
             $user->decrement('balance_amount', $data['bet_amount']);
 
+
+
             // Fetch Updated Bets and Calculate Odds
             $betsData = $this->getBetSummary($data['game_list_id'], $data['current_round_id']);
             extract($this->calculateOdds($betsData, $game->rate));
 
-            return [
-                'user' => $user->fresh(),
-                'bet' => $betsData['bets'],
+            GameListRound::find($data['current_round_id'])->update([
+                'ods_meron' => $ods_meron,
+                'ods_wala' => $ods_wala,
                 'total_meron' => $total_meron,
                 'total_wala' => $total_wala,
                 'total_draw' => $total_draw,
                 'multiplier' => $game->multiplier,
-                'rate' => $rate,
-                'ods_meron' => $ods_meron,
-                'ods_wala' => $ods_wala,
-                'pay_meron' => $final_meron_ods * 100,
-                'pay_wala' => $final_wala_ods * 100,
+            ]);
+
+            broadcast(new DynamicBroadcastEvent(GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']), 'game.' . $data['game_list_id']));
+
+
+            return [
+                'game' => GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']),
+                'user' => $user->fresh(),
+                // 'bet' => $betsData['bets'],
+                // 'total_meron' => $total_meron,
+                // 'total_wala' => $total_wala,
+                // 'total_draw' => $total_draw,
+                // 'multiplier' => $game->multiplier,
+                // 'rate' => $rate,
+                // 'ods_meron' => $ods_meron,
+                // 'ods_wala' => $ods_wala,
+                // 'pay_meron' => $final_meron_ods * 100,
+                // 'pay_wala' => $final_wala_ods * 100,
             ];
         });
     }
@@ -486,6 +357,8 @@ class SabongRepository implements SabongInterface
     private function getGameWithRounds($gameListId): array
     {
         return DB::transaction(function () use ($gameListId) {
+            broadcast(new DynamicBroadcastEvent(GameList::with(['gamePresent', 'currentRound'])->find($gameListId), 'game.' . $gameListId));
+
             return [
                 'game' => GameList::with(['gamePresent', 'currentRound'])->find($gameListId),
                 'round' => GameListRound::where('game_list_id', $gameListId)->orderBy('round_no', 'asc')->get(),

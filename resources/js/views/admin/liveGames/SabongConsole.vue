@@ -1,6 +1,11 @@
 <script setup>
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
+
+import { useAuthStore } from '@/stores/useAuthStore.js';
+const { loginUser } = useAuthStore();
+const { user } = storeToRefs(useAuthStore());
+
 import { useSabongConsoleStore } from '@/stores/admin/useSabongConsoleStore.js';
 const { fnShow, fnSelectRound, fnOpenRound, fnCloseRound, fnDeclareRound, fnCancelRound, fnNextRound, fnBetRound } = useSabongConsoleStore();
 const { game, bet, round, option, sum } = storeToRefs(useSabongConsoleStore());
@@ -117,6 +122,9 @@ const betRound = async (option, amount) => {
             <br />
             <br />
             {{ sums }} -->
+            <!-- {{ games }} -->
+
+            {{ api.decrypt(user) }}
 
             <div class="grid grid-cols-3 gap-1">
                 <div class="col-span-3 md:col-span-1 gap-2">
@@ -164,28 +172,28 @@ const betRound = async (option, amount) => {
                 <div class="col-span-3 md:col-span-1 gap-2">
                     <div class="grid grid-cols-2">
                         <div class="col-span-1 text-start">2 Bettors</div>
-                        <div class="col-span-1 text-end">250,000</div>
+                        <div class="col-span-1 text-end">{{ (games?.current_round?.total_draw ?? 0) + (games?.current_round?.total_wala ?? 0) + (games?.current_round?.total_meron ?? 0) }}</div>
                     </div>
                     <table class="w-full mb-2 text-white dark:text-black">
                         <tbody>
                             <tr>
                                 <td class="bg-red-500 justify-items-center">
                                     <p class="text-2xl">MERON</p>
-                                    <p>150,000</p>
-                                    <p class="text-lg">(150,000)</p>
-                                    <p class="text-sm">x 1.62</p>
+                                    <p>{{ (games?.current_round?.total_meron ?? 0) * games?.current_round?.multiplier }}</p>
+                                    <p class="text-lg">({{ games?.current_round?.total_meron ?? 0 }})</p>
+                                    <p class="text-sm">x{{ games?.current_round?.ods_meron ?? 0 }}</p>
                                 </td>
                                 <td class="bg-blue-500 justify-items-center">
                                     <p class="text-2xl">WALA</p>
-                                    <p>150,000</p>
-                                    <p class="text-lg">(150,000)</p>
-                                    <p class="text-sm">x 1.62</p>
+                                    <p>{{ (games?.current_round?.total_wala ?? 0) * games?.current_round?.multiplier }}</p>
+                                    <p class="text-lg">({{ games?.current_round?.total_wala ?? 0 }})</p>
+                                    <p class="text-sm">x{{ games?.current_round?.ods_wala ?? 0 }}</p>
                                 </td>
                                 <td class="bg-green-500 justify-items-center">
                                     <p class="text-2xl">DRAW</p>
-                                    <p>150,000</p>
-                                    <p class="text-lg">(150,000)</p>
-                                    <p class="text-sm">x 1.62</p>
+                                    <p>{{ (games?.current_round?.total_draw ?? 0) * games?.current_round?.multiplier }}</p>
+                                    <p class="text-lg">({{ games?.current_round?.total_draw ?? 0 }})</p>
+                                    <p class="text-sm">x0</p>
                                 </td>
                             </tr>
                         </tbody>
