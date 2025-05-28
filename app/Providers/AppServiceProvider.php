@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
             \App\Http\Controllers\Api\GameModerator\GameList\GameListInterface::class                               => \App\Http\Controllers\Api\GameModerator\GameList\GameListRepository::class,
             \App\Http\Controllers\Api\GameController\Sabong\SabongInterface::class                                  => \App\Http\Controllers\Api\GameController\Sabong\SabongRepository::class,
 
+            \App\Http\Controllers\Api\User\UserList\UserListInterface::class                                        => \App\Http\Controllers\Api\User\UserList\UserListRepository::class,
+
         ];
 
         foreach ($maintenanceBindings as $interface => $repository) {

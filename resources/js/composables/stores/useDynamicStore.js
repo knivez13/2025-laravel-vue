@@ -16,6 +16,7 @@ export default function createCrudStore(name, endpoint) {
                 keywords: '',
                 sortBy: 'created_at',
                 sortOrder: 'desc',
+                role: null,
                 rows: 10,
                 page: 1,
                 show_modal: false,
@@ -32,6 +33,10 @@ export default function createCrudStore(name, endpoint) {
         actions: {
             set_processing(data) {
                 this.processing = data;
+            },
+            set_role(data) {
+                console.log(data);
+                this.option.role = data;
             },
             set_keywords(data) {
                 this.option.keywords = data;
@@ -55,6 +60,7 @@ export default function createCrudStore(name, endpoint) {
                     keyword: this.option.keywords,
                     sortBy: this.option.sortBy,
                     sortOrder: this.option.sortOrder,
+                    role: this.option.role,
                     rows: this.option.rows,
                     page: this.option.page || 1
                 };

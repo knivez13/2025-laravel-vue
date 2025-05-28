@@ -1,26 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Api\User\BankAccount;
+namespace App\Http\Controllers\Api\User\UserList;
 
-use Illuminate\Http\Request;
-use App\Models\User\BankAccount;
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Repositories\BaseRepository;
 
-class BankAccountRepository extends BaseRepository implements BankAccountInterface
+
+class UserListRepository extends BaseRepository implements UserListInterface
 {
     protected array $rules = [
-        'code' => ['required', 'string', 'unique:amenities,code'],
+        'code' => ['required', 'string', 'unique:video_types,code'],
         'description' => ['required', 'string'],
     ];
 
     protected array $filterableFields = ['code', 'description']; // Fields to search in
     protected array $relationshipTable = ['createdBy', 'updatedBy'];
     protected array $filteredInsertData = ['code', 'description'];
-    protected bool $cacheData = false;
+    protected bool $cacheData = true;
     protected string $cacheName = 'video_type';
 
-    public function __construct(BankAccount $model)
+    public function __construct(User $model)
     {
         parent::__construct($model);
     }

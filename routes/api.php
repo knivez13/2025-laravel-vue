@@ -29,8 +29,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
             });
         });
 
+        Route::prefix('user')->name('user.')->group(function () {
+            Route::apiResource('userList', App\Http\Controllers\Api\User\UserList\UserListController::class)->except(['show']);
+        });
+
         Route::prefix('maintenance')->name('maintenance.')->group(function () {
-            Route::apiResource('agentGameCommission', App\Http\Controllers\Api\Maintenance\AgentGameCommission\AgentGameCommissionController::class)->except(['show']);
             Route::apiResource('agentType', App\Http\Controllers\Api\Maintenance\AgentType\AgentTypeController::class)->except(['show']);
             Route::apiResource('bankType', App\Http\Controllers\Api\Maintenance\BankType\BankTypeController::class)->except(['show']);
             Route::apiResource('gamePresent', App\Http\Controllers\Api\Maintenance\GamePresent\GamePresentController::class)->except(['show']);

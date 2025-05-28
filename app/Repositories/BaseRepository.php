@@ -151,7 +151,7 @@ class BaseRepository implements BaseRepositoryInterface
     /**
      * Paginate records with filters, sorting, and relationships.
      */
-    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1): LengthAwarePaginator
+    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1, array $role = []): LengthAwarePaginator
     {
         if ($this->cacheData) {
             Cache::rememberForever($this->cacheName, fn() => $this->model->get());
@@ -162,6 +162,9 @@ class BaseRepository implements BaseRepositoryInterface
         // Apply search filters
         if (!empty($filters['keyword']) && !empty($this->filterableFields)) {
             $this->applySearchFilter($query, $filters['keyword']);
+        }
+        if (!empty($role)) {
+            $query->role($role);
         }
 
         // Apply date range filters

@@ -167,50 +167,56 @@ const betRound = async (option, amount) => {
                         <div class="col-span-1 text-end">250,000</div>
                     </div>
                     <table class="w-full mb-2 text-white dark:text-black">
-                        <td class="bg-red-500 justify-items-center">
-                            <p class="text-2xl">MERON</p>
-                            <p>150,000</p>
-                            <p class="text-lg">(150,000)</p>
-                            <p class="text-sm">x 1.62</p>
-                        </td>
-                        <td class="bg-blue-500 justify-items-center">
-                            <p class="text-2xl">WALA</p>
-                            <p>150,000</p>
-                            <p class="text-lg">(150,000)</p>
-                            <p class="text-sm">x 1.62</p>
-                        </td>
-                        <td class="bg-green-500 justify-items-center">
-                            <p class="text-2xl">DRAW</p>
-                            <p>150,000</p>
-                            <p class="text-lg">(150,000)</p>
-                            <p class="text-sm">x 1.62</p>
-                        </td>
+                        <tbody>
+                            <tr>
+                                <td class="bg-red-500 justify-items-center">
+                                    <p class="text-2xl">MERON</p>
+                                    <p>150,000</p>
+                                    <p class="text-lg">(150,000)</p>
+                                    <p class="text-sm">x 1.62</p>
+                                </td>
+                                <td class="bg-blue-500 justify-items-center">
+                                    <p class="text-2xl">WALA</p>
+                                    <p>150,000</p>
+                                    <p class="text-lg">(150,000)</p>
+                                    <p class="text-sm">x 1.62</p>
+                                </td>
+                                <td class="bg-green-500 justify-items-center">
+                                    <p class="text-2xl">DRAW</p>
+                                    <p>150,000</p>
+                                    <p class="text-lg">(150,000)</p>
+                                    <p class="text-sm">x 1.62</p>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
                     <table class="w-full mb-2">
-                        <tr>
-                            <th>
-                                <div class="flex gap-2">
-                                    <Button size="small" label="5k" severity="danger" @click="betRound(meron_id, 5000)" />
-                                    <Button size="small" label="10k" severity="danger" @click="betRound(meron_id, 10000)" />
-                                    <Button size="small" label="50k" severity="danger" @click="betRound(meron_id, 50000)" />
-                                    <Button size="small" label="100k" severity="danger" @click="betRound(meron_id, 100000)" />
-                                    <Button size="small" label="500k" severity="danger" @click="betRound(meron_id, 500000)" />
-                                    <Button size="small" label="1M" severity="danger" @click="betRound(meron_id, 1000000)" />
-                                </div>
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>
-                                <div class="flex gap-2">
-                                    <Button size="small" label="5k" severity="info" @click="betRound(wala_id, 5000)" />
-                                    <Button size="small" label="10k" severity="info" @click="betRound(wala_id, 10000)" />
-                                    <Button size="small" label="50k" severity="info" @click="betRound(wala_id, 50000)" />
-                                    <Button size="small" label="100k" severity="info" @click="betRound(wala_id, 100000)" />
-                                    <Button size="small" label="500k" severity="info" @click="betRound(wala_id, 500000)" />
-                                    <Button size="small" label="1M" severity="info" @click="betRound(wala_id, 1000000)" />
-                                </div>
-                            </th>
-                        </tr>
+                        <tbody>
+                            <tr>
+                                <th>
+                                    <div class="flex gap-2">
+                                        <Button size="small" label="5k" severity="danger" @click="betRound(meron_id, 5000)" />
+                                        <Button size="small" label="10k" severity="danger" @click="betRound(meron_id, 10000)" />
+                                        <Button size="small" label="50k" severity="danger" @click="betRound(meron_id, 50000)" />
+                                        <Button size="small" label="100k" severity="danger" @click="betRound(meron_id, 100000)" />
+                                        <Button size="small" label="500k" severity="danger" @click="betRound(meron_id, 500000)" />
+                                        <Button size="small" label="1M" severity="danger" @click="betRound(meron_id, 1000000)" />
+                                    </div>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <div class="flex gap-2">
+                                        <Button size="small" label="5k" severity="info" @click="betRound(wala_id, 5000)" />
+                                        <Button size="small" label="10k" severity="info" @click="betRound(wala_id, 10000)" />
+                                        <Button size="small" label="50k" severity="info" @click="betRound(wala_id, 50000)" />
+                                        <Button size="small" label="100k" severity="info" @click="betRound(wala_id, 100000)" />
+                                        <Button size="small" label="500k" severity="info" @click="betRound(wala_id, 500000)" />
+                                        <Button size="small" label="1M" severity="info" @click="betRound(wala_id, 1000000)" />
+                                    </div>
+                                </th>
+                            </tr>
+                        </tbody>
                     </table>
                     <DataTable :value="bets" class="w-full mb-2" size="small">
                         <Column field="code" header="Name" class="grid-table-line"></Column>
@@ -227,8 +233,8 @@ const betRound = async (option, amount) => {
                             <template #body="data">
                                 <div>
                                     <Button text type="button" v-tooltip.top="'Select'" @click="selectRound(data)" icon="pi pi-download" severity="info" size="small"></Button>
-                                    <!-- <Button text type="button" v-tooltip.top="'Lock'" @click="console.log(data)" icon="pi pi-lock" severity="info" size="small"></Button>
-                                    <Button text type="button" v-tooltip.top="'Reset'" @click="console.log(data)" icon="pi pi-undo" severity="info" size="small"></Button> -->
+                                    <Button text type="button" v-tooltip.top="'Lock'" @click="console.log(data)" icon="pi pi-lock" severity="info" size="small"></Button>
+                                    <Button text type="button" v-tooltip.top="'Reset'" @click="console.log(data)" icon="pi pi-undo" severity="info" size="small"></Button>
                                 </div>
                             </template>
                         </Column>

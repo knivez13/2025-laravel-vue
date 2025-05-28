@@ -18,5 +18,5 @@ interface BaseRepositoryInterface
     public function restore(string $id);
     public function forceDelete(string $id);
     public function getDeleted(int $perPage = 10);
-    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1): LengthAwarePaginator;
+    public function paginateWithFilters(array $filters = [], int $perPage = 10, string $sortBy = 'id', string $sortOrder = 'asc', int $page = 1, array $role = []): LengthAwarePaginator;
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\User\UserCommission;
+namespace App\Http\Controllers\Api\User\UserList;
 
 use App\Helper\ApiCheckEnc;
 use App\Helper\ApiResponse;
@@ -9,29 +9,32 @@ use Illuminate\Http\Request;
 use App\Helper\ApiEncResponse;
 use App\Helper\ExceptionHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Api\User\UserCommission\UserCommissionInterface;
+use App\Http\Controllers\Api\User\UserList\UserListInterface;
 
-class UserCommissionController extends Controller
+class UserListController extends Controller
 {
     protected $interface;
 
-    public function __construct(UserCommissionInterface $interface)
+    public function __construct(UserListInterface $interface)
     {
         $this->interface = $interface;
     }
 
     public function index(Request $request)
     {
+
         try {
             AccessHelper::check('CanAddMaintenance');
             $data = new Request(ApiCheckEnc::check($request['encrypt']));
+
             $filters = $data->only(['keyword']);
             $perPage = (int) $data->input('rows', 10);
             $sortBy = $data->input('sortBy', 'id');
             $sortOrder = $data->input('sortOrder', 'asc');
             $page =  $data->input('page', 1);
+            $role =  $data->input('role', ['Player']);
 
-            $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page);
+            $res['list'] = $this->interface->paginateWithFilters($filters, $perPage, $sortBy, $sortOrder, $page, $role);
 
             return ApiResponse::success($res, 'fetch success');
         } catch (\Throwable $e) {

@@ -3,11 +3,11 @@ import { ref, computed, onBeforeMount } from 'vue';
 import Resource from '@/api/resource';
 import { storeToRefs } from 'pinia';
 
-export default function useCrudComposable(resourceName, useStore, columnsDef, formDef, titleLabel = '', formFieldDefinition = []) {
+export default function useCrudComposable(resourceName, useStore, columnsDef, formDef, titleLabel = '', formFieldDefinition = [], roles = []) {
     const api = new Resource(resourceName);
     const store = useStore();
 
-    const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, trigger_modal } = store;
+    const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, set_role, trigger_modal } = store;
 
     const { error, processing, token, option } = storeToRefs(store);
 
@@ -49,7 +49,7 @@ export default function useCrudComposable(resourceName, useStore, columnsDef, fo
 
     const search = async () => {
         set_keywords(keyword.value);
-        await set_page(0);
+        set_page(0);
         await fnFetch();
     };
 
@@ -62,8 +62,8 @@ export default function useCrudComposable(resourceName, useStore, columnsDef, fo
     };
 
     const fetch = async (event) => {
-        await set_rows(event.rows);
-        await set_page(event.page + 1);
+        set_rows(event.rows);
+        set_page(event.page + 1);
         await fnFetch();
     };
 
@@ -90,10 +90,11 @@ export default function useCrudComposable(resourceName, useStore, columnsDef, fo
         func.value = 'Edit';
         select_id.value = data.id;
         assignValue(data);
-        await trigger_modal(true);
+        trigger_modal(true);
     };
 
     onBeforeMount(async () => {
+        set_role(roles);
         await resetTable();
         await fnFetch();
     });

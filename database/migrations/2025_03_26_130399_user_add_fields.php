@@ -54,7 +54,7 @@ return new class extends Migration
             'max_bet_time' => 1000000,
             'max_bet_game' => 5000000,
             'max_bet_draw' => 1000000,
-            'balance_amount' => 1000000000000000000000000,
+            'balance_amount' => 1000000000000,
             'password' => Hash::make('password'),
         ]);
         $role = Role::create(['name' => 'SystemAdmin']);
