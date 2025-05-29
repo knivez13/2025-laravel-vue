@@ -77,15 +77,11 @@ class SabongRepository implements SabongInterface
                     'status' => 1,
                     'updated_by' => $user->id,
                 ]);
-                $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
-                $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
-                return $res;
+                return $this->getGameWithRounds($data['game_list_id']);
             }
-
-            $res['error'] = 'Round Already Open or Finish';
-            $res['game'] = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id']);
-            $res['round'] = GameListRound::where('game_list_id', $data['game_list_id'])->orderBy('round_no', 'asc')->get();
-            return $res;
+            return array_merge($this->getGameWithRounds($game->id), [
+                'error' => 'Round Already Open or Finish',
+            ]);
         });
     }
     public function nextRound(array $data): array
@@ -203,113 +199,57 @@ class SabongRepository implements SabongInterface
         });
     }
 
-    // private function winnerBets($gameListId, $roundId, $winOption)
-    // {
-    //     $option = GamePresentOption::find($winOption);
-    //     $playerBets = GameRoundBet::where('game_list_id', $gameListId)
-    //         ->where('game_round_id', $roundId)
-    //         ->where('bet_option_id', $winOption)
-    //         ->get();
-
-    //     foreach ($playerBets as $key => $bet) {
-    //         $user = User::find($bet->user_id);
-    //         if ($option->code == 'MERON') {
-    //             $user->increment('balance_amount', ($bet->bet_amount * ($bet->ods_meron * 100)) * $option->multiplier);
-    //         } elseif ($option->code == 'WALA') {
-    //             $user->increment('balance_amount', ($bet->bet_amount * ($bet->ods_wala * 100)) * $option->multiplier);
-    //         } else {
-    //             $user->increment('balance_amount', ($bet->bet_amount * $option->multiplier));
-    //         }
-    //     }
-    //     if ($option->code == 'DRAW') {
-    //         $playerReturnBets = GameRoundBet::where('game_list_id', $gameListId)
-    //             ->where('game_round_id', $roundId)
-    //             ->where('bet_option_id', '!=', $winOption)
-    //             ->get();
-    //         foreach ($playerReturnBets as $key => $bet) {
-    //             $user = User::find($bet->user_id);
-    //             $user->increment('balance_amount', $bet->bet_amount);
-    //         }
-    //         GameRoundBet::where('game_list_id', $gameListId)
-    //             ->where('game_round_id', $roundId)
-    //             ->where('bet_option_id', '=', $winOption)->update([
-    //                 'is_win' => 1, // 0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
-    //             ]);
-    //         GameRoundBet::where('game_list_id', $gameListId)
-    //             ->where('game_round_id', $roundId)
-    //             ->where('bet_option_id', '!=', $winOption)->update([
-    //                 'is_win' => 3, // 0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
-    //             ]);
-    //     } else {
-    //         GameRoundBet::where('game_list_id', $gameListId)
-    //             ->where('game_round_id', $roundId)
-    //             ->where('bet_option_id', '=', $winOption)->update([
-    //                 'is_win' => 1, // 0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
-    //             ]);
-    //         GameRoundBet::where('game_list_id', $gameListId)
-    //             ->where('game_round_id', $roundId)
-    //             ->where('bet_option_id', '!=', $winOption)->update([
-    //                 'is_win' => 2, // 0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
-    //             ]);
-    //     }
-    //     return $playerBets;
-    // }
-
     private function winnerBets($gameListId, $roundId, $winOption)
     {
-        $option = GamePresentOption::findOrFail($winOption);
+        return DB::transaction(function () use ($gameListId, $roundId, $winOption) {
+            $option = GamePresentOption::findOrFail($winOption);
 
-        // Fetch all bets for the round in one go
-        $allBets = GameRoundBet::where('game_list_id', $gameListId)
-            ->where('game_round_id', $roundId)
-            ->get()
-            ->groupBy('bet_option_id');
+            $allBets = GameRoundBet::where('game_list_id', $gameListId)
+                ->where('game_round_id', $roundId)
+                ->get()
+                ->groupBy('bet_option_id');
 
-        $winningBets = $allBets->get($winOption, collect());
-        $losingBets = $allBets->filter(fn($_, $optionId) => $optionId != $winOption)->flatten(1);
+            $winningBets = $allBets->get($winOption, collect());
+            $losingBets = $allBets->filter(fn($_, $optionId) => $optionId != $winOption)->flatten(1);
+            $userIds = $winningBets->pluck('user_id')->merge($losingBets->pluck('user_id'))->unique();
+            $users = User::whereIn('id', $userIds)->get()->keyBy('id');
 
-        // Preload all users in one query
-        $userIds = $winningBets->pluck('user_id')->merge($losingBets->pluck('user_id'))->unique();
-
-        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-        // Handle winners
-        foreach ($winningBets as $bet) {
-            $user = $users[$bet->user_id];
-            $payout = match ($option->code) {
-                'MERON' => $bet->bet_amount * ($bet->ods_meron * 100) * $option->multiplier,
-                'WALA'  => $bet->bet_amount * ($bet->ods_wala * 100) * $option->multiplier,
-                default => $bet->bet_amount * $option->multiplier,
-            };
-            $user->increment('balance_amount', $payout);
-        }
-
-        // Handle refunds in case of draw
-        if ($option->code === 'DRAW') {
-            foreach ($losingBets as $bet) {
+            foreach ($winningBets as $bet) {
                 $user = $users[$bet->user_id];
-                $user->increment('balance_amount', $bet->bet_amount);
+                $payout = match ($option->code) {
+                    'MERON' => ($bet->bet_amount * $bet->ods_meron) * $option->multiplier,
+                    'WALA'  => ($bet->bet_amount * $bet->ods_wala) * $option->multiplier,
+                    default => $bet->bet_amount * $option->multiplier,
+                };
+                $user->increment('balance_amount', $payout);
+            }
+            if ($option->code === 'DRAW') {
+                foreach ($losingBets as $bet) {
+                    $user = $users[$bet->user_id];
+                    $user->increment('balance_amount', $bet->bet_amount);
+                }
+                $this->updateWinStatus($gameListId, $roundId, $winOption, 1, 3);
+            } else {
+                $this->updateWinStatus($gameListId, $roundId, $winOption, 1, 2);
             }
 
-            // Update win statuses
-            $this->updateWinStatus($gameListId, $roundId, $winOption, 1, 3);
-        } else {
-            $this->updateWinStatus($gameListId, $roundId, $winOption, 1, 2);
-        }
-
-        return $winningBets;
+            return $winningBets;
+        });
     }
 
     private function updateWinStatus($gameListId, $roundId, $winOption, $winStatus, $loseStatus)
     {
-        GameRoundBet::where('game_list_id', $gameListId)
-            ->where('game_round_id', $roundId)
-            ->where('bet_option_id', $winOption)
-            ->update(['is_win' => $winStatus]);
+        return DB::transaction(function () use ($gameListId, $roundId, $winOption, $winStatus, $loseStatus) {
+            GameRoundBet::where('game_list_id', $gameListId)
+                ->where('game_round_id', $roundId)
+                ->where('bet_option_id', $winOption)
+                ->update(['is_win' => $winStatus]); //0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
 
-        GameRoundBet::where('game_list_id', $gameListId)
-            ->where('game_round_id', $roundId)
-            ->where('bet_option_id', '!=', $winOption)
-            ->update(['is_win' => $loseStatus]);
+            GameRoundBet::where('game_list_id', $gameListId)
+                ->where('game_round_id', $roundId)
+                ->where('bet_option_id', '!=', $winOption)
+                ->update(['is_win' => $loseStatus]); //0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
+        });
     }
 
 
@@ -382,13 +322,27 @@ class SabongRepository implements SabongInterface
                     'win_option_id' => null,
                     'updated_by' => $user->id,
                 ]);
-            $playerReturnBets = GameRoundBet::where('game_list_id', $data['game_list_id'])
-                ->where('game_round_id', $data['current_round_id'])
-                ->get();
-            foreach ($playerReturnBets as $key => $bet) {
-                $user = User::find($bet->user_id);
-                $user->increment('balance_amount', $bet->bet_amount);
-            }
+
+            // condition with ods
+
+            // $playerWinBets = GameRoundBet::where('game_list_id', $data['game_list_id'])
+            //     ->where('game_round_id', $data['current_round_id'])
+            //     ->where('bet_option_id', $data['win_option_id'])
+            //     ->get();
+            // foreach ($playerWinBets as $key => $bet) {
+            //     $user = User::find($bet->user_id);
+            //     $user->decrement('balance_amount', $bet->bet_amount);
+            // }
+
+            // $playerlooseBets = GameRoundBet::where('game_list_id', $data['game_list_id'])
+            //     ->where('game_round_id', $data['current_round_id'])
+            //     ->where('bet_option_id', '!=', $data['win_option_id'])
+            //     ->get();
+            // foreach ($playerlooseBets as $key => $bet) {
+            //     $user = User::find($bet->user_id);
+            //     $user->increment('balance_amount', $bet->bet_amount);
+            // }
+
             GameRoundBet::where('game_list_id', $data['game_list_id'])
                 ->where('game_round_id', $data['current_round_id'])
                 ->update([

@@ -42,11 +42,11 @@ function changeLanguage(lang) {
                     <div class="font-medium p-3">Available Language</div>
                 </template>
             </Select>
-            <Button disabled severity="secondary" :label="api.decrypt(user)['first_name']" class="mb-1" size="xlarge" />
+            <Button text-end disabled severity="secondary" :label="api.decrypt(user)['first_name']" class="mb-1" size="xlarge" />
             <div>{{ api.decrypt(token)['roles'][0] }}</div>
             <div class="mb-5">{{ api.decrypt(token)['roles'][0] == 'Agent' ? 'Agent' : 'Player' }}</div>
             <ButtonGroup class="w-full">
-                <Button variant="outlined" :label="api.decrypt(user)['balance_amount']" class="w-full" />
+                <Button variant="outlined" :label="new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(api.decrypt(user)['balance_amount'])" class="w-full" />
                 <!-- <InputText v-model="data[field]" autofocus fluid /> -->
                 <Button icon="pi pi-refresh" style="width: 25%" />
             </ButtonGroup>

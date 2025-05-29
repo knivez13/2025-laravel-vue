@@ -63,7 +63,7 @@ const form = ref({
 });
 
 const selectRound = async (data) => {
-    form.value.game_list_id = data.data.game_list_id;
+    form.value.game_list_id = games.value['id'];
     form.value.game_round_id = data.data.id;
     await fnSelectRound(form.value);
 };
@@ -106,6 +106,15 @@ const betRound = async (option, amount) => {
     form.value.bet_amount = amount;
     await fnBetRound(form.value);
 };
+
+const formatNumber = (num) => {
+    if (num >= 1_000_000) {
+        return (num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 2) + 'M';
+    } else if (num >= 1_000) {
+        return (num / 1_000).toFixed(num % 1_000 === 0 ? 0 : 2) + 'K';
+    }
+    return num.toString();
+};
 </script>
 <template>
     <div>
@@ -117,7 +126,7 @@ const betRound = async (option, amount) => {
             <br />
             <br />
             {{ sums }} -->
-            {{ games }}
+            <!-- {{ form }} -->
 
             <div class="grid grid-cols-3 gap-1">
                 <div class="col-span-3 md:col-span-1 gap-2">
@@ -131,18 +140,34 @@ const betRound = async (option, amount) => {
                     </div> -->
                     <table class="table-fixed w-full mb-2 mt-2 card p-0 m-0">
                         <tbody>
-                            <tr v-if="1 == 1">
-                                <td style="width: 70%"><Button size="small" label="OPEN" severity="info" @click="openRound()" /></td>
-                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" @click="cancelRound()" /></td>
+                            <tr>
+                                <td>
+                                    Status:
+                                    <span v-if="games?.current_round?.status == 0">Live</span>
+                                    <span v-if="games?.current_round?.status == 1">Live</span>
+                                    <span v-if="games?.current_round?.status == 2">Open</span>
+                                    <span v-if="games?.current_round?.status == 3">Close</span>
+                                    <span v-if="games?.current_round?.status == 4">Declared</span>
+                                    <span v-if="games?.current_round?.status == 5">Cancelled</span>
+                                    <span v-if="games?.current_round?.status == 6">Locked</span>
+                                    <span v-if="games?.current_round?.status == 7">Reset</span>
+                                </td>
+                                <td>
+                                    <span v-if="games?.current_round?.round_no">Round #: {{ games?.current_round?.round_no }}</span>
+                                </td>
                             </tr>
-                            <tr v-if="1 == 1">
-                                <td style="width: 70%"><Button size="small" label="CLOSE" severity="info" @click="closeRound()" /></td>
-                                <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" @click="cancelRound()" /></td>
+                            <tr v-if="games?.current_round?.status == 1">
+                                <td style="width: 70%"><Button size="small" :disabled="games?.current_round?.status != 1" label="OPEN" severity="info" @click="openRound()" /></td>
+                                <td style="width: 30%"><Button size="small" :disabled="games?.current_round?.status != 1" label="Cancel" severity="danger" @click="cancelRound()" /></td>
                             </tr>
-                            <tr v-if="1 == 1">
+                            <tr v-if="games?.current_round?.status == 2">
+                                <td style="width: 70%"><Button size="small" :disabled="games?.current_round?.status != 2" label="CLOSE" severity="info" @click="closeRound()" /></td>
+                                <td style="width: 30%"><Button size="small" :disabled="games?.current_round?.status != 2" label="Cancel" severity="danger" @click="cancelRound()" /></td>
+                            </tr>
+                            <tr v-if="games?.current_round?.status == 3 || games?.current_round?.status == 7">
                                 <td colspan="2" style="width: 100%">
                                     <div class="mb-3">Select Main Bet Winners :{{ winner.code }}</div>
-                                    <ButtonGroup class="w-full gap-2">
+                                    <ButtonGroup class="w-full gap-2" :disabled="games?.current_round?.status != 3">
                                         <Button v-slot="slotProps" asChild v-for="item in api.decrypt(option)" :key="item.id">
                                             <button v-bind="slotProps.a11yAttrs" class="w-full rounded-lg px-5 py-3 text-white dark:text-black" :class="'bg-' + item.color + '-500'" @click="selectWinner(item)">{{ item.code }}</button>
                                         </Button>
@@ -150,13 +175,13 @@ const betRound = async (option, amount) => {
                                     <div class="mt-2">Select Side Bet Winners (If any)</div>
                                 </td>
                             </tr>
-                            <tr v-if="1 == 1">
+                            <tr v-if="games?.current_round?.status == 3 || games?.current_round?.status == 7">
                                 <td style="width: 70%"><Button size="small" label="Declare" severity="info" @click="declareRound()" /></td>
                                 <td style="width: 30%"><Button size="small" label="Cancel" severity="danger" @click="cancelRound()" /></td>
                             </tr>
-                            <tr v-if="1 == 1">
+                            <tr v-if="games?.current_round?.status == 4">
                                 <td colspan="2" style="width: 100%">
-                                    <Button size="small" label="Next Round" severity="info" @click="nextRound()" />
+                                    <Button size="small" :disabled="games?.current_round?.status != 4" label="Next Round" severity="info" @click="nextRound()" />
                                 </td>
                             </tr>
                         </tbody>
@@ -172,48 +197,48 @@ const betRound = async (option, amount) => {
                             <tr>
                                 <td class="bg-red-500 justify-items-center">
                                     <p class="text-2xl">MERON</p>
-                                    <p>{{ (games?.current_round?.total_meron ?? 0) * games?.current_round?.multiplier }}</p>
-                                    <p class="text-lg">({{ games?.current_round?.total_meron ?? 0 }})</p>
-                                    <p class="text-sm">x{{ games?.current_round?.ods_meron ?? 0 }}</p>
+                                    <p>{{ formatNumber((games?.current_round?.total_meron ?? 0) * games?.multiplier) }}</p>
+                                    <p class="text-lg">({{ formatNumber(games?.current_round?.total_meron ?? 0) }})</p>
+                                    <p class="text-sm">x{{ new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(games?.current_round?.ods_meron) }}</p>
                                 </td>
                                 <td class="bg-blue-500 justify-items-center">
                                     <p class="text-2xl">WALA</p>
-                                    <p>{{ (games?.current_round?.total_wala ?? 0) * games?.current_round?.multiplier }}</p>
-                                    <p class="text-lg">({{ games?.current_round?.total_wala ?? 0 }})</p>
-                                    <p class="text-sm">x{{ games?.current_round?.ods_wala ?? 0 }}</p>
+                                    <p>{{ formatNumber((games?.current_round?.total_wala ?? 0) * games?.multiplier) }}</p>
+                                    <p class="text-lg">({{ formatNumber(games?.current_round?.total_wala ?? 0) }})</p>
+                                    <p class="text-sm">x{{ new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(games?.current_round?.ods_wala) }}</p>
                                 </td>
                                 <td class="bg-green-500 justify-items-center">
                                     <p class="text-2xl">DRAW</p>
-                                    <p>{{ (games?.current_round?.total_draw ?? 0) * games?.current_round?.multiplier }}</p>
-                                    <p class="text-lg">({{ games?.current_round?.total_draw ?? 0 }})</p>
+                                    <p>{{ formatNumber((games?.current_round?.total_draw ?? 0) * games?.multiplier) }}</p>
+                                    <p class="text-lg">({{ formatNumber(games?.current_round?.total_draw ?? 0) }})</p>
                                     <p class="text-sm">x0</p>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <table class="w-full mb-2">
+                    <table class="w-full mb-2" v-if="games?.current_round?.status == 2">
                         <tbody>
                             <tr>
                                 <th>
                                     <div class="flex gap-2">
-                                        <Button size="small" label="5k" severity="danger" @click="betRound(meron_id, 5000)" />
-                                        <Button size="small" label="10k" severity="danger" @click="betRound(meron_id, 10000)" />
-                                        <Button size="small" label="50k" severity="danger" @click="betRound(meron_id, 50000)" />
-                                        <Button size="small" label="100k" severity="danger" @click="betRound(meron_id, 100000)" />
-                                        <Button size="small" label="500k" severity="danger" @click="betRound(meron_id, 500000)" />
-                                        <Button size="small" label="1M" severity="danger" @click="betRound(meron_id, 1000000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="5k" severity="danger" @click="betRound(meron_id, 5000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="10k" severity="danger" @click="betRound(meron_id, 10000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="50k" severity="danger" @click="betRound(meron_id, 50000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="100k" severity="danger" @click="betRound(meron_id, 100000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="500k" severity="danger" @click="betRound(meron_id, 500000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="1M" severity="danger" @click="betRound(meron_id, 1000000)" />
                                     </div>
                                 </th>
                             </tr>
                             <tr>
                                 <th>
                                     <div class="flex gap-2">
-                                        <Button size="small" label="5k" severity="info" @click="betRound(wala_id, 5000)" />
-                                        <Button size="small" label="10k" severity="info" @click="betRound(wala_id, 10000)" />
-                                        <Button size="small" label="50k" severity="info" @click="betRound(wala_id, 50000)" />
-                                        <Button size="small" label="100k" severity="info" @click="betRound(wala_id, 100000)" />
-                                        <Button size="small" label="500k" severity="info" @click="betRound(wala_id, 500000)" />
-                                        <Button size="small" label="1M" severity="info" @click="betRound(wala_id, 1000000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="5k" severity="info" @click="betRound(wala_id, 5000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="10k" severity="info" @click="betRound(wala_id, 10000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="50k" severity="info" @click="betRound(wala_id, 50000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="100k" severity="info" @click="betRound(wala_id, 100000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="500k" severity="info" @click="betRound(wala_id, 500000)" />
+                                        <Button :disabled="games?.current_round?.status !== 2" size="small" label="1M" severity="info" @click="betRound(wala_id, 1000000)" />
                                     </div>
                                 </th>
                             </tr>
@@ -230,17 +255,38 @@ const betRound = async (option, amount) => {
                 <div class="col-span-3 md:col-span-1 gap-2">
                     <DataTable :value="rounds" class="w-full" size="small" scrollable scrollHeight="500px">
                         <Column field="round_no" header="#" class="grid-table-line"></Column>
-                        <Column field="id" header="Action" class="grid-table-line">
+                        <Column header="Action" class="grid-table-line">
                             <template #body="data">
                                 <div>
-                                    <Button text type="button" v-tooltip.top="'Select'" @click="selectRound(data)" icon="pi pi-download" severity="info" size="small"></Button>
-                                    <Button text type="button" v-tooltip.top="'Lock'" @click="console.log(data)" icon="pi pi-lock" severity="info" size="small"></Button>
-                                    <Button text type="button" v-tooltip.top="'Reset'" @click="console.log(data)" icon="pi pi-undo" severity="info" size="small"></Button>
+                                    <Button variant="outlined" disabled v-if="![0, 4, 6, 7].includes(data.data.status)" label="Current" icon="pi pi-download" severity="secondary" size="small"></Button>
+
+                                    <Button variant="outlined" v-if="data.data.status == 0" label="Select" v-tooltip.top="'Select'" @click="selectRound(data)" icon="pi pi-download" severity="help" size="small"></Button>
+                                    <Button variant="outlined" v-if="data.data.status == 4" label="Lock" v-tooltip.top="'Lock'" @click="console.log(data)" icon="pi pi-lock" severity="warn" size="small"></Button>
                                 </div>
                             </template>
                         </Column>
-                        <Column field="status" header="Status" class="grid-table-line"></Column>
-                        <Column field="win_option_id" header="Winner" class="grid-table-line"></Column>
+                        <Column field="status" header="Status" class="grid-table-line">
+                            <template #body="data">
+                                <span v-if="data.data.status == 0" class="text-purple-500">Idle</span>
+                                <span v-if="data.data.status == 1" class="text-blue-500">Live</span>
+                                <span v-if="data.data.status == 2" class="text-yellow-500">Open</span>
+                                <span v-if="data.data.status == 3" class="text-green-500">Close</span>
+                                <span v-if="data.data.status == 4" class="text-gray-500">Declared</span>
+                                <span v-if="data.data.status == 5" class="text-purple-500">Cancelled</span>
+                                <span v-if="data.data.status == 6" class="text-orange-500">Locked</span>
+                                <span v-if="data.data.status == 7" class="text-pink-500">Reset</span>
+                            </template>
+                        </Column>
+                        <Column field="win_option_id" header="Winner" class="grid-table-line">
+                            <template #body="data">
+                                {{ data.data?.game_option?.code ?? '' }}
+                            </template>
+                        </Column>
+                        <Column header="More" class="grid-table-line">
+                            <template #body="data">
+                                <Button text type="button" v-if="data.data.status == 4" v-tooltip.top="'Reset'" @click="console.log(data)" icon="pi pi-undo" severity="info" size="small"></Button>
+                            </template>
+                        </Column>
                     </DataTable>
                 </div>
             </div>
