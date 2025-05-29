@@ -2,10 +2,6 @@
 import Resource from '@/api/resource.js';
 const api = new Resource('sample');
 
-import { useAuthStore } from '@/stores/useAuthStore.js';
-const { loginUser } = useAuthStore();
-const { user } = storeToRefs(useAuthStore());
-
 import { useSabongConsoleStore } from '@/stores/admin/useSabongConsoleStore.js';
 const { fnShow, fnSelectRound, fnOpenRound, fnCloseRound, fnDeclareRound, fnCancelRound, fnNextRound, fnBetRound } = useSabongConsoleStore();
 const { game, bet, round, option, sum } = storeToRefs(useSabongConsoleStore());
@@ -92,7 +88,6 @@ const selectWinner = async (data) => {
     winner.value = data;
 };
 const declareRound = async () => {
-    console.log('declare');
     form.value.game_list_id = games.value['id'];
     form.value.current_round_id = games.value['current_round_id'];
     form.value.win_option_id = winner.value.id;
@@ -122,9 +117,7 @@ const betRound = async (option, amount) => {
             <br />
             <br />
             {{ sums }} -->
-            <!-- {{ games }} -->
-
-            {{ api.decrypt(user) }}
+            {{ games }}
 
             <div class="grid grid-cols-3 gap-1">
                 <div class="col-span-3 md:col-span-1 gap-2">

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // 0 =Pending, 1 = Win, 2 = Lose,3 = Cancelled
         Schema::create('game_round_bets', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->nullable();

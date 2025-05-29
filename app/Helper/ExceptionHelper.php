@@ -9,6 +9,22 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ExceptionHelper
 {
+    // public static function handle(\Throwable $e)
+    // {
+    //     if ($e instanceof ValidationException) {
+    //         return ApiResponse::failed('Validation Error', $e->errors(), 422);
+    //     }
+
+    //     if ($e instanceof AuthorizationException) {
+    //         return ApiResponse::failed('Authorization Error', 'You do not have permission to perform this action.', 403);
+    //     }
+
+    //     if ($e instanceof HttpException) {
+    //         return ApiResponse::failed('Http Error', $e->getMessage(), 420);
+    //     }
+
+    //     return ApiResponse::failed('errors', $e->getMessage(), 500);
+    // }
     public static function handle(\Throwable $e)
     {
         if ($e instanceof ValidationException) {
@@ -20,9 +36,19 @@ class ExceptionHelper
         }
 
         if ($e instanceof HttpException) {
-            return ApiResponse::failed('Http Error', $e->getMessage(), 420);
+            return ApiResponse::failed('Http Error', $e->getMessage(), $e->getStatusCode());
         }
 
-        return ApiResponse::failed('errors', $e->getMessage(), 500);
+        // Default error with file and line number
+        $debugInfo = [
+            'exception' => get_class($e),
+            'message'   => $e->getMessage(),
+            'file'      => $e->getFile(),
+            'line'      => $e->getLine(),
+            // Optionally include trace:
+            // 'trace'     => collect($e->getTrace())->take(5),
+        ];
+
+        return ApiResponse::failed('Server Error', $debugInfo, 500);
     }
 }
