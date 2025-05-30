@@ -68,15 +68,7 @@ class SabongRepository implements SabongInterface
             $new_round = GameListRound::find($data['game_round_id']);
 
             if ($new_round->status == 0) {
-                GameList::find($data['game_list_id'])
-                    ->update([
-                        'current_round_id' => $data['game_round_id'],
-                        'updated_by' => $user->id,
-                    ]);
-                GameListRound::find($data['game_round_id'])->update([
-                    'status' => 1,
-                    'updated_by' => $user->id,
-                ]);
+                $this->setCurrentRound($data['game_list_id'], $data['game_round_id'], $user->id, 1);
                 return $this->getGameWithRounds($data['game_list_id']);
             }
             return array_merge($this->getGameWithRounds($game->id), [
@@ -84,68 +76,41 @@ class SabongRepository implements SabongInterface
             ]);
         });
     }
+
     public function nextRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
             $user = Auth::user();
             $round_no = !empty($data['current_round_id']) ? GameListRound::find($data['current_round_id'])->round_no : 0;
-            $res['round2'] = GameListRound::where('game_list_id', $data['game_list_id'])->where('status', 0)->where('round_no', '>=', $round_no)->orderBy('round_no', 'asc')->first();
-            GameList::find($data['game_list_id'])
-                ->update([
-                    'current_round_id' => $res['round2']->id,
-                    'updated_by' => $user->id,
-                ]);
-            GameListRound::find($res['round2']->id)->update([
-                'status' => 1,
-                'updated_by' => $user->id,
-            ]);
+            $res['round2'] = GameListRound::where('game_list_id', $data['game_list_id'])
+                ->where('status', 0)
+                ->where('round_no', '>=', $round_no)
+                ->orderBy('round_no', 'asc')
+                ->first();
+            if ($res['round2']) {
+                $this->setCurrentRound($data['game_list_id'], $res['round2']->id, $user->id, 1);
+            }
             return $this->getGameWithRounds($data['game_list_id']);
         });
     }
+
     public function openRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
-
             $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
 
             if ($game->current_round_id && $game->currentRound->status == 1) {
                 $userID = Auth::user();
                 $padding = GameList::with(['gamePresent', 'currentRound'])->find($data['game_list_id'])->padding;
-                // return ['message' => $padding];
                 if ($padding > 0) {
                     $user = User::findOrFail($userID->id);
-
-                    GameRoundBet::create([
-                        'user_id' => $user->id,
-                        'game_list_id' => $data['game_list_id'],
-                        'game_round_id' => $data['current_round_id'],
-                        'bet_option_id' => GamePresentOption::where('code', 'MERON')->first()->id,
-                        'bet_amount' => $padding,
-                        'before_amount' => $user->balance_amount,
-                        'after_amount' => $user->balance_amount - $padding,
-                        'created_by' => $user->id,
-                    ]);
-
-                    GameRoundBet::create([
-                        'user_id' => $user->id,
-                        'game_list_id' => $data['game_list_id'],
-                        'game_round_id' => $data['current_round_id'],
-                        'bet_option_id' => GamePresentOption::where('code', 'WALA')->first()->id,
-                        'bet_amount' => $padding,
-                        'before_amount' => $user->balance_amount,
-                        'after_amount' => $user->balance_amount - $padding,
-                        'created_by' => $user->id,
-                    ]);
-                    $user->decrement('balance_amount', $padding * 2);
+                    $this->createPaddingBets($user, $data['game_list_id'], $data['current_round_id'], $padding);
                 }
-
-
                 GameListRound::find($data['current_round_id'])
                     ->update([
                         'status' => 2,
                         'updated_by' => $userID->id,
                     ]);
-
                 return $this->getGameWithRounds($data['game_list_id']);
             }
             return array_merge($this->getGameWithRounds($game->id), [
@@ -153,12 +118,16 @@ class SabongRepository implements SabongInterface
             ]);
         });
     }
+
     public function closeRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
             $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
 
-            if ($game->current_round_id && $game->currentRound->status == 2 || $game->currentRound->status == 7) {
+            if (
+                $game->current_round_id &&
+                ($game->currentRound->status == 2 || $game->currentRound->status == 7)
+            ) {
                 $user = Auth::user();
                 GameListRound::find($data['current_round_id'])
                     ->update([
@@ -172,11 +141,15 @@ class SabongRepository implements SabongInterface
             ]);
         });
     }
+
     public function declareRound(array $data): array
     {
         return DB::transaction(function () use ($data) {
             $game = GameList::with(['gamePresent', 'currentRound'])->findOrFail($data['game_list_id']);
-            if ($game->current_round_id && $game->currentRound->status == 3 || $game->currentRound->status == 7) {
+            if (
+                $game->current_round_id &&
+                ($game->currentRound->status == 3 || $game->currentRound->status == 7)
+            ) {
                 if (!$data['win_option_id']) {
                     return array_merge($this->getGameWithRounds($game->id), [
                         'error' => 'Need to Declare Win Option',
@@ -189,7 +162,6 @@ class SabongRepository implements SabongInterface
                         'win_option_id' => $data['win_option_id'],
                         'updated_by' => $user->id,
                     ]);
-
                 $this->winnerBets($data['game_list_id'], $data['current_round_id'], $data['win_option_id']);
                 return $this->getGameWithRounds($data['game_list_id']);
             }
@@ -507,5 +479,56 @@ class SabongRepository implements SabongInterface
         $final_wala_ods = max(1.6, min($ods_wala, 2.1));
 
         return compact('total_meron', 'total_wala', 'total_draw', 'rate', 'ods_meron', 'ods_wala', 'final_meron_ods', 'final_wala_ods');
+    }
+
+    /**
+     * Set the current round and update its status.
+     */
+    private function setCurrentRound($gameListId, $gameRoundId, $userId, $roundStatus)
+    {
+        GameList::find($gameListId)
+            ->update([
+                'current_round_id' => $gameRoundId,
+                'updated_by' => $userId,
+            ]);
+        GameListRound::find($gameRoundId)->update([
+            'status' => $roundStatus,
+            'updated_by' => $userId,
+        ]);
+    }
+
+    /**
+     * Create padding bets for both MERON and WALA.
+     */
+    private function createPaddingBets($user, $gameListId, $currentRoundId, $padding)
+    {
+        $meronOption = GamePresentOption::where('code', 'MERON')->first();
+        $walaOption = GamePresentOption::where('code', 'WALA')->first();
+
+        if ($meronOption) {
+            GameRoundBet::create([
+                'user_id' => $user->id,
+                'game_list_id' => $gameListId,
+                'game_round_id' => $currentRoundId,
+                'bet_option_id' => $meronOption->id,
+                'bet_amount' => $padding,
+                'before_amount' => $user->balance_amount,
+                'after_amount' => $user->balance_amount - $padding,
+                'created_by' => $user->id,
+            ]);
+        }
+        if ($walaOption) {
+            GameRoundBet::create([
+                'user_id' => $user->id,
+                'game_list_id' => $gameListId,
+                'game_round_id' => $currentRoundId,
+                'bet_option_id' => $walaOption->id,
+                'bet_amount' => $padding,
+                'before_amount' => $user->balance_amount,
+                'after_amount' => $user->balance_amount - $padding,
+                'created_by' => $user->id,
+            ]);
+        }
+        $user->decrement('balance_amount', $padding * 2);
     }
 }
