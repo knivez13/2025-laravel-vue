@@ -1,5 +1,5 @@
 <script setup>
-import useScript from '@/composables/admin/user/useUserList.js';
+import useScript from '@/composables/admin/user/usePlayerList.js';
 const { keyword, form, func, title, error, processing, option, tableData, formFieldDefinition, totalRecords, columns, search, fetch, sort, save, openModal, showEdit } = useScript();
 </script>
 

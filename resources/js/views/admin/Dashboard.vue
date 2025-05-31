@@ -1,188 +1,199 @@
 <script setup>
-import Resource from '@/api/resource.js';
-const api = new Resource('sample');
-import { useDashboardStore } from '@/stores/admin/useDashboardStore.js';
-const { fnFetch, fnStore, fnUpdate, fnDelete, set_keywords, set_processing, set_rows, set_page, set_sort, tigger_modal } = useDashboardStore();
-const { error, processing, token, option } = storeToRefs(useDashboardStore());
-const keyword = ref(null);
-onBeforeMount(async () => {
-    re_fetch();
-    await fnFetch();
+import { useLayout } from '@/layout/composables/layout';
+import { onMounted, ref, watch } from 'vue';
+
+const { getPrimary, getSurface, isDarkTheme } = useLayout();
+
+const chartData = ref(null);
+const chartOptions = ref(null);
+
+function setChartData() {
+    const documentStyle = getComputedStyle(document.documentElement);
+
+    return {
+        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+        datasets: [
+            {
+                type: 'bar',
+                label: 'Subscriptions',
+                backgroundColor: documentStyle.getPropertyValue('--p-primary-400'),
+                data: [4000, 10000, 15000, 4000],
+                barThickness: 32
+            },
+            {
+                type: 'bar',
+                label: 'Advertising',
+                backgroundColor: documentStyle.getPropertyValue('--p-primary-300'),
+                data: [2100, 8400, 2400, 7500],
+                barThickness: 32
+            },
+            {
+                type: 'bar',
+                label: 'Affiliate',
+                backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
+                data: [4100, 5200, 3400, 7400],
+                borderRadius: {
+                    topLeft: 8,
+                    topRight: 8
+                },
+                borderSkipped: true,
+                barThickness: 32
+            }
+        ]
+    };
+}
+
+function setChartOptions() {
+    const documentStyle = getComputedStyle(document.documentElement);
+    const borderColor = documentStyle.getPropertyValue('--surface-border');
+    const textMutedColor = documentStyle.getPropertyValue('--text-color-secondary');
+
+    return {
+        maintainAspectRatio: false,
+        aspectRatio: 0.8,
+        scales: {
+            x: {
+                stacked: true,
+                ticks: {
+                    color: textMutedColor
+                },
+                grid: {
+                    color: 'transparent',
+                    borderColor: 'transparent'
+                }
+            },
+            y: {
+                stacked: true,
+                ticks: {
+                    color: textMutedColor
+                },
+                grid: {
+                    color: borderColor,
+                    borderColor: 'transparent',
+                    drawTicks: false
+                }
+            }
+        }
+    };
+}
+
+watch([getPrimary, getSurface, isDarkTheme], () => {
+    chartData.value = setChartData();
+    chartOptions.value = setChartOptions();
 });
-const title = ref('Dashboard');
-const func = ref(null);
-const select_id = ref(null);
-const form = ref({
-    game_present_id: null,
-    game_name: null,
-    event_name: null,
-    total_round: null,
-    multiplier: null,
-    game_name: null
+
+onMounted(() => {
+    chartData.value = setChartData();
+    chartOptions.value = setChartOptions();
 });
-const assign_value = async (e) => {
-    form.value.game_present_id = e?.game_present_id ?? null;
-    form.value.game_name = e?.game_name ?? null;
-    form.value.event_name = e?.event_name ?? null;
-    form.value.total_round = e?.total_round ?? null;
-    form.value.multiplier = e?.multiplier ?? null;
-    form.value.rate = e?.rate ?? null;
-};
-
-const search = async () => {
-    set_keywords(keyword.value);
-    await set_page(0);
-    await fnFetch();
-};
-
-const re_fetch = async (event) => {
-    await set_keywords(null);
-    await set_rows(10);
-    await set_page(1);
-    await set_sort({
-        sortBy: 'created_at',
-        sortOrder: -1
-    });
-    await set_processing(false);
-};
-
-const fetch = async (event) => {
-    await set_rows(event.rows);
-    await set_page(event.page + 1);
-    await fnFetch();
-};
-const sort = async (event) => {
-    await set_sort({
-        sortBy: event.sortField,
-        sortOrder: event.sortOrder
-    });
-    await fnFetch();
-};
-const open_modal = async (data) => {
-    func.value = 'Add New';
-    assign_value();
-    await tigger_modal(data);
-};
-
-const save = async (data) => {
-    if (func.value == 'Add New') {
-        await fnStore(form.value);
-    }
-    if (func.value == 'Edit') {
-        await fnUpdate(select_id.value, form.value);
-    }
-};
-
-const show_edit = async (data) => {
-    func.value = 'Edit';
-    select_id.value = data.data.id;
-    assign_value(data.data);
-    await tigger_modal(true);
-};
 </script>
-
 <template>
-    <div>
-        <div className="card">
-            <h6 class="text-xl mb-5">{{ title }}</h6>
-
-            <div class="grid grid-cols-12 mb-4">
-                <div class="col-span-6 md:col-span-6">
-                    <IconField>
-                        <InputIcon>
-                            <i class="fa fa-duotone fa-search" />
-                        </InputIcon>
-                        <InputText placeholder="Keyword Search" class="w-full" v-model="keyword" @keypress.enter="search()" />
-                    </IconField>
+    <div class="grid grid-cols-12 gap-2 mb-2">
+        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+            <div class="card mb-0">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <span class="block text-muted-color font-medium mb-4">House Gross Earnings</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">152</div>
+                    </div>
+                    <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-shopping-cart text-blue-500 !text-xl"></i>
+                    </div>
                 </div>
-                <div class="col-span-6 md:col-span-6 text-end">
-                    <Button outlined severity="secondary" icon="pi pi-plus" v-tooltip.top="'Add New'" label="Add New" @click="open_modal(true)" />
-                </div>
-            </div>
-            <div class="field">
-                <DataTable
-                    v-model:sortField="option.sortBy"
-                    v-model:rows="option.rows"
-                    v-model:sortOrder="option.sortOrder"
-                    v-model:totalRecords="api.decrypt(token)['list']['total']"
-                    @page="fetch"
-                    @sort="sort"
-                    update:sortOrder
-                    :loading="processing"
-                    :value="token ? api.decrypt(token)['list']['data'] : []"
-                    :scrollable="true"
-                    :rowsPerPageOptions="[10, 20, 50, 100]"
-                    :lazy="true"
-                    :paginator="true"
-                    paginatorTemplate=" FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-                    showGridlines
-                    tableStyle="min-width: 20rem"
-                    scrollDirection="both"
-                >
-                    <Column field="game_present.code" header="Game Present" class="grid-table-line" />
-                    <Column field="event_name" sortable header="Event Name" class="grid-table-line" />
-                    <Column field="game_name" sortable header="Game Name" class="grid-table-line" />
-                    <Column field="total_round" sortable header="No. Round" class="grid-table-line" />
-                    <Column field="multiplier" sortable header="Multiplier" class="grid-table-line">
-                        <template #body="data"> x{{ data.data.multiplier }} </template>
-                    </Column>
-                    <Column field="rate" sortable header="Rake" class="grid-table-line">
-                        <template #body="data"> {{ data.data.rate }}% </template>
-                    </Column>
-                    <Column field="created_at" sortable header="Created Date" class="grid-table-line" />
-                    <Column field="updated_at" sortable header="Updated Date" class="grid-table-line" />
-                    <Column field="actions" frozen alignFrozen="right" class="grid-table-line" style="width: 1%" headerStyle=" text-align: center" bodyStyle="text-align: center; overflow: visible">
-                        <template #body="data">
-                            <div class="text-end">
-                                <Button text type="button" v-tooltip.top="'Edit'" @click="show_edit(data)" icon="pi pi-pencil" severity="info" class="h-8 w-8 mr-2"></Button>
-                                <!-- <Button text type="button" v-tooltip.top="'Delete'" @click="destroy(data)" icon="pi pi-trash" class="h-8 w-8" severity="danger"></Button> -->
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable>
+                <span class="text-muted-color">Last Month : </span>
+                <span class="text-primary font-medium">520 </span>
             </div>
         </div>
-        <Dialog
-            v-model:visible="option.show_modal"
-            modal
-            :closable="false"
-            position="center"
-            :draggable="false"
-            :style="{ width: '30rem' }"
-            :pt="{
-                root: 'border-none',
-                mask: {
-                    style: 'backdrop-filter: blur(10px)'
-                }
-            }"
-            :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-        >
-            <div v-focustrap class="flex flex-col gap-4 w-full mb-2">
-                <div class="font-semibold text-xl">{{ func }} {{ title }}</div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatSelect v-model="form.game_present_id" label="Game Present" name="game_present_id" :options="api.decrypt(token)['game_present']" optionLabel="code" optionValue="id" :error="error" />
+        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+            <div class="card mb-0">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <span class="block text-muted-color font-medium mb-4">Agent Earnings</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">$2.100</div>
+                    </div>
+                    <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-dollar text-orange-500 !text-xl"></i>
+                    </div>
                 </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatText v-model="form.game_name" label="game_name" name="game_name" :error="error" autofocus />
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatText v-model="form.event_name" label="event_name" name="event_name" :error="error" autofocus />
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.total_round" label="total_round" name="total_round" :error="error" autofocus />
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.multiplier" label="multiplier" name="multiplier" :error="error" autofocus />
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                    <FloatNumber v-model="form.rate" label="rate" name="rate" :error="error" autofocus />
-                </div>
+                <span class="text-muted-color">Last Month : </span>
+                <span class="text-primary font-medium">520 </span>
             </div>
-            <div class="flex items-center gap-2">
-                <Button outlined :disabled="processing" :loading="processing" type="button" label="Cancel" severity="warn" @click="open_modal(false)"></Button>
-                <Button outlined :disabled="processing" :loading="processing" type="button" label="Save" severity="success" @click="save()"></Button>
+        </div>
+        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+            <div class="card mb-0">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <span class="block text-muted-color font-medium mb-4">House Net Profit</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">28441</div>
+                    </div>
+                    <div class="flex items-center justify-center bg-cyan-100 dark:bg-cyan-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-users text-cyan-500 !text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-muted-color">Last Month : </span>
+                <span class="text-primary font-medium">520 </span>
             </div>
-        </Dialog>
+        </div>
+    </div>
+    <div class="grid grid-cols-12 gap-2 mb-2">
+        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+            <div class="card mb-0">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <span class="block text-muted-color font-medium mb-4">Total Member</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">152</div>
+                    </div>
+                    <div class="flex items-center justify-center bg-blue-100 dark:bg-blue-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-shopping-cart text-blue-500 !text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-primary font-medium">24 new </span>
+                <span class="text-muted-color">since last visit</span>
+            </div>
+        </div>
+        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+            <div class="card mb-0">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <span class="block text-muted-color font-medium mb-4">Agent</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">$2.100</div>
+                    </div>
+                    <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-dollar text-orange-500 !text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-primary font-medium">%52+ </span>
+                <span class="text-muted-color">since last week</span>
+            </div>
+        </div>
+        <div class="col-span-12 lg:col-span-4 xl:col-span-4">
+            <div class="card mb-0">
+                <div class="flex justify-between mb-4">
+                    <div>
+                        <span class="block text-muted-color font-medium mb-4">Player</span>
+                        <div class="text-surface-900 dark:text-surface-0 font-medium text-xl">$2.100</div>
+                    </div>
+                    <div class="flex items-center justify-center bg-orange-100 dark:bg-orange-400/10 rounded-border" style="width: 2.5rem; height: 2.5rem">
+                        <i class="pi pi-dollar text-orange-500 !text-xl"></i>
+                    </div>
+                </div>
+                <span class="text-primary font-medium">%52+ </span>
+                <span class="text-muted-color">since last week</span>
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-12 gap-2">
+        <div class="col-span-12 lg:col-span-6 xl:col-span-6">
+            <div class="card mb-0">
+                <div class="font-semibold text-xl mb-4">Daily Income</div>
+                <Chart type="bar" :data="chartData" :options="chartOptions" class="h-80" />
+            </div>
+        </div>
+        <div class="col-span-12 lg:col-span-6 xl:col-span-6">
+            <div class="card mb-0">
+                <div class="font-semibold text-xl mb-4">Monthly Income</div>
+                <Chart type="bar" :data="chartData" :options="chartOptions" class="h-80" />
+            </div>
+        </div>
     </div>
 </template>

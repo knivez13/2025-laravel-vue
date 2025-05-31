@@ -18,10 +18,11 @@ const model = ref([
         meta: 'user',
         items: [
             { label: 'Dashboard', icon: 'pi pi-fw pi-home', to: '/admin/dashboard', meta: 'user' },
-            { label: 'Earnings', icon: 'pi pi-fw pi-home', to: '/admin/earning', meta: 'user' },
-            { label: 'Live Games', icon: 'pi pi-fw pi-home', to: '/admin/liveGames', meta: 'user' },
-            { label: 'Agent', icon: 'pi pi-fw pi-home', to: '/admin/agentPlayer', meta: 'user' },
-            { label: 'Player', icon: 'pi pi-fw pi-home', to: '/admin/agentPlayer', meta: 'user' },
+            { label: 'Agent', icon: 'pi pi-fw pi-home', to: '/admin/agent', meta: 'user' },
+            { label: 'Player', icon: 'pi pi-fw pi-home', to: '/admin/player', meta: 'user' },
+            { label: 'Transaction', icon: 'pi pi-fw pi-home', to: '/admin/transaction', meta: 'user' },
+            { label: 'Report', icon: 'pi pi-fw pi-home', to: '/admin/report', meta: 'user' },
+
             {
                 label: 'Maintenance',
                 icon: 'pi pi-fw pi-user',

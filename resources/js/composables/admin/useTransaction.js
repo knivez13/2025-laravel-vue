@@ -14,10 +14,16 @@ const formFieldDefinition = [
 ];
 
 const columnDefinition = [
-    { field: 'code', header: 'Code', sortable: true, class: 'grid-table-line' },
-    { field: 'description', header: 'Description', sortable: true, class: 'grid-table-line' },
+    { field: 'code', header: '#', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'Name', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'Login ID', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'Deposit', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'Withdraw', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'Remarks', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'IP Address', sortable: true, class: 'grid-table-line' },
     { field: 'created_at', header: 'Created Date', sortable: true, class: 'grid-table-line' },
-    { field: 'updated_at', header: 'Updated Date', sortable: true, class: 'grid-table-line' },
+    { field: 'description', header: 'Created By', sortable: true, class: 'grid-table-line' },
+
     {
         field: 'actions',
         header: '',
@@ -32,8 +38,8 @@ const columnDefinition = [
 
 const roles = ['SystemAdmin'];
 
-export default function useUserList() {
-    const crud = useCrudComposable('sample', useStore, columnDefinition, formDefinition, 'User List', formFieldDefinition, roles);
+export default function useTransaction() {
+    const crud = useCrudComposable('sample', useStore, columnDefinition, formDefinition, 'Transaction', formFieldDefinition, roles);
     const customFunction = () => {
         console.log('This is a custom function specific to Bank Type');
     };

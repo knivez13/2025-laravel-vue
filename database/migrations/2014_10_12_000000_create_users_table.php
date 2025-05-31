@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('ip_address')->nullable();
             $table->timestamp('last_online')->nullable();
             $table->decimal('commission_amount', 30, 8)->default(0);
+            $table->decimal('given_credit', 30, 8)->default(0);
             $table->decimal('balance_amount', 30, 8)->default(0);
             $table->decimal('cash_out_amount', 30, 8)->default(0);
             $table->decimal('sabong_comm', 30, 8)->default(0);
